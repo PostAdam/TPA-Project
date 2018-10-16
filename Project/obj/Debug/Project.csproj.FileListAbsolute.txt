@@ -1,0 +1,17 @@
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\bin\Debug\Project.exe.config
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\bin\Debug\Project.exe
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\bin\Debug\Project.pdb
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\Project.csprojAssemblyReference.cache
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\StyleResources\ButtonStyle.baml
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\StyleResources\RoundCornersRectangle.baml
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\View\MainWindow.baml
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\App.baml
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\View\MainWindow.g.cs
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\App.g.cs
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\Project_MarkupCompile.cache
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\Project.g.resources
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\Project.Properties.Resources.resources
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\Project.csproj.GenerateResource.cache
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\Project.csproj.CoreCompileInputs.cache
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\Project.exe
+C:\Users\4DAM\source\repos\TP\TP_SVN_Repository\tag\Project I stage\Project\obj\Debug\Project.pdb
