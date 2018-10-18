@@ -39,7 +39,7 @@ namespace Project.ViewModel
 
         #region Methods
 
-        private void Save()
+        internal void Save()
         {
             DataContractSerializer serializer = new DataContractSerializer( AssemblyMetadata.GetType() );
             using (FileStream stream = File.Create( @"..\Test.Xml" ))
