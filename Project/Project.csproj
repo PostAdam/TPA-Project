@@ -129,6 +129,7 @@
     <Compile Include="Model\Reflection\Model\Metadata\AssemblyMetadata.cs" />
     <Compile Include="Model\Reflection\Model\ExtensionMethods.cs" />
     <Compile Include="Model\Reflection\Model\Metadata\AttributeMetadata.cs" />
+    <Compile Include="Model\Reflection\Model\Metadata\EventMetadata.cs" />
     <Compile Include="Model\Reflection\Model\Metadata\FieldMetadata.cs" />
     <Compile Include="Model\Reflection\Model\Metadata\MethodMetadata.cs" />
     <Compile Include="Model\Reflection\Model\Metadata\NamespaceMetadata.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="ViewModel\MetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\AttributeMetadataViewModel.cs" />
+    <Compile Include="ViewModel\MetadataViewModels\EventMetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\MethodMetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\NamespaceMetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\FieldMetadataViewModel.cs" />
