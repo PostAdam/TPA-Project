@@ -32,7 +32,7 @@ namespace Project.Model.Reflection.Model
             Properties = PropertyMetadata.EmitProperties( type.GetProperties() );
             Fields = EmitFields( type.GetFields() );
             TypeKind = GetTypeKind( type );
-            Attributes = EmitAttributes( type.GetCustomAttributes( false ).Cast<Attribute>() );
+            Attributes = EmitAttributes(type.GetCustomAttributes(false).Cast<Attribute>());
         }
 
         #endregion

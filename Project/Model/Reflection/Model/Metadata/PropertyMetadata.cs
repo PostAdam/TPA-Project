@@ -7,7 +7,7 @@ namespace Project.Model.Reflection.Model
 {
     [DataContract( IsReference = true )]
     internal class PropertyMetadata
-    {
+    { 
         #region Constructor
 
         private PropertyMetadata(string propertyName, TypeMetadata propertyType)
@@ -22,6 +22,7 @@ namespace Project.Model.Reflection.Model
 
         internal static IEnumerable<PropertyMetadata> EmitProperties( IEnumerable<PropertyInfo> props )
         {
+     
             return from prop in props
                 where prop.GetGetMethod().GetVisible() || prop.GetSetMethod().GetVisible()
                 select new PropertyMetadata( prop.Name, TypeMetadata.EmitReference( prop.PropertyType ) );

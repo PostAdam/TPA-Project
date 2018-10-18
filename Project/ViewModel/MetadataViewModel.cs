@@ -52,6 +52,28 @@ namespace Project.ViewModel
 
         protected abstract void BuildMyself();
 
+        internal string GetModifier(AccessLevel? accessLevel)
+        {
+            string modifier = "";
+            switch (accessLevel)
+            {
+                case AccessLevel.IsPublic:
+                    modifier = "public ";
+                    break;
+                case AccessLevel.IsProtected:
+                    modifier = "protected ";
+                    break;
+                case AccessLevel.IsProtectedInternal:
+                    modifier = "internal ";
+                    break;
+                case AccessLevel.IsPrivate:
+                    modifier = "private ";
+                    break;
+            }
+
+            return modifier;
+        }
+
 
         
     }

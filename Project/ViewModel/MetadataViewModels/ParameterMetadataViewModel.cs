@@ -6,7 +6,7 @@ namespace Project.ViewModel
     {
         #region Constructor
 
-        internal ParameterMetadataViewModel( ParameterMetadata parameterMetadata )
+        internal ParameterMetadataViewModel(ParameterMetadata parameterMetadata)
         {
             Name = parameterMetadata.Name;
             _parameterMetadata = parameterMetadata;
@@ -19,14 +19,14 @@ namespace Project.ViewModel
         protected override void BuildMyself()
         {
             Child.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey( _parameterMetadata.TypeMetadata.TypeName ))
+            if (TypesDictionary.ReflectedTypes.ContainsKey(_parameterMetadata.TypeMetadata.TypeName))
             {
-                Child.Add( new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_parameterMetadata.TypeMetadata.TypeName] ) );
+                Child.Add(new TypeMetadataViewModel(
+                    TypesDictionary.ReflectedTypes[_parameterMetadata.TypeMetadata.TypeName]));
             }
             else
             {
-                Child.Add( new TypeMetadataViewModel( _parameterMetadata.TypeMetadata ) );
+                Child.Add(new TypeMetadataViewModel(_parameterMetadata.TypeMetadata));
             }
 
             WasBuilt = true;

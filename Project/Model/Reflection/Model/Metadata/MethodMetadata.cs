@@ -67,7 +67,7 @@ namespace Project.Model.Reflection.Model
             MethodInfo methodInfo = method as MethodInfo;
             if (methodInfo == null)
                 return null;
-            return TypeMetadata.EmitReference( methodInfo.ReturnType );
+            return new TypeMetadata(methodInfo.ReturnType);
         }
 
         private static bool EmitExtension( MethodBase method )

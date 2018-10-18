@@ -6,9 +6,10 @@ namespace Project.ViewModel
     {
         #region Constructor
 
-        internal FieldMetadataViewModel( FieldMetadata fieldMetadata )
+        internal FieldMetadataViewModel(FieldMetadata fieldMetadata)
         {
-            Name = fieldMetadata.Name;
+            Name = GetModifier(fieldMetadata.TypeMetadata.Modifiers?.Item1) + " " +
+                   fieldMetadata.TypeMetadata.TypeName + " " + fieldMetadata.Name;
             _fieldMetadata = fieldMetadata;
         }
 
@@ -19,14 +20,14 @@ namespace Project.ViewModel
         protected override void BuildMyself()
         {
             Child.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey( _fieldMetadata.TypeMetadata.TypeName ))
+            if (TypesDictionary.ReflectedTypes.ContainsKey(_fieldMetadata.TypeMetadata.TypeName))
             {
-                Child.Add( new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_fieldMetadata.TypeMetadata.TypeName] ) );
+                Child.Add(new TypeMetadataViewModel(
+                    TypesDictionary.ReflectedTypes[_fieldMetadata.TypeMetadata.TypeName]));
             }
             else
             {
-                Child.Add( new TypeMetadataViewModel( _fieldMetadata.TypeMetadata ) );
+                Child.Add(new TypeMetadataViewModel(_fieldMetadata.TypeMetadata));
             }
 
             WasBuilt = true;
