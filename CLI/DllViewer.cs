@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Project.ViewModel;
 
 namespace CLI
@@ -8,6 +7,11 @@ namespace CLI
     public class DllViewer
     {
         #region Constructor
+
+        public DllViewer(int maxLevelVisible = 5)
+        {
+            MaxLevelVisible = maxLevelVisible;
+        }
 
         public DllViewer(IList<MetadataViewModel> rootNodes, int maxLevelVisible = 5)
         {
@@ -20,7 +24,7 @@ namespace CLI
         #region Public
 
         public int MaxLevelVisible { get; set; }
-        public IList<MetadataViewModel> RootNodes { get; }
+        public IList<MetadataViewModel> RootNodes { get; set; }
 
         public void DisplayTree()
         {
@@ -48,7 +52,13 @@ namespace CLI
                 PrintAllNodesBelowPath();
 
                 key = GetNodeChar(_currentLevelNodes.Count);
-
+                if (key == 65)
+                {
+                    Console.Clear();
+                    Console.WriteLine("You're back in menu!");
+                    return;
+                }
+               
                 currentDepth = (key == FoldKey) ? PreviousLevel(currentDepth) : NextLevel(currentDepth, key);
             }
         }
@@ -170,22 +180,9 @@ namespace CLI
             {
                 key = Console.ReadKey(true).KeyChar;
                 key -= '0';
-            } while ((key < 0 || key >= childNumber) && key != FoldKey);
+            } while ((key < 0 || key >= childNumber) && key != FoldKey && key != 65);
 
             return key;
-        }
-
-        private string GetFilename()
-        {
-            string filename = Console.ReadLine();
-            string directory = Directory.GetCurrentDirectory();
-            if (File.Exists(directory + filename))
-            {
-                Console.WriteLine(@"File {directory}/{filename} doesn't exist.");
-                return " ";
-            }
-
-            return directory + filename;
         }
 
         private int NextLevel(int level, char key)

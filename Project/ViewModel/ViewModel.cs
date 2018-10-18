@@ -46,7 +46,7 @@ namespace Project.ViewModel
         {
             Logger.Log( "Starting serializaton process.", LogLevel.Information );
             DataContractSerializer serializer = new DataContractSerializer( AssemblyMetadata.GetType() );
-            using (FileStream stream = File.Create( @"..\Test.Xml" ))
+            using (FileStream stream = File.Create( @"Test.Xml" ))
             {
                 serializer.WriteObject( stream, AssemblyMetadata );
             }
@@ -78,20 +78,25 @@ namespace Project.ViewModel
             };
             if (openFileDialog.ShowDialog() == true)
             {
-                DataContractSerializer serializer = new DataContractSerializer( typeof(AssemblyMetadata) );
-                using (FileStream stream = File.OpenRead( openFileDialog.FileName ))
-                {
-
-                    AssemblyMetadata data = (AssemblyMetadata) serializer.ReadObject( stream );
-                    AddClassesToDirectory( data );
-                    InitTreeView( data );
-                }
+               readFromFile(openFileDialog.FileName);
             }
         }
 
         #endregion
 
         #region Help Methods
+
+        internal void readFromFile(string filename)
+        {
+            DataContractSerializer serializer = new DataContractSerializer(typeof(AssemblyMetadata));
+            using (FileStream stream = File.OpenRead(filename))
+            {
+
+                AssemblyMetadata data = (AssemblyMetadata)serializer.ReadObject(stream);
+                AddClassesToDirectory(data);
+                InitTreeView(data);
+            }
+        }
 
         internal void AddClassesToDirectory( AssemblyMetadata assemblyMetadata )
         {
