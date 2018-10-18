@@ -100,6 +100,7 @@ namespace Project.ViewModel
 
         internal void AddClassesToDirectory( AssemblyMetadata assemblyMetadata )
         {
+            Logger.Log( "Adding classes to directory.", LogLevel.Information );
             foreach (NamespaceMetadata dataNamespace in assemblyMetadata.Namespaces)
             {
                 foreach (TypeMetadata type in dataNamespace.Types)
@@ -110,6 +111,7 @@ namespace Project.ViewModel
                     }
                 }
             }
+            Logger.Log( "Classes added to directory!", LogLevel.Information );
         }
 
         internal void InitTreeView( AssemblyMetadata assemblyMetadata )
