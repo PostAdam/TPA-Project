@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using Project;
 using Project.ViewModel;
 
 namespace CLI
@@ -17,7 +19,8 @@ namespace CLI
 
         private static IList<MetadataViewModel> InitViewModel()
         {
-            ViewModel viewmodel = new ViewModel();
+            Logger logger = new Logger( new TextWriterTraceListener( "Logs.log" ) );
+            ViewModel viewmodel = new ViewModel( logger );
             viewmodel.LoadDll(Directory.GetCurrentDirectory() + "\\ClassLibrary1.dll");
             viewmodel.InitTreeView(viewmodel.AssemblyMetadata);
             return viewmodel.Items;

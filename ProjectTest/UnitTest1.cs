@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Project;
 using Project.Model.Reflection.Model;
 using Project.ViewModel;
 
@@ -42,7 +44,8 @@ namespace ProjectTest
         [TestMethod]
         public void ChildTest()
         {
-            ViewModel viewModel = new ViewModel();
+            Logger logger = new Logger( new TextWriterTraceListener( "Logs.log" ) );
+            ViewModel viewModel = new ViewModel( logger );
             viewModel.LoadDll( @"..\..\ClassLibrary1.dll" );
             viewModel.InitTreeView( viewModel.AssemblyMetadata );
 
@@ -80,7 +83,8 @@ namespace ProjectTest
         [TestMethod]
         public void ChildLifetimeTest()
         {
-            ViewModel viewModel = new ViewModel();
+            Logger logger = new Logger( new TextWriterTraceListener( "Logs.log" ) );
+            ViewModel viewModel = new ViewModel( logger );
             viewModel.LoadDll(@"..\..\ClassLibrary1.dll");
             viewModel.InitTreeView(viewModel.AssemblyMetadata);
 

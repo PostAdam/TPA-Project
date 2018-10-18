@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Project.Model.Reflection;
 using Project.Model.Reflection.Model;
@@ -13,18 +14,20 @@ namespace Project.ViewModel
     {
         #region Constructor
 
-        public ViewModel()
+        public ViewModel( Logger logger )
         {
             Items = new ObservableCollection<MetadataViewModel>();
             ClickOpen = new DelegateCommand( Open );
             ClickSave = new DelegateCommand( Save );
             ClickRead = new DelegateCommand( Read );
+            Logger = logger;
         }
 
         #endregion
 
         #region DataContext
 
+        public static Logger Logger { get; private set; }
         public ObservableCollection<MetadataViewModel> Items { get; set; }
 
         public ICommand ClickOpen { get; }
@@ -41,6 +44,7 @@ namespace Project.ViewModel
 
         internal void Save()
         {
+            Logger.Log( "Starting serializaton process.", LogLevel.Information );
             DataContractSerializer serializer = new DataContractSerializer( AssemblyMetadata.GetType() );
             using (FileStream stream = File.Create( @"..\Test.Xml" ))
             {
@@ -48,6 +52,7 @@ namespace Project.ViewModel
             }
 
             MessageBox.Show( "Serialization Completed!" );
+            Logger.Log( "Serializaton completed!", LogLevel.Information );
         }
 
         private void Open()
@@ -76,9 +81,9 @@ namespace Project.ViewModel
                 DataContractSerializer serializer = new DataContractSerializer( typeof(AssemblyMetadata) );
                 using (FileStream stream = File.OpenRead( openFileDialog.FileName ))
                 {
+
                     AssemblyMetadata data = (AssemblyMetadata) serializer.ReadObject( stream );
                     AddClassesToDirectory( data );
-
                     InitTreeView( data );
                 }
             }
@@ -104,15 +109,19 @@ namespace Project.ViewModel
 
         internal void InitTreeView( AssemblyMetadata assemblyMetadata )
         {
+            Logger.Log( "Initializing treeView.", LogLevel.Information );
             MetadataViewModel metadataViewModel = new AssemblyMetadataViewModel( assemblyMetadata );
             Items.Add( metadataViewModel );
+            Logger.Log( "TreeView initialized!", LogLevel.Information );
         }
 
         internal void LoadDll( string path )
         {
+            Logger.Log( "Loading DLL.", LogLevel.Information );
             Reflector reflector = new Reflector();
             reflector.Reflect( path );
             AssemblyMetadata = reflector.AssemblyModel;
+            Logger.Log( "DLL loaded!", LogLevel.Information );
         }
 
         #endregion
