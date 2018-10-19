@@ -29,8 +29,7 @@ namespace CLI
                             Console.WriteLine(@"Provide filename:");
                             Console.Write(">");
                             string filename = GetFilename();
-                            viewModel.LoadDll(filename);
-                            viewModel.InitTreeView(viewModel.AssemblyMetadata);
+                            viewModel.Init(filename);
                             dllViewer.RootNodes = viewModel.Items;
                             dllViewer.DisplayTree();
                         }

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Project.Annotations;
 
 namespace Project.ViewModel
 {
@@ -8,7 +7,6 @@ namespace Project.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged( [CallerMemberName] string propertyName = null )
         {
             PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );

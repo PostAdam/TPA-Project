@@ -34,15 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.1.1.0\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.1.0\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.3.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -123,38 +114,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Logger.cs" />
-    <Compile Include="Model\Reflection\Model\Enums\AbstractEnum.cs" />
-    <Compile Include="Model\Reflection\Model\Enums\AccessLevel.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\AssemblyMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\ExtensionMethods.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\AttributeMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\EventMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\FieldMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\MethodMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\NamespaceMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\ParameterMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\PropertyMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Enums\SealedEnum.cs" />
-    <Compile Include="Model\Reflection\Model\Enums\StaticEnum.cs" />
-    <Compile Include="Model\Reflection\Model\Enums\TypeKind.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\TypeMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Enums\VirtualEnum.cs" />
-    <Compile Include="Model\Reflection\Model\TypesDictionary.cs" />
-    <Compile Include="Model\Reflection\Reflector.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ViewModel\MetadataViewModels\AssemblyMetadataViewModel.cs" />
-    <Compile Include="ViewModel\BaseViewModel.cs" />
-    <Compile Include="ViewModel\DelegateCommand.cs" />
-    <Compile Include="ViewModel\MetadataViewModel.cs" />
-    <Compile Include="ViewModel\MetadataViewModels\AttributeMetadataViewModel.cs" />
-    <Compile Include="ViewModel\MetadataViewModels\EventMetadataViewModel.cs" />
-    <Compile Include="ViewModel\MetadataViewModels\MethodMetadataViewModel.cs" />
-    <Compile Include="ViewModel\MetadataViewModels\NamespaceMetadataViewModel.cs" />
-    <Compile Include="ViewModel\MetadataViewModels\FieldMetadataViewModel.cs" />
-    <Compile Include="ViewModel\MetadataViewModels\PropertyMetadataViewModel.cs" />
-    <Compile Include="ViewModel\MetadataViewModels\TypeMetadataViewModel.cs" />
-    <Compile Include="ViewModel\ViewModel.cs" />
     <Page Include="StyleResources\ButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -171,7 +131,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModel\MetadataViewModels\ParameterMetadataViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -207,6 +166,11 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ReflectionMVM\ReflectionMVM.csproj">
+      <Project>{5959593d-9565-46cd-be35-983e93145117}</Project>
+      <Name>ReflectionMVM</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

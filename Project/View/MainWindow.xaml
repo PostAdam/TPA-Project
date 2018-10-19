@@ -41,7 +41,7 @@
                 <Border Style="{StaticResource RoundCornerRectangle}"
                         Grid.Row="0">
                     <Button view:Name="OpenButton" Content="Open"
-                            Command="{Binding ClickOpen}"
+                            Click="Open"
                             Style="{StaticResource ButtonStyle}" />
                 </Border>
                 <Border Style="{StaticResource RoundCornerRectangle}"
@@ -53,7 +53,7 @@
                 <Border Style="{StaticResource RoundCornerRectangle}"
                         Grid.Row="2">
                     <Button view:Name="ReadButton" Content="Read"
-                            Command="{Binding ClickRead}"
+                            Click="Read"
                             Style="{StaticResource ButtonStyle}" />
                 </Border>
             </Grid>
