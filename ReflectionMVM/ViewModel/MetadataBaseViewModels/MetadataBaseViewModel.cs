@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using Project.Model.Reflection.Model;
 
 namespace Project.ViewModel
@@ -22,7 +23,8 @@ namespace Project.ViewModel
 
         #region Properties
 
-        public string Name { get; set; }
+        public string FullName => ToString();
+        public string Name { get; internal set; }
 
         public ObservableCollection<MetadataViewModel> Child { get; set; }
 
@@ -39,42 +41,25 @@ namespace Project.ViewModel
                 {
                     return;
                 }
-
-                BuildMyself();
+                try
+                {
+                    BuildMyself();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                }
             }
         }
 
         #endregion
-
-        internal readonly TypeMetadata TypeMetadata;
+        
         private bool _isExpanded;
         protected bool WasBuilt;
 
         protected abstract void BuildMyself();
 
-        internal string GetModifier(AccessLevel? accessLevel)
-        {
-            string modifier = "";
-            switch (accessLevel)
-            {
-                case AccessLevel.IsPublic:
-                    modifier = "public ";
-                    break;
-                case AccessLevel.IsProtected:
-                    modifier = "protected ";
-                    break;
-                case AccessLevel.IsProtectedInternal:
-                    modifier = "internal ";
-                    break;
-                case AccessLevel.IsPrivate:
-                    modifier = "private ";
-                    break;
-            }
-
-            return modifier;
-        }
-
-
-        
+        public abstract override string ToString();
     }
 }

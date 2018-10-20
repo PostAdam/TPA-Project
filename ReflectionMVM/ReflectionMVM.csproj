@@ -105,7 +105,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\DelegateCommand.cs" />
-    <Compile Include="ViewModel\MetadataViewModel.cs" />
+    <Compile Include="ViewModel\MetadataBaseViewModels\MetadataBaseViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\AssemblyMetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\AttributeMetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\EventMetadataViewModel.cs" />
@@ -115,9 +115,11 @@
     <Compile Include="ViewModel\MetadataViewModels\ParameterMetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\PropertyMetadataViewModel.cs" />
     <Compile Include="ViewModel\MetadataViewModels\TypeMetadataViewModel.cs" />
+    <Compile Include="ViewModel\MetadataBaseViewModels\TypeMetadataBaseViewModel.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

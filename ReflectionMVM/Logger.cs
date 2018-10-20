@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 
-namespace Project
+namespace ReflectionMVM
 {
     public class Logger
     {

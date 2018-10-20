@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using Project;
 using Project.ViewModel;
+using ReflectionMVM;
 
 namespace CLI
 {
@@ -48,7 +49,7 @@ namespace CLI
                         Console.WriteLine(@"Read filename:");
                         Console.Write(">");
                         string fn = Console.ReadLine();
-                        viewModel.readFromFile(fn);
+                        viewModel.ReadFromFile(fn);
                         dllViewer.RootNodes = viewModel.Items;
                         dllViewer.DisplayTree();
                         break;

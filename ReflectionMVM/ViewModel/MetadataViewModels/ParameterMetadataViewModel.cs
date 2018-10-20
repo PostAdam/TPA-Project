@@ -1,20 +1,37 @@
 ﻿using Project.Model.Reflection.Model;
+using ReflectionMVM.ViewModel;
 
 namespace Project.ViewModel
 {
-    public class ParameterMetadataViewModel : MetadataViewModel
+    public class ParameterMetadataViewModel : TypeMetadataBaseViewModel
     {
-        #region Constructor
+        #region Public
 
-        internal ParameterMetadataViewModel(ParameterMetadata parameterMetadata)
+        public string TypeName { get; }
+
+        public override string ToString()
         {
-            Name = parameterMetadata.Name;
-            _parameterMetadata = parameterMetadata;
+            return Name + ": " + TypeName;
         }
 
         #endregion
 
+        #region Constructor
+
+        internal ParameterMetadataViewModel(ParameterMetadata parameterMetadata)
+        {
+            _parameterMetadata = parameterMetadata;
+            TypeName = _parameterMetadata.TypeMetadata.TypeName;
+            Name = _parameterMetadata.Name;
+        }
+
+        #endregion
+
+        #region Private
+
         private readonly ParameterMetadata _parameterMetadata;
+
+        #endregion
 
         protected override void BuildMyself()
         {

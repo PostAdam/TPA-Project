@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Project.Model.Reflection.Model
 {
@@ -11,6 +12,7 @@ namespace Project.Model.Reflection.Model
         {
             Name = name;
             TypeMetadata = typeMetadata;
+            Modifiers = typeMetadata.Modifiers;
         }
 
         #endregion
@@ -19,6 +21,7 @@ namespace Project.Model.Reflection.Model
 
         [DataMember] internal string Name;
         [DataMember] internal TypeMetadata TypeMetadata;
+        [DataMember] internal Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers;
 
         #endregion
     }

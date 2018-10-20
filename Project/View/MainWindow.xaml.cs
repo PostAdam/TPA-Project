@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 using Microsoft.Win32;
+using ReflectionMVM;
 
 namespace Project
 {
@@ -11,8 +12,9 @@ namespace Project
 
         public MainWindow()
         {
+            PresentationTraceSources.Refresh();
             InitializeComponent();
-            Logger logger = new Logger(new TextWriterTraceListener("Logs.log"));
+            Logger logger = new Logger(new ConsoleTraceListener());
             ViewModel = new ViewModel.ViewModel(logger);
             DataContext = ViewModel;
         }

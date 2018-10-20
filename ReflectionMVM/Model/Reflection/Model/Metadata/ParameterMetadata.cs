@@ -3,11 +3,11 @@
 namespace Project.Model.Reflection.Model
 {
     [DataContract( IsReference = true )]
-    internal class ParameterMetadata
+    public class ParameterMetadata
     {
         #region Constructor
 
-        public ParameterMetadata( string name, TypeMetadata typeMetadata )
+        internal ParameterMetadata( string name, TypeMetadata typeMetadata )
         {
             Name = name;
             TypeMetadata = typeMetadata;

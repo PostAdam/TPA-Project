@@ -1,16 +1,34 @@
 ﻿using Project.Model.Reflection.Model;
+using ReflectionMVM.ViewModel;
 
 namespace Project.ViewModel
 {
-    public class PropertyMetadataViewModel : MetadataViewModel
+    public class PropertyMetadataViewModel : TypeMetadataBaseViewModel
     {
+        #region Public
+
+        public override string ToString()
+        {
+            return Modifier + " " + Name + ": " + TypeName;
+        }
+
+        #endregion
+
         #region Constructor
 
         internal PropertyMetadataViewModel(PropertyMetadata propertyMetadata)
         {
-            Name = GetModifier(propertyMetadata.TypeMetadata.Modifiers?.Item1) + " " + propertyMetadata.Name;
             _propertyMetadata = propertyMetadata;
+            Modifier = GetModifierName(propertyMetadata.Modifiers?.Item1);
+            TypeName = _propertyMetadata.TypeMetadata.TypeName;
+            Name = propertyMetadata.Name;
         }
+
+        #endregion
+
+        #region Private
+
+        private readonly PropertyMetadata _propertyMetadata;
 
         #endregion
 
@@ -28,9 +46,21 @@ namespace Project.ViewModel
                 Child.Add(new TypeMetadataViewModel(_propertyMetadata.TypeMetadata));
             }
 
+            foreach (var attribute in _propertyMetadata.PropertyAttributes)
+            {
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeMetadata.TypeName))
+                {
+                    Child.Add(new TypeMetadataViewModel(
+                        TypesDictionary.ReflectedTypes[attribute.TypeMetadata.TypeName]));
+                }
+                else
+                {
+                    Child.Add(new TypeMetadataViewModel(attribute.TypeMetadata));
+                }
+            }
+
+
             WasBuilt = true;
         }
-
-        private readonly PropertyMetadata _propertyMetadata;
     }
 }

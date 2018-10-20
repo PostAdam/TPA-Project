@@ -7,16 +7,19 @@ using System.Runtime.Serialization;
 
 namespace Project.Model.Reflection.Model
 {
-    [DataContract( IsReference = true )]
-    internal class MethodMetadata
+    [DataContract(IsReference = true)]
+    public class MethodMetadata
     {
-        internal static IEnumerable<MethodMetadata> EmitMethods( IEnumerable<MethodBase> methods )
+        internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
         {
             return from MethodBase currentMethod in methods
                 where currentMethod.GetVisible()
-                select new MethodMetadata( currentMethod );
+                select new MethodMetadata(currentMethod);
         }
-
+        internal static MethodMetadata EmitMethod(MethodBase method)
+        {
+            return new MethodMetadata(method);
+        }
         #region Private
 
         #region Variables
@@ -24,6 +27,7 @@ namespace Project.Model.Reflection.Model
         [DataMember] internal string Name;
         [DataMember] internal bool Extension;
         [DataMember] internal TypeMetadata ReturnType;
+        [DataMember] internal IEnumerable<AttributeMetadata> MethodAttributes;
         [DataMember] internal IEnumerable<ParameterMetadata> Parameters;
         [DataMember] internal IEnumerable<TypeMetadata> GenericArguments;
         [DataMember] internal Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers;
@@ -32,51 +36,56 @@ namespace Project.Model.Reflection.Model
 
         #region Private Constructor
 
-        private MethodMetadata( MethodBase method )
+        private MethodMetadata(MethodBase method)
         {
             Name = method.Name;
             GenericArguments = method.IsGenericMethodDefinition
-                ? TypeMetadata.EmitGenericArguments( method.GetGenericArguments() )
+                ? TypeMetadata.EmitGenericArguments(method.GetGenericArguments())
                 : null;
-            ReturnType = EmitReturnType( method );
-            Parameters = EmitParameters( method.GetParameters() );
-            Modifiers = EmitModifiers( method );
-            Extension = EmitExtension( method );
+            ReturnType = EmitReturnType(method);
+            Parameters = EmitParameters(method.GetParameters());
+            Modifiers = EmitModifiers(method);
+            Extension = EmitExtension(method);
+            MethodAttributes = TypeMetadata.EmitAttributes(method.GetCustomAttributes());
         }
 
         #endregion
 
         #region Emiters
 
-        private static IEnumerable<ParameterMetadata> EmitParameters( IEnumerable<ParameterInfo> parms )
+        private static IEnumerable<ParameterMetadata> EmitParameters(IList<ParameterInfo> parms)
         {
             foreach (ParameterInfo parameter in parms)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey( parameter.ParameterType.Name ) == false)
+                if (TypesDictionary.ReflectedTypes.ContainsKey(parameter.ParameterType.Name) == false)
                 {
-                    new TypeMetadata( parameter.ParameterType );
+                    new TypeMetadata(parameter.ParameterType);
                 }
             }
 
             return from parm in parms
-                select new ParameterMetadata( parm.Name, TypeMetadata.EmitReference( parm.ParameterType ) );
+                select new ParameterMetadata(parm.Name, TypeMetadata.EmitReference(parm.ParameterType));
         }
 
-        private static TypeMetadata EmitReturnType( MethodBase method )
+        private static TypeMetadata EmitReturnType(MethodBase method)
         {
             MethodInfo methodInfo = method as MethodInfo;
             if (methodInfo == null)
                 return null;
+            if (TypesDictionary.ReflectedTypes.ContainsKey(methodInfo.Name) == false)
+            {
+                new TypeMetadata(methodInfo.ReturnType);
+            }
 
-            return TypeMetadata.EmitReference( methodInfo.ReturnType );
+            return TypeMetadata.EmitReference(methodInfo.ReturnType);
         }
 
-        private static bool EmitExtension( MethodBase method )
+        private static bool EmitExtension(MethodBase method)
         {
-            return method.IsDefined( typeof(ExtensionAttribute), true );
+            return method.IsDefined(typeof(ExtensionAttribute), true);
         }
 
-        private static Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> EmitModifiers( MethodBase method )
+        private static Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> EmitModifiers(MethodBase method)
         {
             AccessLevel access = AccessLevel.IsPrivate;
             if (method.IsPublic)
@@ -98,8 +107,8 @@ namespace Project.Model.Reflection.Model
             if (method.IsVirtual)
                 _virtual = VirtualEnum.Virtual;
 
-            return new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( access, _abstract, _static,
-                _virtual );
+            return new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>(access, _abstract, _static,
+                _virtual);
         }
 
         #endregion

@@ -1,19 +1,25 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using Project.Model.Reflection;
 using Project.Model.Reflection.Model;
+using ReflectionMVM;
 
 namespace Project.ViewModel
 {
     public class ViewModel : BaseViewModel
     {
+        private static readonly TraceSource myListener = new TraceSource("Log");
+
         #region Constructor
 
         public ViewModel(Logger logger)
         {
+            myListener.TraceInformation("PLS LOG ME");
+            myListener.Flush();
             Items = new ObservableCollection<MetadataViewModel>();
             ClickSave = new DelegateCommand(Save);
             Logger = logger;
@@ -29,6 +35,7 @@ namespace Project.ViewModel
         #endregion
 
         #region Private
+
         public ICommand ClickSave { get; }
         internal AssemblyMetadata AssemblyMetadata;
 
@@ -54,14 +61,14 @@ namespace Project.ViewModel
 
         public void Read(string fileName)
         {
-            readFromFile(fileName);
+            ReadFromFile(fileName);
         }
 
         #endregion
 
         #region Help Methods
 
-        public void readFromFile(string filename)
+        public void ReadFromFile(string filename)
         {
             DataContractSerializer serializer = new DataContractSerializer(typeof(AssemblyMetadata));
             using (FileStream stream = File.OpenRead(filename))
@@ -96,6 +103,7 @@ namespace Project.ViewModel
             Items.Add(metadataViewModel);
             Logger.Log("TreeView initialized!", LogLevel.Information);
         }
+
         public void Init(string filename)
         {
             LoadDll(filename);

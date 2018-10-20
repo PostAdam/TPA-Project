@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Project;
 using Project.Model.Reflection.Model;
 using Project.ViewModel;
+using ReflectionMVM;
 
 
 namespace ProjectTest
@@ -93,8 +94,8 @@ namespace ProjectTest
 
             AssemblyMetadata expectedAssembly = viewModel.AssemblyMetadata;
 
-            AssemblyMetadataViewModel assemblyMetadataViewModel = new AssemblyMetadataViewModel(expectedAssembly);
-            assemblyMetadataViewModel.IsExpanded = true;
+            AssemblyMetadataViewModel assemblyMetadataViewModel =
+                new AssemblyMetadataViewModel(expectedAssembly) {IsExpanded = true};
             assemblyMetadataViewModel.IsExpanded = false;
 
             Assert.AreEqual(assemblyMetadataViewModel.Child.First().Name, "ClassLibrary1");

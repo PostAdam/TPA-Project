@@ -1,17 +1,35 @@
-﻿using Project.Model.Reflection.Model;
+﻿using System;
+using Project.Model.Reflection.Model;
+using ReflectionMVM.ViewModel;
 
 namespace Project.ViewModel
 {
-    public class TypeMetadataViewModel : MetadataViewModel
+    public class TypeMetadataViewModel : TypeMetadataBaseViewModel
     {
+        #region Public
+
+        public override string ToString()
+        {
+            string modifier = string.IsNullOrEmpty(Modifier) ? Modifier : Modifier + " ";
+            return modifier + Name;
+        }
+
+        #endregion
+
         #region Constructor
 
-        internal TypeMetadataViewModel(TypeMetadata type)
+        internal TypeMetadataViewModel(TypeMetadata typeMetadataMetadata)
         {
-            
-            Name = GetModifier(type.Modifiers?.Item1) + type.TypeName;
-            _type = type;
+            _typeMetadata = typeMetadataMetadata;
+            Modifier = GetModifierName(_typeMetadata.Modifiers?.Item1);
+            Name = _typeMetadata.TypeName;
         }
+
+        #endregion
+
+        #region Private
+
+        private readonly TypeMetadata _typeMetadata;
 
         #endregion
 
@@ -19,41 +37,43 @@ namespace Project.ViewModel
         {
             Child.Clear();
 
-            if (_type.Methods != null)
-                foreach (MethodMetadata method in _type.Methods)
+            if (_typeMetadata.Methods != null)
+                foreach (MethodMetadata method in _typeMetadata.Methods)
                     Child.Add(new MethodMetadataViewModel(method));
 
-            if (_type.Constructors != null)
-                foreach (MethodMetadata constructors in _type.Constructors)
+            if (_typeMetadata.Constructors != null)
+                foreach (MethodMetadata constructors in _typeMetadata.Constructors)
                     Child.Add(new MethodMetadataViewModel(constructors));
 
-            if (_type.GenericArguments != null)
-                foreach (TypeMetadata genericArgument in _type.GenericArguments)
+            if (_typeMetadata.GenericArguments != null)
+                foreach (TypeMetadata genericArgument in _typeMetadata.GenericArguments)
                     Child.Add(new TypeMetadataViewModel(genericArgument));
 
-            if (_type.ImplementedInterfaces != null)
-                foreach (TypeMetadata implementedInterface in _type.ImplementedInterfaces)
+            if (_typeMetadata.ImplementedInterfaces != null)
+                foreach (TypeMetadata implementedInterface in _typeMetadata.ImplementedInterfaces)
                     Child.Add(new TypeMetadataViewModel(implementedInterface));
 
-            if (_type.NestedTypes != null)
-                foreach (TypeMetadata nestedType in _type.NestedTypes)
+            if (_typeMetadata.NestedTypes != null)
+                foreach (TypeMetadata nestedType in _typeMetadata.NestedTypes)
                     Child.Add(new TypeMetadataViewModel(nestedType));
 
-            if (_type.Properties != null)
-                foreach (PropertyMetadata property in _type.Properties)
+            if (_typeMetadata.Properties != null)
+                foreach (PropertyMetadata property in _typeMetadata.Properties)
                     Child.Add(new PropertyMetadataViewModel(property));
 
-            if (_type.Fields != null)
-                foreach (FieldMetadata field in _type.Fields)
+            if (_typeMetadata.Fields != null)
+                foreach (FieldMetadata field in _typeMetadata.Fields)
                     Child.Add(new FieldMetadataViewModel(field));
 
-            if (_type.Attributes != null)
-                foreach (AttributeMetadata attribute in _type.Attributes)
+            if (_typeMetadata.Attributes != null)
+                foreach (AttributeMetadata attribute in _typeMetadata.Attributes)
                     Child.Add(new AttributeMetadataViewModel(attribute));
+
+            if (_typeMetadata.Events != null)
+                foreach (EventMetadata singleEvent in _typeMetadata.Events)
+                    Child.Add(new EventMetadataViewModel(singleEvent));
 
             WasBuilt = true;
         }
-
-        private readonly TypeMetadata _type;
     }
 }
