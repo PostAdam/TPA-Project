@@ -10,6 +10,8 @@ namespace Project.Model.Reflection.Model
     [DataContract(IsReference = true)]
     public class MethodMetadata
     {
+        #region Emit APi
+
         internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
         {
             return from MethodBase method in methods select new MethodMetadata(method);
@@ -23,7 +25,7 @@ namespace Project.Model.Reflection.Model
             return new MethodMetadata(method);
         }
 
-        #region Private
+        #endregion
 
         #region Variables
 
@@ -69,6 +71,7 @@ namespace Project.Model.Reflection.Model
 
         private static bool EmitExtension(MethodBase method)
         {
+            //TODO: wtf?
             return method.IsDefined(typeof(ExtensionAttribute), true);
         }
 
@@ -97,8 +100,6 @@ namespace Project.Model.Reflection.Model
             return new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>(access, _abstract, _static,
                 _virtual);
         }
-
-        #endregion
 
         #endregion
     }

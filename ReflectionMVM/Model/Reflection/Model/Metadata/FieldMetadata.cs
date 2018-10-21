@@ -28,8 +28,6 @@ namespace Project.Model.Reflection.Model
         [DataMember] internal StaticEnum IsStatic;
         [DataMember] internal IEnumerable<TypeMetadata> FieldAttributes;
 
-        #endregion
-
         internal static AccessLevel GetModifier(FieldInfo fieldInfo)
         {
             AccessLevel access = AccessLevel.Private;
@@ -43,5 +41,7 @@ namespace Project.Model.Reflection.Model
                 access = AccessLevel.Internal;
             return access;
         }
+
+        #endregion
     }
 }

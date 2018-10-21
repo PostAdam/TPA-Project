@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -37,27 +36,14 @@ namespace Project.Model.Reflection.Model
 
         #endregion
 
-        #region API
-
-        internal static TypeMetadata EmitReference(Type type)
-        {
-            if (!type.IsGenericType)
-            {
-                return new TypeMetadata(type.Name, type.GetNamespace());
-            }
-            else
-            {
-                return new TypeMetadata(type.Name, type.GetNamespace(),
-                    EmitTypes(type.GetGenericArguments()));
-            }
-        }
+        #region Emit API
 
         internal static IEnumerable<TypeMetadata> EmitTypes(IEnumerable<Type> types)
         {
             return from type in types select EmitType(type);
         }
 
-        public static TypeMetadata EmitType(Type type)
+        internal static TypeMetadata EmitType(Type type)
         {
             if (type == null)
             {
@@ -81,34 +67,6 @@ namespace Project.Model.Reflection.Model
 
         #endregion
 
-        #region Variables
-
-        [DataMember] internal string TypeName;
-        [DataMember] internal string NamespaceName;
-        [DataMember] internal TypeMetadata BaseType;
-        [DataMember] internal TypeMetadata DeclaringType;
-        [DataMember] internal TypeKind TypeKind;
-        [DataMember] internal Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers;
-        [DataMember] internal IEnumerable<FieldMetadata> Fields;
-        [DataMember] internal IEnumerable<TypeMetadata> GenericArguments;
-        [DataMember] internal IEnumerable<TypeMetadata> Attributes;
-        [DataMember] internal IEnumerable<TypeMetadata> ImplementedInterfaces;
-        [DataMember] internal IEnumerable<TypeMetadata> NestedTypes;
-        [DataMember] internal IEnumerable<PropertyMetadata> Properties;
-        [DataMember] internal IEnumerable<MethodMetadata> Methods;
-        [DataMember] internal IEnumerable<MethodMetadata> Constructors;
-        [DataMember] internal IEnumerable<EventMetadata> Events;
-
-        public const BindingFlags AllAccessLevels = BindingFlags.NonPublic
-                                                    | BindingFlags.DeclaredOnly
-                                                    | BindingFlags.Public
-                                                    | BindingFlags.Static
-                                                    | BindingFlags.Instance;
-
-        #endregion
-
-        #region Private
-
         #region Private Constructors
 
         private TypeMetadata(string typeName, string namespaceName)
@@ -126,7 +84,7 @@ namespace Project.Model.Reflection.Model
 
         #endregion
 
-        #region Methods
+        #region Private Methods
 
         private static IEnumerable<FieldMetadata> EmitFields(IEnumerable<FieldInfo> fieldsInfo)
         {
@@ -138,11 +96,10 @@ namespace Project.Model.Reflection.Model
             return from singleEvent in events select new EventMetadata(singleEvent);
         }
 
-        internal static IEnumerable<PropertyMetadata> EmitProperties(IEnumerable<PropertyInfo> props)
+        private static IEnumerable<PropertyMetadata> EmitProperties(IEnumerable<PropertyInfo> props)
         {
             return from prop in props select new PropertyMetadata(prop);
         }
-
 
         private static TypeKind GetTypeKind(Type type)
         {
@@ -152,7 +109,7 @@ namespace Project.Model.Reflection.Model
                 TypeKind.Class;
         }
 
-        internal static Tuple<AccessLevel, SealedEnum, AbstractEnum> EmitModifiers(Type type)
+        private static Tuple<AccessLevel, SealedEnum, AbstractEnum> EmitModifiers(Type type)
         {
             AccessLevel access = AccessLevel.Private;
             if (type.IsPublic)
@@ -181,13 +138,41 @@ namespace Project.Model.Reflection.Model
             {
                 return null;
             }
-            else
+
+            if (!baseType.IsGenericType)
             {
-                return EmitReference(baseType);
+                return new TypeMetadata(baseType.Name, baseType.GetNamespace());
             }
+
+            return new TypeMetadata(baseType.Name, baseType.GetNamespace(),
+                EmitTypes(baseType.GetGenericArguments()));
         }
 
         #endregion
+
+        #region Variables
+
+        [DataMember] internal string TypeName;
+        [DataMember] internal string NamespaceName;
+        [DataMember] internal TypeMetadata BaseType;
+        [DataMember] internal TypeMetadata DeclaringType;
+        [DataMember] internal TypeKind TypeKind;
+        [DataMember] internal Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers;
+        [DataMember] internal IEnumerable<FieldMetadata> Fields;
+        [DataMember] internal IEnumerable<TypeMetadata> GenericArguments;
+        [DataMember] internal IEnumerable<TypeMetadata> Attributes;
+        [DataMember] internal IEnumerable<TypeMetadata> ImplementedInterfaces;
+        [DataMember] internal IEnumerable<TypeMetadata> NestedTypes;
+        [DataMember] internal IEnumerable<PropertyMetadata> Properties;
+        [DataMember] internal IEnumerable<MethodMetadata> Methods;
+        [DataMember] internal IEnumerable<MethodMetadata> Constructors;
+        [DataMember] internal IEnumerable<EventMetadata> Events;
+
+        const BindingFlags AllAccessLevels = BindingFlags.NonPublic
+                                             | BindingFlags.DeclaredOnly
+                                             | BindingFlags.Public
+                                             | BindingFlags.Static
+                                             | BindingFlags.Instance;
 
         #endregion
     }
