@@ -46,6 +46,20 @@ namespace Project.ViewModel
                 Child.Add(new TypeMetadataViewModel(_parameterMetadata.TypeMetadata));
             }
 
+            foreach (var attribute in _parameterMetadata.ParameterAttributes)
+            {
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
+                {
+                    Child.Add(new TypeMetadataViewModel(
+                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
+                }
+                else
+                {
+                    Child.Add(new TypeMetadataViewModel(attribute));
+                }
+            }
+
+
             WasBuilt = true;
         }
     }

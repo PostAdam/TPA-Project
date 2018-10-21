@@ -2,7 +2,7 @@
 {
     internal enum AbstractEnum
     {
-        NotAbstract,
-        Abstract
+        Abstract,
+        NotAbstract
     }
 }

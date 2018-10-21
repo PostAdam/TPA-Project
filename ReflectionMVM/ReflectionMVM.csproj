@@ -92,7 +92,6 @@
     <Compile Include="Model\Reflection\Model\Enums\VirtualEnum.cs" />
     <Compile Include="Model\Reflection\Model\ExtensionMethods.cs" />
     <Compile Include="Model\Reflection\Model\Metadata\AssemblyMetadata.cs" />
-    <Compile Include="Model\Reflection\Model\Metadata\AttributeMetadata.cs" />
     <Compile Include="Model\Reflection\Model\Metadata\EventMetadata.cs" />
     <Compile Include="Model\Reflection\Model\Metadata\FieldMetadata.cs" />
     <Compile Include="Model\Reflection\Model\Metadata\MethodMetadata.cs" />

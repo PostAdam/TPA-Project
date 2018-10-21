@@ -12,16 +12,12 @@ namespace Project.Model.Reflection.Model
 
         internal EventMetadata(EventInfo eventInfo)
         {
-            TypeMetadata = TypeMetadata.EmitReference(eventInfo.EventHandlerType);
+            TypeMetadata = TypeMetadata.EmitType(eventInfo.EventHandlerType);
             Name = eventInfo.Name;
-            Modifiers = TypeMetadata.Modifiers;
             EventAttributes = TypeMetadata.EmitAttributes(eventInfo.GetCustomAttributes());
-            AddMethodMetadata = 
-                eventInfo.AddMethod != null ? MethodMetadata.EmitMethod(eventInfo.AddMethod) : null;
-            RaiseMethodMetadata =
-                eventInfo.RaiseMethod != null ? MethodMetadata.EmitMethod(eventInfo.RaiseMethod) : null;
-            RemoveMethodMetadata =
-                eventInfo.RemoveMethod != null ? MethodMetadata.EmitMethod(eventInfo.RemoveMethod) : null;
+            AddMethodMetadata = MethodMetadata.EmitMethod(eventInfo.AddMethod);
+            RaiseMethodMetadata = MethodMetadata.EmitMethod(eventInfo.RaiseMethod);
+            RemoveMethodMetadata = MethodMetadata.EmitMethod(eventInfo.RemoveMethod);
             Multicast = eventInfo.IsMulticast;
         }
 
@@ -31,12 +27,11 @@ namespace Project.Model.Reflection.Model
 
         [DataMember] internal string Name;
         [DataMember] internal TypeMetadata TypeMetadata;
-        [DataMember] internal Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers;
         [DataMember] internal MethodMetadata AddMethodMetadata;
         [DataMember] internal MethodMetadata RaiseMethodMetadata;
         [DataMember] internal MethodMetadata RemoveMethodMetadata;
         [DataMember] internal bool Multicast;
-        [DataMember] internal IEnumerable<AttributeMetadata> EventAttributes;
+        [DataMember] internal IEnumerable<TypeMetadata> EventAttributes;
 
         #endregion
     }

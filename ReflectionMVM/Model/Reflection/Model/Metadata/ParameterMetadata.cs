@@ -1,16 +1,20 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace Project.Model.Reflection.Model
 {
-    [DataContract( IsReference = true )]
+    [DataContract(IsReference = true)]
     public class ParameterMetadata
     {
         #region Constructor
 
-        internal ParameterMetadata( string name, TypeMetadata typeMetadata )
+        internal ParameterMetadata(ParameterInfo parameterInfo)
         {
-            Name = name;
-            TypeMetadata = typeMetadata;
+//TODO: get more data from reflection and change viewmodel (like default value, is out, is ref etc.)
+            Name = parameterInfo.Name;
+            TypeMetadata = TypeMetadata.EmitType(parameterInfo.ParameterType);
+            ParameterAttributes = TypeMetadata.EmitAttributes(parameterInfo.GetCustomAttributes());
         }
 
         #endregion
@@ -19,6 +23,9 @@ namespace Project.Model.Reflection.Model
 
         [DataMember] internal string Name;
         [DataMember] internal TypeMetadata TypeMetadata;
+        [DataMember] internal int Position;
+        [DataMember] internal IEnumerable<TypeMetadata> ParameterAttributes;
+        [DataMember] internal object DefaultValue;
 
         #endregion
     }

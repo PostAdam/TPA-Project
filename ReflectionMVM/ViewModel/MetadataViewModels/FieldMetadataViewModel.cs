@@ -1,4 +1,5 @@
-﻿using Project.Model.Reflection.Model;
+﻿using System.Diagnostics.Eventing.Reader;
+using Project.Model.Reflection.Model;
 using ReflectionMVM.ViewModel;
 
 namespace Project.ViewModel
@@ -10,7 +11,8 @@ namespace Project.ViewModel
         public override string ToString()
         {
             string modifier = string.IsNullOrEmpty(Modifier) ? Modifier : Modifier + " ";
-            return modifier + TypeName + " " + Name;
+            string isStatic = _fieldMetadata.IsStatic == StaticEnum.Static ? "static " : "";
+            return modifier + isStatic + Name + ": " + TypeName;
         }
 
         #endregion
@@ -20,9 +22,9 @@ namespace Project.ViewModel
         internal FieldMetadataViewModel(FieldMetadata fieldMetadata)
         {
             _fieldMetadata = fieldMetadata;
-            Modifier = GetModifierName(_fieldMetadata.TypeMetadata.Modifiers?.Item1);
-            TypeName = _fieldMetadata.TypeMetadata.TypeName;
             Name = _fieldMetadata.Name;
+            TypeName = _fieldMetadata.TypeMetadata.TypeName;
+            Modifier = _fieldMetadata.Modifiers.ToString().ToLower();
         }
 
         #endregion
@@ -48,14 +50,14 @@ namespace Project.ViewModel
 
             foreach (var attribute in _fieldMetadata.FieldAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeMetadata.TypeName))
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
                 {
                     Child.Add(new TypeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.TypeMetadata.TypeName]));
+                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
                 }
                 else
                 {
-                    Child.Add(new TypeMetadataViewModel(attribute.TypeMetadata));
+                    Child.Add(new TypeMetadataViewModel(attribute));
                 }
             }
 

@@ -12,14 +12,17 @@ namespace Project.Model.Reflection.Model
     {
         internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
         {
-            return from MethodBase currentMethod in methods
-                where currentMethod.GetVisible()
-                select new MethodMetadata(currentMethod);
+            return from MethodBase method in methods select new MethodMetadata(method);
         }
+
         internal static MethodMetadata EmitMethod(MethodBase method)
         {
+            if (method == null)
+                return null;
+
             return new MethodMetadata(method);
         }
+
         #region Private
 
         #region Variables
@@ -27,7 +30,7 @@ namespace Project.Model.Reflection.Model
         [DataMember] internal string Name;
         [DataMember] internal bool Extension;
         [DataMember] internal TypeMetadata ReturnType;
-        [DataMember] internal IEnumerable<AttributeMetadata> MethodAttributes;
+        [DataMember] internal IEnumerable<TypeMetadata> MethodAttributes;
         [DataMember] internal IEnumerable<ParameterMetadata> Parameters;
         [DataMember] internal IEnumerable<TypeMetadata> GenericArguments;
         [DataMember] internal Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers;
@@ -40,7 +43,7 @@ namespace Project.Model.Reflection.Model
         {
             Name = method.Name;
             GenericArguments = method.IsGenericMethodDefinition
-                ? TypeMetadata.EmitGenericArguments(method.GetGenericArguments())
+                ? TypeMetadata.EmitTypes(method.GetGenericArguments())
                 : null;
             ReturnType = EmitReturnType(method);
             Parameters = EmitParameters(method.GetParameters());
@@ -53,31 +56,15 @@ namespace Project.Model.Reflection.Model
 
         #region Emiters
 
-        private static IEnumerable<ParameterMetadata> EmitParameters(IList<ParameterInfo> parms)
+        private static IEnumerable<ParameterMetadata> EmitParameters(IList<ParameterInfo> parameters)
         {
-            foreach (ParameterInfo parameter in parms)
-            {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(parameter.ParameterType.Name) == false)
-                {
-                    new TypeMetadata(parameter.ParameterType);
-                }
-            }
-
-            return from parm in parms
-                select new ParameterMetadata(parm.Name, TypeMetadata.EmitReference(parm.ParameterType));
+            return from parameter in parameters select new ParameterMetadata(parameter);
         }
 
         private static TypeMetadata EmitReturnType(MethodBase method)
         {
             MethodInfo methodInfo = method as MethodInfo;
-            if (methodInfo == null)
-                return null;
-            if (TypesDictionary.ReflectedTypes.ContainsKey(methodInfo.Name) == false)
-            {
-                new TypeMetadata(methodInfo.ReturnType);
-            }
-
-            return TypeMetadata.EmitReference(methodInfo.ReturnType);
+            return TypeMetadata.EmitType(methodInfo?.ReturnType);
         }
 
         private static bool EmitExtension(MethodBase method)
@@ -87,13 +74,13 @@ namespace Project.Model.Reflection.Model
 
         private static Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> EmitModifiers(MethodBase method)
         {
-            AccessLevel access = AccessLevel.IsPrivate;
+            AccessLevel access = AccessLevel.Private;
             if (method.IsPublic)
-                access = AccessLevel.IsPublic;
+                access = AccessLevel.Public;
             else if (method.IsFamily)
-                access = AccessLevel.IsProtected;
+                access = AccessLevel.Protected;
             else if (method.IsFamilyAndAssembly)
-                access = AccessLevel.IsProtectedInternal;
+                access = AccessLevel.Internal;
 
             AbstractEnum _abstract = AbstractEnum.NotAbstract;
             if (method.IsAbstract)

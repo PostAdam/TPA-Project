@@ -66,7 +66,7 @@ namespace Project.ViewModel
                     Child.Add(new FieldMetadataViewModel(field));
 
             if (_typeMetadata.Attributes != null)
-                foreach (AttributeMetadata attribute in _typeMetadata.Attributes)
+                foreach (TypeMetadata attribute in _typeMetadata.Attributes)
                     Child.Add(new AttributeMetadataViewModel(attribute));
 
             if (_typeMetadata.Events != null)

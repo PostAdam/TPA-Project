@@ -1,4 +1,5 @@
-﻿using Project.Model.Reflection.Model;
+﻿using System.Runtime.InteropServices;
+using Project.Model.Reflection.Model;
 using ReflectionMVM.ViewModel;
 
 namespace Project.ViewModel
@@ -16,32 +17,32 @@ namespace Project.ViewModel
 
         #region Constructor
 
-        internal AttributeMetadataViewModel(AttributeMetadata attributeMetadata)
+        internal AttributeMetadataViewModel(TypeMetadata attributeMetadata)
         {
             _attributeMetadata = attributeMetadata;
-            Name = _attributeMetadata.Name;
-            TypeName = _attributeMetadata.TypeMetadata.TypeName;
+            Name = _attributeMetadata.TypeName;
+            TypeName = _attributeMetadata.TypeName;
         }
 
         #endregion
 
         #region Private
 
-        private readonly AttributeMetadata _attributeMetadata;
+        private readonly TypeMetadata _attributeMetadata;
 
         #endregion
 
         protected override void BuildMyself()
         {
             Child.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_attributeMetadata.TypeMetadata.TypeName))
+            if (TypesDictionary.ReflectedTypes.ContainsKey(_attributeMetadata.TypeName))
             {
                 Child.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_attributeMetadata.TypeMetadata.TypeName]));
+                    TypesDictionary.ReflectedTypes[_attributeMetadata.TypeName]));
             }
             else
             {
-                Child.Add(new TypeMetadataViewModel(_attributeMetadata.TypeMetadata));
+                Child.Add(new TypeMetadataViewModel(_attributeMetadata));
             }
 
             WasBuilt = true;

@@ -48,14 +48,14 @@ namespace Project.ViewModel
 
             foreach (var attribute in _propertyMetadata.PropertyAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeMetadata.TypeName))
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
                 {
                     Child.Add(new TypeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.TypeMetadata.TypeName]));
+                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
                 }
                 else
                 {
-                    Child.Add(new TypeMetadataViewModel(attribute.TypeMetadata));
+                    Child.Add(new TypeMetadataViewModel(attribute));
                 }
             }
 

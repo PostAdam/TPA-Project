@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -13,27 +14,25 @@ namespace Project.Model.Reflection.Model
 
         internal TypeMetadata(Type type)
         {
-            if (TypesDictionary.ReflectedTypes.ContainsKey(type.Name) == false)
-            {
-                TypesDictionary.ReflectedTypes.Add(type.Name, this);
-            }
-            
-            TypeName = type.Name;
-            DeclaringType = EmitDeclaringType(type.DeclaringType);
-            Constructors = MethodMetadata.EmitMethods(type.GetConstructors());
-            Methods = MethodMetadata.EmitMethods(type.GetMethods());
-            NestedTypes = EmitNestedTypes(type.GetNestedTypes());
-            ImplementedInterfaces = EmitImplements(type.GetInterfaces());
-            GenericArguments = type.IsGenericTypeDefinition
-                ? EmitGenericArguments(type.GetGenericArguments())
-                : null;
-            Modifiers = EmitModifiers(type);
+            // Types
             BaseType = EmitExtends(type);
-            Events = EmitEvents(type.GetEvents());
-            Properties = PropertyMetadata.EmitProperties(type.GetProperties());
-            Fields = EmitFields(type.GetFields());
-            TypeKind = GetTypeKind(type);
+            DeclaringType = EmitType(type.DeclaringType);
+            NestedTypes = EmitTypes(type.GetNestedTypes(AllAccessLevels));
             Attributes = EmitAttributes(type.GetCustomAttributes(false).Cast<Attribute>());
+            Fields = EmitFields(type.GetFields(AllAccessLevels));
+            Events = EmitEvents(type.GetEvents(AllAccessLevels));
+            GenericArguments = type.IsGenericTypeDefinition ? EmitTypes(type.GetGenericArguments()) : null;
+            Properties = EmitProperties(type.GetProperties(AllAccessLevels));
+            ImplementedInterfaces = EmitTypes(type.GetInterfaces());
+
+            // Methods
+            Constructors = MethodMetadata.EmitMethods(type.GetConstructors(AllAccessLevels));
+            Methods = MethodMetadata.EmitMethods(type.GetMethods(AllAccessLevels));
+
+            // Infos
+            TypeName = type.Name;
+            Modifiers = EmitModifiers(type);
+            TypeKind = GetTypeKind(type);
         }
 
         #endregion
@@ -49,13 +48,34 @@ namespace Project.Model.Reflection.Model
             else
             {
                 return new TypeMetadata(type.Name, type.GetNamespace(),
-                    EmitGenericArguments(type.GetGenericArguments()));
+                    EmitTypes(type.GetGenericArguments()));
             }
         }
 
-        internal static IEnumerable<TypeMetadata> EmitGenericArguments(IEnumerable<Type> arguments)
+        internal static IEnumerable<TypeMetadata> EmitTypes(IEnumerable<Type> types)
         {
-            return from Type argument in arguments select EmitReference(argument);
+            return from type in types select EmitType(type);
+        }
+
+        public static TypeMetadata EmitType(Type type)
+        {
+            if (type == null)
+            {
+                return null;
+            }
+
+            if (!TypesDictionary.ReflectedTypes.ContainsKey(type.Name))
+            {
+                TypesDictionary.ReflectedTypes.Add(type.Name, new TypeMetadata(type));
+            }
+
+            return TypesDictionary.ReflectedTypes[type.Name];
+        }
+
+        internal static IEnumerable<TypeMetadata> EmitAttributes(IEnumerable<Attribute> attributes)
+        {
+            var attributesTypes = from attribute in attributes select attribute.GetType();
+            return EmitTypes(attributesTypes);
         }
 
         #endregion
@@ -70,13 +90,19 @@ namespace Project.Model.Reflection.Model
         [DataMember] internal Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers;
         [DataMember] internal IEnumerable<FieldMetadata> Fields;
         [DataMember] internal IEnumerable<TypeMetadata> GenericArguments;
-        [DataMember] internal IEnumerable<AttributeMetadata> Attributes;
+        [DataMember] internal IEnumerable<TypeMetadata> Attributes;
         [DataMember] internal IEnumerable<TypeMetadata> ImplementedInterfaces;
         [DataMember] internal IEnumerable<TypeMetadata> NestedTypes;
         [DataMember] internal IEnumerable<PropertyMetadata> Properties;
         [DataMember] internal IEnumerable<MethodMetadata> Methods;
         [DataMember] internal IEnumerable<MethodMetadata> Constructors;
         [DataMember] internal IEnumerable<EventMetadata> Events;
+
+        public const BindingFlags AllAccessLevels = BindingFlags.NonPublic
+                                                    | BindingFlags.DeclaredOnly
+                                                    | BindingFlags.Public
+                                                    | BindingFlags.Static
+                                                    | BindingFlags.Instance;
 
         #endregion
 
@@ -101,91 +127,41 @@ namespace Project.Model.Reflection.Model
 
         #region Methods
 
-        internal static IEnumerable<AttributeMetadata> EmitAttributes(IEnumerable<Attribute> attributes)
+        private static IEnumerable<FieldMetadata> EmitFields(IEnumerable<FieldInfo> fieldsInfo)
         {
-            attributes = attributes.ToList();
-            foreach (Attribute attribute in attributes)
-            {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.GetType().Name) == false)
-                {
-                    new TypeMetadata(attribute.GetType());
-                }
-            }
-
-            return from attribute in attributes
-                select new AttributeMetadata(attribute.GetType().Name,
-                    EmitReference(attribute.GetType()));
+            return from fieldInfo in fieldsInfo select new FieldMetadata(fieldInfo);
         }
 
-        private static IEnumerable<FieldMetadata> EmitFields(IEnumerable<FieldInfo> fields)
-        {
-            fields = fields.ToList();
-            foreach (FieldInfo field in fields)
-            {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(field.GetType().Name) == false)
-                {
-                    new TypeMetadata(field.GetType());
-                }
-            }
-
-            return from field in fields
-                select new FieldMetadata(field.Name, EmitReference(field.FieldType),
-                    EmitAttributes(field.GetCustomAttributes()));
-        }
         private static IEnumerable<EventMetadata> EmitEvents(IEnumerable<EventInfo> events)
         {
-            events = events.ToList();
-            foreach (EventInfo singleEvent in events)
-            {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(singleEvent.GetType().Name) == false)
-                {
-                    new TypeMetadata(singleEvent.GetType());
-                }
-            }
-
-            return from singleEvent in events
-                select new EventMetadata(singleEvent);
+            return from singleEvent in events select new EventMetadata(singleEvent);
         }
 
-        private TypeMetadata EmitDeclaringType(Type declaringType)
+        internal static IEnumerable<PropertyMetadata> EmitProperties(IEnumerable<PropertyInfo> props)
         {
-            if (declaringType == null)
-                return null;
-            return EmitReference(declaringType);
+            return from prop in props select new PropertyMetadata(prop);
         }
 
-        private IEnumerable<TypeMetadata> EmitNestedTypes(IEnumerable<Type> nestedTypes)
-        {
-            return from type in nestedTypes
-                where type.GetVisible()
-                select new TypeMetadata(type);
-        }
-
-        private IEnumerable<TypeMetadata> EmitImplements(IEnumerable<Type> interfaces)
-        {
-            return from currentInterface in interfaces
-                select EmitReference(currentInterface);
-        }
 
         private static TypeKind GetTypeKind(Type type)
         {
-            return type.IsEnum ? TypeKind.EnumType :
-                type.IsValueType ? TypeKind.StructType :
-                type.IsInterface ? TypeKind.InterfaceType :
-                TypeKind.ClassType;
+            return type.IsEnum ? TypeKind.Enum :
+                type.IsValueType ? TypeKind.Struct :
+                type.IsInterface ? TypeKind.Interface :
+                TypeKind.Class;
         }
 
         internal static Tuple<AccessLevel, SealedEnum, AbstractEnum> EmitModifiers(Type type)
         {
-            AccessLevel access = AccessLevel.IsPrivate;
+            AccessLevel access = AccessLevel.Private;
             if (type.IsPublic)
-                access = AccessLevel.IsPublic;
+                access = AccessLevel.Public;
             else if (type.IsNestedPublic)
-                access = AccessLevel.IsPublic;
+                access = AccessLevel.Public;
             else if (type.IsNestedFamily)
-                access = AccessLevel.IsProtected;
+                access = AccessLevel.Protected;
             else if (type.IsNestedFamANDAssem)
-                access = AccessLevel.IsProtectedInternal;
+                access = AccessLevel.Internal;
 
             SealedEnum _sealed = SealedEnum.NotSealed;
             if (type.IsSealed) _sealed = SealedEnum.Sealed;

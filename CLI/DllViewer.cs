@@ -115,7 +115,7 @@ namespace CLI
             {
                 PrintIndent(indentSize);
                 PrintOptionChar(i);
-                Console.WriteLine(_currentLevelNodes[i].Name);
+                Console.WriteLine(_currentLevelNodes[i].FullName);
             }
         }
 
@@ -130,7 +130,7 @@ namespace CLI
                     _pathFromRoot[currentLevel] >= index)
                 {
                     PrintIndent(currentLevel - startingLevel);
-                    Console.WriteLine(node.Name);
+                    Console.WriteLine(node.FullName);
                 }
                 else
                 {
@@ -166,7 +166,7 @@ namespace CLI
                 {
                     for (int j = _nodesBelowPath.Count; j > 0; j--)
                         Console.Write(@"  ");
-                    Console.WriteLine(node.Name);
+                    Console.WriteLine(node.FullName);
                 }
             }
 

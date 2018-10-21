@@ -18,16 +18,16 @@ namespace ReflectionMVM.ViewModel
             string modifier = null;
             switch (accessLevel)
             {
-                case AccessLevel.IsPublic:
+                case AccessLevel.Public:
                     modifier = "public";
                     break;
-                case AccessLevel.IsProtected:
+                case AccessLevel.Protected:
                     modifier = "protected";
                     break;
-                case AccessLevel.IsProtectedInternal:
+                case AccessLevel.Internal:
                     modifier = "internal";
                     break;
-                case AccessLevel.IsPrivate:
+                case AccessLevel.Private:
                     modifier = "private";
                     break;
             }

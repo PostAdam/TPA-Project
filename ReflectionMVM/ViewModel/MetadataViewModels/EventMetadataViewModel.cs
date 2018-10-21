@@ -10,7 +10,6 @@ namespace Project.ViewModel
         internal EventMetadataViewModel(EventMetadata eventMetadata)
         {
             _eventMetadata = eventMetadata;
-            Modifier = GetModifierName(_eventMetadata.Modifiers?.Item1);
             Name = _eventMetadata.Name;
             TypeName = _eventMetadata.TypeMetadata.TypeName;
             AddMethodMetadata = _eventMetadata.AddMethodMetadata;
@@ -40,14 +39,14 @@ namespace Project.ViewModel
 
             foreach (var attribute in _eventMetadata.EventAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeMetadata.TypeName))
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
                 {
                     Child.Add(new TypeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.TypeMetadata.TypeName]));
+                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
                 }
                 else
                 {
-                    Child.Add(new TypeMetadataViewModel(attribute.TypeMetadata));
+                    Child.Add(new TypeMetadataViewModel(attribute));
                 }
             }
 
@@ -65,7 +64,8 @@ namespace Project.ViewModel
 
         public override string ToString()
         {
-            return TypeName + " " + Name;
+            string multicast = _eventMetadata.Multicast ? "multicast " : "singlecast";
+            return multicast + TypeName + " " + Name;
         }
     }
 }

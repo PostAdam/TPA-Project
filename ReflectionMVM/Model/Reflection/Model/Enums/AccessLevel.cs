@@ -2,9 +2,9 @@
 {
     internal enum AccessLevel
     {
-        IsPublic,
-        IsProtected,
-        IsProtectedInternal,
-        IsPrivate
+        Public,
+        Protected,
+        Internal,
+        Private
     }
 }

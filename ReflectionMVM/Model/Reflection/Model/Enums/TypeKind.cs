@@ -2,9 +2,9 @@
 {
     internal enum TypeKind
     {
-        EnumType,
-        StructType,
-        InterfaceType,
-        ClassType
+        Enum,
+        Struct,
+        Interface,
+        Class
     }
 }

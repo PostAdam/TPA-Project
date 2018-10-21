@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Project.Model.Reflection.Model
 {
-    [DataContract( IsReference = true )]
+    [DataContract(IsReference = true)]
     public class FieldMetadata
     {
         #region Constructor
-            
-        internal FieldMetadata( string name, TypeMetadata typeMetadata, IEnumerable<AttributeMetadata> attributes)
+
+        internal FieldMetadata(FieldInfo fieldInfo)
         {
-            Name = name;
-            Modifiers = typeMetadata.Modifiers;
-            TypeMetadata = typeMetadata;
-            FieldAttributes = attributes;
+            Name = fieldInfo.Name;
+            TypeMetadata = TypeMetadata.EmitType(fieldInfo.FieldType);
+            Modifiers = GetModifier(fieldInfo);
+            IsStatic = fieldInfo.IsStatic ? StaticEnum.Static : StaticEnum.NotStatic;
+            FieldAttributes = TypeMetadata.EmitAttributes(fieldInfo.GetCustomAttributes());
         }
 
         #endregion
@@ -24,9 +24,24 @@ namespace Project.Model.Reflection.Model
 
         [DataMember] internal string Name;
         [DataMember] internal TypeMetadata TypeMetadata;
-        [DataMember] internal Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers;
-        [DataMember] internal IEnumerable<AttributeMetadata> FieldAttributes;
+        [DataMember] internal AccessLevel Modifiers;
+        [DataMember] internal StaticEnum IsStatic;
+        [DataMember] internal IEnumerable<TypeMetadata> FieldAttributes;
 
         #endregion
+
+        internal static AccessLevel GetModifier(FieldInfo fieldInfo)
+        {
+            AccessLevel access = AccessLevel.Private;
+            if (fieldInfo.IsPublic)
+                access = AccessLevel.Public;
+            else if (fieldInfo.IsFamilyOrAssembly)
+                access = AccessLevel.Public;
+            else if (fieldInfo.IsFamily)
+                access = AccessLevel.Protected;
+            else if (fieldInfo.IsFamilyOrAssembly)
+                access = AccessLevel.Internal;
+            return access;
+        }
     }
 }
