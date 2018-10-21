@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Project.ViewModel;
+using ViewModel.MetadataBaseViewModels;
 
 namespace CLI
 {

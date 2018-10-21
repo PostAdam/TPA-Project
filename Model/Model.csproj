@@ -1,20 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FBB9883D-50FA-4AFB-9155-711B6B340ACE}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>CLI</RootNamespace>
-    <AssemblyName>CLI</AssemblyName>
+    <ProjectGuid>{5959593D-9565-46CD-BE35-983E93145117}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Model</RootNamespace>
+    <AssemblyName>Model</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +27,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -35,20 +37,30 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Reflection\Enums\AbstractEnum.cs" />
+    <Compile Include="Reflection\Enums\AccessLevel.cs" />
+    <Compile Include="Reflection\Enums\SealedEnum.cs" />
+    <Compile Include="Reflection\Enums\StaticEnum.cs" />
+    <Compile Include="Reflection\Enums\TypeKind.cs" />
+    <Compile Include="Reflection\Enums\VirtualEnum.cs" />
+    <Compile Include="Reflection\ExtensionMethods.cs" />
+    <Compile Include="Reflection\MetadataModels\AssemblyMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\EventMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\FieldMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\MethodMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\NamespaceMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\ParameterMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\PropertyMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\TypeMetadata.cs" />
+    <Compile Include="Reflection\TypesDictionary.cs" />
+    <Compile Include="Reflection\Reflector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DllViewer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ViewModel\ViewModel.csproj">
-      <Project>{51B15253-D924-4F13-BB50-25B221CBC86B}</Project>
-      <Name>ViewModel</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

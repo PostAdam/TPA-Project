@@ -3,11 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Project;
-using Project.Model.Reflection.Model;
-using Project.ViewModel;
-using ReflectionMVM;
-
+using Model.Reflection.MetadataModels;
+using ViewModel;
+using ViewModel.MetadataViewModels;
 
 namespace ProjectTest
 {
@@ -47,7 +45,7 @@ namespace ProjectTest
         public void ChildTest()
         {
             Logger logger = new Logger( new TextWriterTraceListener( "Logs.log" ) );
-            ViewModel viewModel = new ViewModel( logger );
+            MainViewModel viewModel = new MainViewModel( logger );
             viewModel.LoadDll( @"..\..\ClassLibrary1.dll" );
             viewModel.InitTreeView( viewModel.AssemblyMetadata );
 
@@ -86,7 +84,7 @@ namespace ProjectTest
         public void ChildLifetimeTest()
         {
             Logger logger = new Logger( new TextWriterTraceListener( "Logs.log" ) );
-            ViewModel viewModel = new ViewModel( logger );
+            MainViewModel viewModel = new MainViewModel( logger );
             viewModel.LoadDll(@"..\..\ClassLibrary1.dll");
             viewModel.InitTreeView(viewModel.AssemblyMetadata);
 

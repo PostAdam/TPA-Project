@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Project;
-using ReflectionMVM;
+using ViewModel;
 
 namespace ProjectTest
 {

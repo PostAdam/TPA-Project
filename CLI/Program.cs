@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Project;
-using Project.ViewModel;
-using ReflectionMVM;
+using ViewModel;
 
 namespace CLI
 {
@@ -14,7 +11,7 @@ namespace CLI
         {
             ConfigureConsoleWindow();
             string command;
-            ViewModel viewModel = InitViewModel();
+            MainViewModel viewModel = InitViewModel();
             DllViewer dllViewer = new DllViewer();
             PrintMenu();
             do
@@ -92,10 +89,10 @@ namespace CLI
             Console.ReadKey();
         }
 
-        private static ViewModel InitViewModel()
+        private static MainViewModel InitViewModel()
         {
             Logger logger = new Logger(new TextWriterTraceListener("Logs.log"));
-            ViewModel viewmodel = new ViewModel(logger);
+            MainViewModel viewmodel = new MainViewModel(logger);
             return viewmodel;
         }
 
