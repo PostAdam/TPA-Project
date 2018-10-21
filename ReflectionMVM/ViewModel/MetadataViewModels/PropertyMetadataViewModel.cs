@@ -51,12 +51,12 @@ namespace Project.ViewModel
             {
                 if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
                 {
-                    Child.Add(new TypeMetadataViewModel(
+                    Child.Add(new AttributeMetadataViewModel(
                         TypesDictionary.ReflectedTypes[attribute.TypeName]));
                 }
                 else
                 {
-                    Child.Add(new TypeMetadataViewModel(attribute));
+                    Child.Add(new AttributeMetadataViewModel(attribute));
                 }
             }
 

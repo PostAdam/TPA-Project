@@ -20,7 +20,7 @@ namespace Project.ViewModel
 
         internal ParameterMetadataViewModel(ParameterMetadata parameterMetadata)
         {
-            //TODO: add more info after extracting out ref etc...
+            //TODO: add more info after extracting out, ref, is optional, default value etc... 
             _parameterMetadata = parameterMetadata;
             TypeName = _parameterMetadata.TypeMetadata.TypeName;
             Name = _parameterMetadata.Name;
@@ -51,12 +51,12 @@ namespace Project.ViewModel
             {
                 if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
                 {
-                    Child.Add(new TypeMetadataViewModel(
+                    Child.Add(new AttributeMetadataViewModel(
                         TypesDictionary.ReflectedTypes[attribute.TypeName]));
                 }
                 else
                 {
-                    Child.Add(new TypeMetadataViewModel(attribute));
+                    Child.Add(new AttributeMetadataViewModel(attribute));
                 }
             }
 

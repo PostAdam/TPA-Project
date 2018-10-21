@@ -100,6 +100,19 @@ namespace Project.ViewModel
                     Child.Add(new TypeMetadataViewModel(_methodMetadata.ReturnType));
                 }
 
+            foreach (var attribute in _methodMetadata.MethodAttributes)
+            {
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
+                {
+                    Child.Add(new AttributeMetadataViewModel(
+                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
+                }
+                else
+                {
+                    Child.Add(new AttributeMetadataViewModel(attribute));
+                }
+            }
+
             WasBuilt = true;
         }
     }
