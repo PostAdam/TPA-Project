@@ -43,6 +43,7 @@ namespace Project.ViewModel
                 }
                 try
                 {
+                    //TODO: add different ways to display different types
                     BuildMyself();
                 }
                 catch (Exception e)

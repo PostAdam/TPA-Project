@@ -18,6 +18,7 @@ namespace Project.ViewModel
 
         internal PropertyMetadataViewModel(PropertyMetadata propertyMetadata)
         {
+            //TODO: maybe add more info after PropertyMetadata changes
             _propertyMetadata = propertyMetadata;
             Modifier = GetModifierName(propertyMetadata.Modifiers?.Item1);
             TypeName = _propertyMetadata.TypeMetadata.TypeName;

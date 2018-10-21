@@ -20,6 +20,7 @@ namespace Project.ViewModel
 
         internal ParameterMetadataViewModel(ParameterMetadata parameterMetadata)
         {
+            //TODO: add more info after extracting out ref etc...
             _parameterMetadata = parameterMetadata;
             TypeName = _parameterMetadata.TypeMetadata.TypeName;
             Name = _parameterMetadata.Name;
