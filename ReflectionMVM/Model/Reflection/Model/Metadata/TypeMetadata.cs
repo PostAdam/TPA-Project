@@ -74,6 +74,7 @@ namespace Project.Model.Reflection.Model
 
         internal static IEnumerable<TypeMetadata> EmitAttributes(IEnumerable<Attribute> attributes)
         {
+            if (attributes == null) return null;
             var attributesTypes = from attribute in attributes select attribute.GetType();
             return EmitTypes(attributesTypes);
         }
