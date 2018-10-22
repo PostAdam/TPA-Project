@@ -13,9 +13,9 @@ namespace Model.Reflection.MetadataModels
 
         internal PropertyMetadata(PropertyInfo propertyInfo)
         {
-            Name = propertyInfo.Name;
-            //TODO: add getters and setter connected to this method and check their modifiers 
-//            Modifiers = GetModifier(propertyInfo);
+            Getter = MethodMetadata.EmitMethod(propertyInfo.GetGetMethod(true));
+            Setter = MethodMetadata.EmitMethod(propertyInfo.GetSetMethod(true));
+            Modifiers = GetModifier();
             TypeMetadata = TypeMetadata.EmitType(propertyInfo.PropertyType);
             PropertyAttributes = TypeMetadata.EmitAttributes(propertyInfo.GetCustomAttributes());
         }
@@ -26,9 +26,34 @@ namespace Model.Reflection.MetadataModels
 
         [DataMember] public string Name;
         [DataMember] public IEnumerable<TypeMetadata> PropertyAttributes;
-        [DataMember] public Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers;
+        [DataMember] public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers;
         [DataMember] public TypeMetadata TypeMetadata;
+        [DataMember] public PropertyInfo PropertyInfo;
+        [DataMember] public MethodMetadata Getter;
+        [DataMember] public MethodMetadata Setter;
 
+        #endregion
+
+        #region Private
+
+        private Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> GetModifier()
+        {
+            if (Getter == null && Setter == null) return null;
+
+            if (Getter == null)
+            {
+                return Setter.Modifiers;
+            }
+
+            if (Setter == null)
+            {
+                return Getter.Modifiers;
+            }
+
+            return Getter.Modifiers.Item1 < Setter.Modifiers.Item1 ? Getter.Modifiers : Setter.Modifiers;
+
+        }
+        
         #endregion
     }
 }

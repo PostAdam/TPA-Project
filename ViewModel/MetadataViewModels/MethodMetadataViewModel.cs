@@ -1,24 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Model.Reflection;
+using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
 using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {
-    public class MethodMetadataViewModel : TypeMetadataBaseViewModel
+    public class MethodMetadataViewModel : MetadataBaseViewModel
     {
         #region Public
-
-        // Properties
-        public TypeMetadata ReturnType { get; }
-        public IEnumerable<ParameterMetadata> Parameters { get; }
 
         // Methods
         public override string ToString()
         {
-            return CrateName();
+            string fullname = "";
+            //TODO: add which class is being extended
+            fullname += _methodMetadata.Extension ? "extension: " : String.Empty; 
+            fullname += StringUtility.GetAttributes(_methodMetadata.MethodAttributes);
+            fullname += StringUtility.GetMethodModifiers(_methodMetadata.Modifiers);
+            fullname += _methodMetadata.ReturnType != null ? _methodMetadata.ReturnType.TypeName + " " : String.Empty;
+            fullname += StringUtility.GetGenerics(_methodMetadata.ReturnType);
+            fullname += _methodMetadata.Name;
+            fullname += !string.IsNullOrEmpty(GetParameterNames()) ? "(" + GetParameterNames() + ")" : "()";
+
+            return fullname;
         }
 
         #endregion
@@ -28,10 +36,11 @@ namespace ViewModel.MetadataViewModels
         internal MethodMetadataViewModel(MethodMetadata methodMetadata)
         {
             _methodMetadata = methodMetadata;
-            Name = _methodMetadata.Name;
-            Parameters = _methodMetadata.Parameters;
-            Modifier = GetModifierName(_methodMetadata.Modifiers?.Item1);
-            ReturnType = _methodMetadata?.ReturnType;
+            if (!_methodMetadata.Parameters.Any() && !_methodMetadata.MethodAttributes.Any() &&
+                _methodMetadata.ReturnType == null)
+            {
+                Children.Clear();
+            }
         }
 
         #endregion
@@ -40,33 +49,31 @@ namespace ViewModel.MetadataViewModels
 
         private readonly MethodMetadata _methodMetadata;
 
-        private string CrateName()
-        {
-            string modifierName = Modifier;
-            if (modifierName != null)
-            {
-                modifierName += " ";
-            }
-
-            string parametersNames = GetParameterNames();
-            string returnTypeName = _methodMetadata.ReturnType?.TypeName;
-            string methodName = _methodMetadata.Name;
-            return $"{modifierName}{methodName}({parametersNames}): {returnTypeName}";
-        }
 
         private string GetParameterNames()
         {
-            if (!Parameters.Any())
+            if (!_methodMetadata.Parameters.Any())
             {
                 return "";
             }
 
             StringBuilder names = new StringBuilder();
-            var last = Parameters.Last();
-            foreach (var parameter in Parameters)
+            for (int i = 0; i < _methodMetadata.Parameters.Count(); i++)
             {
-                names.Append(" " + parameter.TypeMetadata.TypeName + " " + parameter.Name);
-                if (parameter != last)
+                ParameterMetadata parameter = _methodMetadata.Parameters.ElementAt(i);
+                string fullname = "";
+
+                fullname += StringUtility.GetAttributes(parameter.ParameterAttributes);
+                fullname += parameter.Kind != ParameterKindEnum.None
+                    ? parameter.Kind.ToString().ToLower() + " "
+                    : String.Empty;
+                fullname += parameter.TypeMetadata.TypeName + " ";
+                fullname += parameter.Name;
+                fullname += !string.IsNullOrEmpty(parameter?.DefaultValue)
+                    ? " = " + parameter.DefaultValue
+                    : String.Empty;
+                names.Append(" " + fullname);
+                if (i < _methodMetadata.Parameters.Count() - 1)
                 {
                     names.Append(", ");
                 }
@@ -83,33 +90,34 @@ namespace ViewModel.MetadataViewModels
 
         protected override void BuildMyself()
         {
-            Child.Clear();
+            Children.Clear();
+          
             foreach (ParameterMetadata parameter in _methodMetadata.Parameters)
             {
-                Child.Add(new ParameterMetadataViewModel(parameter));
+                Children.Add(new ParameterMetadataViewModel(parameter));
             }
 
             if (_methodMetadata.ReturnType != null)
-                if (TypesDictionary.ReflectedTypes.ContainsKey(_methodMetadata.ReturnType.TypeName))
+                if (TypesDictionary.ReflectedTypes.ContainsKey(_methodMetadata.ReturnType.FullName))
                 {
-                    Child.Add(new TypeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[_methodMetadata.ReturnType.TypeName]));
+                    Children.Add(new TypeMetadataViewModel(
+                        TypesDictionary.ReflectedTypes[_methodMetadata.ReturnType.FullName]));
                 }
                 else
                 {
-                    Child.Add(new TypeMetadataViewModel(_methodMetadata.ReturnType));
+                    Children.Add(new TypeMetadataViewModel(_methodMetadata.ReturnType));
                 }
 
             foreach (var attribute in _methodMetadata.MethodAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
                 {
-                    Child.Add(new AttributeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
+                    Children.Add(new AttributeMetadataViewModel(
+                        TypesDictionary.ReflectedTypes[attribute.FullName]));
                 }
                 else
                 {
-                    Child.Add(new AttributeMetadataViewModel(attribute));
+                    Children.Add(new AttributeMetadataViewModel(attribute));
                 }
             }
 

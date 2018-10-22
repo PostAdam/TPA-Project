@@ -13,7 +13,7 @@ namespace CLI
             MaxLevelVisible = maxLevelVisible;
         }
 
-        public DllViewer(IList<MetadataViewModel> rootNodes, int maxLevelVisible = 5)
+        public DllViewer(IList<MetadataBaseViewModel> rootNodes, int maxLevelVisible = 5)
         {
             MaxLevelVisible = maxLevelVisible;
             RootNodes = rootNodes;
@@ -24,7 +24,7 @@ namespace CLI
         #region Public
 
         public int MaxLevelVisible { get; set; }
-        public IList<MetadataViewModel> RootNodes { get; set; }
+        public IList<MetadataBaseViewModel> RootNodes { get; set; }
 
         public void DisplayTree()
         {
@@ -71,9 +71,9 @@ namespace CLI
 
         private const char FoldKey = '\ufffc';
 
-        private IList<MetadataViewModel> _currentLevelNodes;
+        private IList<MetadataBaseViewModel> _currentLevelNodes;
         private readonly List<int> _pathFromRoot = new List<int>();
-        private readonly Stack<List<MetadataViewModel>> _nodesBelowPath = new Stack<List<MetadataViewModel>>();
+        private readonly Stack<List<MetadataBaseViewModel>> _nodesBelowPath = new Stack<List<MetadataBaseViewModel>>();
 
         #endregion
 
@@ -93,17 +93,17 @@ namespace CLI
             }
         }
 
-        private IList<MetadataViewModel> ExpandNodeAndGetItsChildren(int level)
+        private IList<MetadataBaseViewModel> ExpandNodeAndGetItsChildren(int level)
         {
             _currentLevelNodes[_pathFromRoot[level]].IsExpanded = true;
-            return _currentLevelNodes[_pathFromRoot[level]].Child;
+            return _currentLevelNodes[_pathFromRoot[level]].Children;
         }
 
         private void SkipBeginningLevels(int skipNumber)
         {
             for (int i = 0; i < skipNumber; i++)
             {
-                _currentLevelNodes = _currentLevelNodes[_pathFromRoot[i]].Child;
+                _currentLevelNodes = _currentLevelNodes[_pathFromRoot[i]].Children;
             }
 
             Console.WriteLine(@"[...]");
@@ -121,11 +121,11 @@ namespace CLI
 
         private void PrintNodesAbovePath(int startingLevel, int currentLevel)
         {
-            List<MetadataViewModel> remainingNodes = new List<MetadataViewModel>();
+            List<MetadataBaseViewModel> remainingNodes = new List<MetadataBaseViewModel>();
 
             for (var index = 0; index < _currentLevelNodes.Count; index++)
             {
-                MetadataViewModel node = _currentLevelNodes[index];
+                MetadataBaseViewModel node = _currentLevelNodes[index];
                 if (_pathFromRoot.Count > currentLevel &&
                     _pathFromRoot[currentLevel] >= index)
                 {
@@ -140,7 +140,7 @@ namespace CLI
                 if (index == _currentLevelNodes.Count - 1)
                 {
                     _nodesBelowPath.Push(remainingNodes);
-                    remainingNodes = new List<MetadataViewModel>();
+                    remainingNodes = new List<MetadataBaseViewModel>();
                 }
             }
         }
@@ -161,7 +161,7 @@ namespace CLI
             int cursorPosition = Console.CursorTop;
             while (_nodesBelowPath.Count > 0)
             {
-                List<MetadataViewModel> nodes = _nodesBelowPath.Pop();
+                List<MetadataBaseViewModel> nodes = _nodesBelowPath.Pop();
                 foreach (var node in nodes)
                 {
                     for (int j = _nodesBelowPath.Count; j > 0; j--)

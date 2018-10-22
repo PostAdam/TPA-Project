@@ -4,69 +4,66 @@ using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {
-    public class EventMetadataViewModel : TypeMetadataBaseViewModel
+    public class EventMetadataViewModel : MetadataBaseViewModel
     {
+        public override string ToString()
+        {
+            string fullname = "";
+            fullname += StringUtility.GetAttributes(_eventMetadata.EventAttributes);
+            fullname += _eventMetadata.Multicast ? "multicast " : "singlecast";
+            fullname += _eventMetadata.TypeMetadata.TypeName + " ";
+            fullname += _eventMetadata.Name;
+
+            return fullname;
+        }
+
         #region Constructor
 
         internal EventMetadataViewModel(EventMetadata eventMetadata)
         {
             _eventMetadata = eventMetadata;
-            Name = _eventMetadata.Name;
-            TypeName = _eventMetadata.TypeMetadata.TypeName;
-            AddMethodMetadata = _eventMetadata.AddMethodMetadata;
-            RaiseMethodMetadata = _eventMetadata.RaiseMethodMetadata;
-            RemoveMethodMetadata = _eventMetadata.RemoveMethodMetadata;
         }
 
         #endregion
 
         private readonly EventMetadata _eventMetadata;
-        public MethodMetadata AddMethodMetadata { get; }
-        public MethodMetadata RaiseMethodMetadata { get; }
-        public MethodMetadata RemoveMethodMetadata { get; }
 
         protected override void BuildMyself()
         {
-            Child.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_eventMetadata.TypeMetadata.TypeName))
+            Children.Clear();
+            if (TypesDictionary.ReflectedTypes.ContainsKey(_eventMetadata.TypeMetadata.FullName))
             {
-                Child.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_eventMetadata.TypeMetadata.TypeName]));
+                Children.Add(new TypeMetadataViewModel(
+                    TypesDictionary.ReflectedTypes[_eventMetadata.TypeMetadata.FullName]));
             }
             else
             {
-                Child.Add(new TypeMetadataViewModel(_eventMetadata.TypeMetadata));
+                Children.Add(new TypeMetadataViewModel(_eventMetadata.TypeMetadata));
             }
 
             foreach (var attribute in _eventMetadata.EventAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
                 {
-                    Child.Add(new AttributeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
+                    Children.Add(new AttributeMetadataViewModel(
+                        TypesDictionary.ReflectedTypes[attribute.FullName]));
                 }
                 else
                 {
-                    Child.Add(new AttributeMetadataViewModel(attribute));
+                    Children.Add(new AttributeMetadataViewModel(attribute));
                 }
             }
 
-            if (AddMethodMetadata != null)
-                Child.Add(new MethodMetadataViewModel(AddMethodMetadata));
+            if (_eventMetadata.AddMethodMetadata != null)
+                Children.Add(new MethodMetadataViewModel(_eventMetadata.AddMethodMetadata));
 
-            if (RaiseMethodMetadata != null)
-                Child.Add(new MethodMetadataViewModel(RaiseMethodMetadata));
+            if (_eventMetadata.RaiseMethodMetadata != null)
+                Children.Add(new MethodMetadataViewModel(_eventMetadata.RaiseMethodMetadata));
 
-            if (RemoveMethodMetadata != null)
-                Child.Add(new MethodMetadataViewModel(RemoveMethodMetadata));
+            if (_eventMetadata.RemoveMethodMetadata != null)
+                Children.Add(new MethodMetadataViewModel(_eventMetadata.RemoveMethodMetadata));
 
             WasBuilt = true;
-        }
-
-        public override string ToString()
-        {
-            string multicast = _eventMetadata.Multicast ? "multicast " : "singlecast";
-            return multicast + TypeName + " " + Name;
         }
     }
 }

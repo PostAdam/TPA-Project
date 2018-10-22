@@ -4,7 +4,7 @@ using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {
-    public class AssemblyMetadataViewModel : MetadataViewModel
+    public class AssemblyMetadataViewModel : MetadataBaseViewModel
     {
         #region Public
 
@@ -23,6 +23,8 @@ namespace ViewModel.MetadataViewModels
             _namespaces = assemblyMetadata.Namespaces;
         }
 
+        public string Name { get; internal set; }
+
         #endregion
 
         #region Private
@@ -33,10 +35,10 @@ namespace ViewModel.MetadataViewModels
 
         protected override void BuildMyself()
         {
-            Child.Clear();
+            Children.Clear();
             foreach (NamespaceMetadata _namespace in _namespaces)
             {
-                Child.Add(new NamespaceMetadataViewModel(_namespace));
+                Children.Add(new NamespaceMetadataViewModel(_namespace));
                 WasBuilt = true;
             }
         }

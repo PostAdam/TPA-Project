@@ -72,18 +72,17 @@ namespace Model.Reflection.MetadataModels
 
         private static bool EmitExtension(MethodBase method)
         {
-            //TODO: wtf?
             return method.IsDefined(typeof(ExtensionAttribute), true);
         }
 
-        private static Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> EmitModifiers(MethodBase method)
+        public static Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> EmitModifiers(MethodBase method)
         {
             AccessLevel access = AccessLevel.Private;
             if (method.IsPublic)
                 access = AccessLevel.Public;
             else if (method.IsFamily)
                 access = AccessLevel.Protected;
-            else if (method.IsFamilyAndAssembly)
+            else if (method.IsAssembly)
                 access = AccessLevel.Internal;
 
             AbstractEnum _abstract = AbstractEnum.NotAbstract;

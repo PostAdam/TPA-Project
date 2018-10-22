@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using Model.Reflection.MetadataModels;
+﻿using Model.Reflection.MetadataModels;
 using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {
-    public class NamespaceMetadataViewModel : MetadataViewModel
+    public class NamespaceMetadataViewModel : MetadataBaseViewModel
     {
         #region Public
 
         public override string ToString()
         {
-            return Name;
+            return _namespaceMetadata.NamespaceName;
         }
 
         #endregion
@@ -19,23 +18,22 @@ namespace ViewModel.MetadataViewModels
 
         public NamespaceMetadataViewModel(NamespaceMetadata namespaceMetadata)
         {
-            Types = namespaceMetadata.Types;
-            Name = namespaceMetadata.NamespaceName;
+            _namespaceMetadata = namespaceMetadata;
         }
 
         #endregion
 
         #region Private
 
-        private readonly IEnumerable<TypeMetadata> Types;
+        private readonly NamespaceMetadata _namespaceMetadata;
 
         #endregion
 
         protected override void BuildMyself()
         {
-            Child.Clear();
-            foreach (TypeMetadata type in Types)
-                Child.Add(new TypeMetadataViewModel(type));
+            Children.Clear();
+            foreach (TypeMetadata type in _namespaceMetadata.Types)
+                Children.Add(new TypeMetadataViewModel(type));
             WasBuilt = true;
         }
     }

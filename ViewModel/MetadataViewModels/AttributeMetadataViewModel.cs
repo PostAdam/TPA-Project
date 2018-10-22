@@ -4,13 +4,16 @@ using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {
-    public class AttributeMetadataViewModel : TypeMetadataBaseViewModel
+    public class AttributeMetadataViewModel : MetadataBaseViewModel
     {
         #region Public
 
         public override string ToString()
         {
-            return TypeName + " " + "[" + Name + "]";
+            string fullname = "";
+            fullname += StringUtility.GetTypeModifiers(_attributeMetadata.Modifiers);
+            fullname += _attributeMetadata.TypeName;
+            return fullname;
         }
 
         #endregion
@@ -20,8 +23,6 @@ namespace ViewModel.MetadataViewModels
         internal AttributeMetadataViewModel(TypeMetadata attributeMetadata)
         {
             _attributeMetadata = attributeMetadata;
-            Name = _attributeMetadata.TypeName;
-            TypeName = _attributeMetadata.TypeName;
         }
 
         #endregion
@@ -34,15 +35,15 @@ namespace ViewModel.MetadataViewModels
 
         protected override void BuildMyself()
         {
-            Child.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_attributeMetadata.TypeName))
+            Children.Clear();
+            if (TypesDictionary.ReflectedTypes.ContainsKey(_attributeMetadata.FullName))
             {
-                Child.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_attributeMetadata.TypeName]));
+                Children.Add(new TypeMetadataViewModel(
+                    TypesDictionary.ReflectedTypes[_attributeMetadata.FullName]));
             }
             else
             {
-                Child.Add(new TypeMetadataViewModel(_attributeMetadata));
+                Children.Add(new TypeMetadataViewModel(_attributeMetadata));
             }
 
             WasBuilt = true;

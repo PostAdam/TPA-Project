@@ -15,13 +15,13 @@ namespace Model.Reflection.MetadataModels
         internal TypeMetadata(Type type)
         {
             // Types
-            BaseType = EmitExtends(type);
+            BaseType = EmitExtends(type.GetTypeInfo().BaseType);
             DeclaringType = EmitType(type.DeclaringType);
             NestedTypes = EmitTypes(type.GetNestedTypes(AllAccessLevels));
             Attributes = EmitAttributes(type.GetCustomAttributes(false).Cast<Attribute>());
             Fields = EmitFields(type.GetFields(AllAccessLevels));
             Events = EmitEvents(type.GetEvents(AllAccessLevels));
-            GenericArguments = type.IsGenericTypeDefinition ? EmitTypes(type.GetGenericArguments()) : null;
+            GenericArguments = type.IsGenericTypeDefinition ? EmitGenericArguments(type.GetGenericArguments()) : null;
             Properties = EmitProperties(type.GetProperties(AllAccessLevels));
             ImplementedInterfaces = EmitTypes(type.GetInterfaces());
 
@@ -31,8 +31,14 @@ namespace Model.Reflection.MetadataModels
 
             // Infos
             TypeName = type.Name;
+            FullName = type.FullName ?? type.Namespace + "." + type.Name;
             Modifiers = EmitModifiers(type);
             TypeKind = GetTypeKind(type);
+        }
+
+        internal static IEnumerable<TypeMetadata> EmitGenericArguments(IEnumerable<Type> arguments)
+        {
+            return from Type _argument in arguments select EmitReference(_argument);
         }
 
         #endregion
@@ -51,12 +57,13 @@ namespace Model.Reflection.MetadataModels
                 return null;
             }
 
-            if (!TypesDictionary.ReflectedTypes.ContainsKey(type.Name))
+            if (!TypesDictionary.ReflectedTypes.ContainsKey(type.FullName ?? type.Namespace + " . " + type.Name))
             {
-                TypesDictionary.ReflectedTypes.Add(type.Name, new TypeMetadata(type));
+                TypesDictionary.ReflectedTypes.Add(type.FullName ?? type.Namespace + " . " + type.Name,
+                    new TypeMetadata(type));
             }
 
-            return TypesDictionary.ReflectedTypes[type.Name];
+            return TypesDictionary.ReflectedTypes[type.FullName ?? type.Namespace + " . " + type.Name];
         }
 
         internal static IEnumerable<TypeMetadata> EmitAttributes(IEnumerable<Attribute> attributes)
@@ -132,6 +139,17 @@ namespace Model.Reflection.MetadataModels
             return new Tuple<AccessLevel, SealedEnum, AbstractEnum>(access, _sealed, _abstract);
         }
 
+        private static TypeMetadata EmitReference(Type type)
+        {
+            if (!type.IsGenericType)
+            {
+                return new TypeMetadata(type.Name, type.GetNamespace());
+            }
+
+            return new TypeMetadata(type.Name, type.GetNamespace(),
+                EmitGenericArguments(type.GetGenericArguments()));
+        }
+
         private static TypeMetadata EmitExtends(Type baseType)
         {
             if (baseType == null || baseType == typeof(Object) || baseType == typeof(ValueType) ||
@@ -140,13 +158,7 @@ namespace Model.Reflection.MetadataModels
                 return null;
             }
 
-            if (!baseType.IsGenericType)
-            {
-                return new TypeMetadata(baseType.Name, baseType.GetNamespace());
-            }
-
-            return new TypeMetadata(baseType.Name, baseType.GetNamespace(),
-                EmitTypes(baseType.GetGenericArguments()));
+            return EmitReference(baseType);
         }
 
         #endregion
@@ -168,6 +180,7 @@ namespace Model.Reflection.MetadataModels
         [DataMember] public IEnumerable<MethodMetadata> Methods { get; internal set; }
         [DataMember] public IEnumerable<MethodMetadata> Constructors { get; internal set; }
         [DataMember] public IEnumerable<EventMetadata> Events { get; internal set; }
+        [DataMember] public string FullName { get; internal set; }
 
         const BindingFlags AllAccessLevels = BindingFlags.NonPublic
                                              | BindingFlags.DeclaredOnly

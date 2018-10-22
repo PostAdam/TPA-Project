@@ -1,16 +1,28 @@
-﻿using Model.Reflection;
+﻿using System;
+using Model.Reflection;
+using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
 using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {
-    public class ParameterMetadataViewModel : TypeMetadataBaseViewModel
+    public class ParameterMetadataViewModel : MetadataBaseViewModel
     {
         #region Public
 
         public override string ToString()
         {
-            return Name + ": " + TypeName;
+            string fullname = "";
+            fullname += StringUtility.GetAttributes(_parameterMetadata.ParameterAttributes);
+            fullname += _parameterMetadata.Kind != ParameterKindEnum.None
+                ? _parameterMetadata.Kind.ToString().ToLower() + " "
+                : String.Empty;
+            fullname += _parameterMetadata.TypeMetadata.TypeName + " ";
+            fullname += _parameterMetadata.Name;
+            fullname += !string.IsNullOrEmpty(_parameterMetadata?.DefaultValue)
+                ? " = " + _parameterMetadata.DefaultValue
+                : String.Empty;
+            return fullname;
         }
 
         #endregion
@@ -19,10 +31,7 @@ namespace ViewModel.MetadataViewModels
 
         internal ParameterMetadataViewModel(ParameterMetadata parameterMetadata)
         {
-            //TODO: add more info after extracting out, ref, is optional, default value etc... 
             _parameterMetadata = parameterMetadata;
-            TypeName = _parameterMetadata.TypeMetadata.TypeName;
-            Name = _parameterMetadata.Name;
         }
 
         #endregion
@@ -35,27 +44,27 @@ namespace ViewModel.MetadataViewModels
 
         protected override void BuildMyself()
         {
-            Child.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_parameterMetadata.TypeMetadata.TypeName))
+            Children.Clear();
+            if (TypesDictionary.ReflectedTypes.ContainsKey(_parameterMetadata.TypeMetadata.FullName))
             {
-                Child.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_parameterMetadata.TypeMetadata.TypeName]));
+                Children.Add(new TypeMetadataViewModel(
+                    TypesDictionary.ReflectedTypes[_parameterMetadata.TypeMetadata.FullName]));
             }
             else
             {
-                Child.Add(new TypeMetadataViewModel(_parameterMetadata.TypeMetadata));
+                Children.Add(new TypeMetadataViewModel(_parameterMetadata.TypeMetadata));
             }
 
             foreach (var attribute in _parameterMetadata.ParameterAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
                 {
-                    Child.Add(new AttributeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
+                    Children.Add(new AttributeMetadataViewModel(
+                        TypesDictionary.ReflectedTypes[attribute.FullName]));
                 }
                 else
                 {
-                    Child.Add(new AttributeMetadataViewModel(attribute));
+                    Children.Add(new AttributeMetadataViewModel(attribute));
                 }
             }
 

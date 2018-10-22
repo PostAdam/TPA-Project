@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 
 namespace ViewModel.MetadataBaseViewModels
 {
-    public abstract class MetadataViewModel : BaseViewModel
+    public abstract class MetadataBaseViewModel : BaseViewModel
     {
         #region Constructor
 
-        internal MetadataViewModel()
+        internal MetadataBaseViewModel()
         {
-            Child = new ObservableCollection<MetadataViewModel>
+            Children = new ObservableCollection<MetadataBaseViewModel>
             {
                 null
             };
@@ -23,9 +23,8 @@ namespace ViewModel.MetadataBaseViewModels
         #region Properties
 
         public string FullName => ToString();
-        public string Name { get; internal set; }
 
-        public ObservableCollection<MetadataViewModel> Child { get; set; }
+        public ObservableCollection<MetadataBaseViewModel> Children { get; set; }
 
         public bool IsExpanded
         {
@@ -54,7 +53,7 @@ namespace ViewModel.MetadataBaseViewModels
         }
 
         #endregion
-        
+
         private bool _isExpanded;
         protected bool WasBuilt;
 

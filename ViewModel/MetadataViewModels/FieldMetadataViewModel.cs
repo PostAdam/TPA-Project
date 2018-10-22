@@ -1,19 +1,23 @@
-﻿using Model.Reflection;
+﻿using System;
+using Model.Reflection;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
 using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {
-    public class FieldMetadataViewModel : TypeMetadataBaseViewModel
+    public class FieldMetadataViewModel : MetadataBaseViewModel
     {
         #region Public
 
         public override string ToString()
         {
-            string modifier = string.IsNullOrEmpty(Modifier) ? Modifier : Modifier + " ";
-            string isStatic = _fieldMetadata.IsStatic == StaticEnum.Static ? "static " : "";
-            return modifier + isStatic + Name + ": " + TypeName;
+            string fullname = "";
+            fullname += StringUtility.GetAttributes(_fieldMetadata.FieldAttributes);
+            fullname += GetModifiers();
+            fullname += _fieldMetadata.TypeMetadata.TypeName + " ";
+            fullname += _fieldMetadata.Name;
+            return fullname;
         }
 
         #endregion
@@ -23,9 +27,6 @@ namespace ViewModel.MetadataViewModels
         internal FieldMetadataViewModel(FieldMetadata fieldMetadata)
         {
             _fieldMetadata = fieldMetadata;
-            Name = _fieldMetadata.Name;
-            TypeName = _fieldMetadata.TypeMetadata.TypeName;
-            Modifier = _fieldMetadata.Modifiers.ToString().ToLower();
         }
 
         #endregion
@@ -38,31 +39,43 @@ namespace ViewModel.MetadataViewModels
 
         protected override void BuildMyself()
         {
-            Child.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_fieldMetadata.TypeMetadata.TypeName))
+            Children.Clear();
+            if (TypesDictionary.ReflectedTypes.ContainsKey(_fieldMetadata.TypeMetadata.FullName))
             {
-                Child.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_fieldMetadata.TypeMetadata.TypeName]));
+                Children.Add(new TypeMetadataViewModel(
+                    TypesDictionary.ReflectedTypes[_fieldMetadata.TypeMetadata.FullName]));
             }
             else
             {
-                Child.Add(new TypeMetadataViewModel(_fieldMetadata.TypeMetadata));
+                Children.Add(new TypeMetadataViewModel(_fieldMetadata.TypeMetadata));
             }
 
             foreach (var attribute in _fieldMetadata.FieldAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.TypeName))
+                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
                 {
-                    Child.Add(new AttributeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.TypeName]));
+                    Children.Add(new AttributeMetadataViewModel(
+                        TypesDictionary.ReflectedTypes[attribute.FullName]));
                 }
                 else
                 {
-                    Child.Add(new AttributeMetadataViewModel(attribute));
+                    Children.Add(new AttributeMetadataViewModel(attribute));
                 }
             }
 
             WasBuilt = true;
+        }
+
+        private string GetModifiers()
+        {
+            if (_fieldMetadata.Modifiers == null) return String.Empty;
+
+            string mods = String.Empty;
+            mods += _fieldMetadata.Modifiers.Item1 + " ";
+            mods += _fieldMetadata.Modifiers.Item2 == StaticEnum.Static
+                ? _fieldMetadata.Modifiers.Item2 + " "
+                : String.Empty;
+            return mods.ToLower();
         }
     }
 }

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Reflection\Enums\AbstractEnum.cs" />
     <Compile Include="Reflection\Enums\AccessLevel.cs" />
+    <Compile Include="Reflection\Enums\ParameterKindEnum.cs" />
     <Compile Include="Reflection\Enums\SealedEnum.cs" />
     <Compile Include="Reflection\Enums\StaticEnum.cs" />
     <Compile Include="Reflection\Enums\TypeKind.cs" />

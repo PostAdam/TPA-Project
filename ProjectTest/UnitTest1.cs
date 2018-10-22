@@ -18,7 +18,11 @@ namespace ProjectTest
 
         private class Class2
         {
+#pragma warning disable 649
+            // ReSharper disable once InconsistentNaming
+            // ReSharper disable once UnusedMember.Global
             public Class1 field;
+#pragma warning restore 649
         }
 
         [TestMethod]
@@ -26,7 +30,7 @@ namespace ProjectTest
         {
             TypeMetadata typeMetadata = new TypeMetadata( typeof(Class1) );
             TypeMetadataViewModel typeMetadataViewModel = new TypeMetadataViewModel( typeMetadata );
-            Assert.IsNull( typeMetadataViewModel.Child.ElementAt( 0 ) );
+            Assert.IsNull( typeMetadataViewModel.Children.ElementAt( 0 ) );
         }
 
         [TestMethod]
@@ -92,11 +96,11 @@ namespace ProjectTest
 
             AssemblyMetadata expectedAssembly = viewModel.AssemblyMetadata;
 
-            AssemblyMetadataViewModel assemblyMetadataViewModel =
+            AssemblyMetadataViewModel assemblyMetadataBaseViewModel =
                 new AssemblyMetadataViewModel(expectedAssembly) {IsExpanded = true};
-            assemblyMetadataViewModel.IsExpanded = false;
+            assemblyMetadataBaseViewModel.IsExpanded = false;
 
-            Assert.AreEqual(assemblyMetadataViewModel.Child.First().Name, "ClassLibrary1");
+            Assert.AreEqual(assemblyMetadataBaseViewModel.Children.First().FullName, "ClassLibrary1");
         }
     }
 }

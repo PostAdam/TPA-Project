@@ -15,7 +15,7 @@ namespace Model.Reflection.MetadataModels
             NamespaceName = name;
             Types = from type in types
                 orderby type.Name
-                select new TypeMetadata( type );
+                select new TypeMetadata(type);
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
@@ -22,7 +23,7 @@ namespace ViewModel
         {
             myListener.TraceInformation("PLS LOG ME");
             myListener.Flush();
-            Items = new ObservableCollection<MetadataViewModel>();
+            Items = new ObservableCollection<MetadataBaseViewModel>();
             ClickSave = new DelegateCommand(Save);
             Logger = logger;
         }
@@ -32,7 +33,7 @@ namespace ViewModel
         #region DataContext
 
         public static Logger Logger { get; private set; }
-        public ObservableCollection<MetadataViewModel> Items { get; set; }
+        public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
 
         #endregion
 
@@ -101,7 +102,7 @@ namespace ViewModel
         internal void InitTreeView(AssemblyMetadata assemblyMetadata)
         {
             Logger.Log("Initializing treeView.", LogLevel.Information);
-            MetadataViewModel metadataViewModel = new AssemblyMetadataViewModel(assemblyMetadata);
+            MetadataBaseViewModel metadataViewModel = new AssemblyMetadataViewModel(assemblyMetadata);
             Items.Add(metadataViewModel);
             Logger.Log("TreeView initialized!", LogLevel.Information);
         }
