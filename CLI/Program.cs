@@ -91,8 +91,7 @@ namespace CLI
 
         private static MainViewModel InitViewModel()
         {
-            Logger logger = new Logger(new TextWriterTraceListener("Logs.log"));
-            MainViewModel viewmodel = new MainViewModel(logger);
+            MainViewModel viewmodel = new MainViewModel();
             return viewmodel;
         }
 

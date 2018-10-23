@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModel", "ViewModel\ViewModel.csproj", "{51B15253-D924-4F13-BB50-25B221CBC86B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEFDefinitions", "MEFDefinitions\MEFDefinitions.csproj", "{130FE00A-39E7-4462-A52A-5614B4F5CF74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,12 +41,16 @@ Global
 		{51B15253-D924-4F13-BB50-25B221CBC86B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51B15253-D924-4F13-BB50-25B221CBC86B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51B15253-D924-4F13-BB50-25B221CBC86B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{130FE00A-39E7-4462-A52A-5614B4F5CF74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{130FE00A-39E7-4462-A52A-5614B4F5CF74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{130FE00A-39E7-4462-A52A-5614B4F5CF74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{130FE00A-39E7-4462-A52A-5614B4F5CF74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {EF7208FB-6259-4E54-B98D-64AE25FD4966}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

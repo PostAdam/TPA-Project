@@ -1,13 +1,19 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.IO;
+using MEFDefinitions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ViewModel;
+using Model;
+
 
 namespace ProjectTest
 {
     [TestClass]
     class LogingTest
     {
+        [Import(typeof(ITrace))]
+        private ITrace _logger;
+
         [TestMethod]
         public void TraceTest()
         {
@@ -17,9 +23,7 @@ namespace ProjectTest
             {
                 logFile.Delete();
             }
-
-            Logger logger = new Logger( new TextWriterTraceListener( path, "LogTest" ) );
-            logger.Log( "Test" );
+            _logger.Log( "Test" );
             logFile.Refresh();
             Assert.IsTrue( logFile.Exists );
             Assert.IsTrue( logFile.Length > 10 );
