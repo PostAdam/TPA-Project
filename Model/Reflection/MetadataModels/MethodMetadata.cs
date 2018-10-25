@@ -11,7 +11,7 @@ namespace Model.Reflection.MetadataModels
     [DataContract(IsReference = true)]
     public class MethodMetadata
     {
-        #region Emit APi
+        #region Emit API
 
         internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
         {
@@ -51,8 +51,8 @@ namespace Model.Reflection.MetadataModels
             ReturnType = EmitReturnType(method);
             Parameters = EmitParameters(method.GetParameters());
             Modifiers = EmitModifiers(method);
-            Extension = EmitExtension(method);
             MethodAttributes = TypeMetadata.EmitAttributes(method.GetCustomAttributes());
+            Extension = EmitExtension(method);
         }
 
         #endregion

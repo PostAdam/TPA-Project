@@ -10,12 +10,46 @@ namespace Model.Reflection.MetadataModels
     [DataContract(IsReference = true)]
     public class TypeMetadata
     {
+        #region Public
+
+        [DataMember] public string TypeName { get; internal set; }
+        [DataMember] public string NamespaceName { get; internal set; }
+        [DataMember] public TypeMetadata BaseType { get; internal set; }
+        [DataMember] public TypeMetadata DeclaringType { get; internal set; }
+        [DataMember] public TypeKind TypeKind { get; internal set; }
+        [DataMember] public Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers { get; internal set; }
+        [DataMember] public IEnumerable<FieldMetadata> Fields { get; internal set; }
+        [DataMember] public IEnumerable<TypeMetadata> GenericArguments { get; internal set; }
+        [DataMember] public IEnumerable<TypeMetadata> Attributes { get; internal set; }
+        [DataMember] public IEnumerable<TypeMetadata> ImplementedInterfaces { get; internal set; }
+        [DataMember] public IEnumerable<TypeMetadata> NestedTypes { get; internal set; }
+        [DataMember] public IEnumerable<PropertyMetadata> Properties { get; internal set; }
+        [DataMember] public IEnumerable<MethodMetadata> Methods { get; internal set; }
+        [DataMember] public IEnumerable<MethodMetadata> Constructors { get; internal set; }
+        [DataMember] public IEnumerable<EventMetadata> Events { get; internal set; }
+        [DataMember] public string FullName { get; internal set; }
+
+        const BindingFlags AllAccessLevels = BindingFlags.NonPublic
+                                             | BindingFlags.DeclaredOnly
+                                             | BindingFlags.Public
+                                             | BindingFlags.Static
+                                             | BindingFlags.Instance;
+
+        #endregion
+
         #region Constructor
 
         internal TypeMetadata(Type type)
         {
+            // Infos
+            TypeName = type.Name;
+            FullName = type.FullName ?? type.Namespace + "." + type.Name;
+            Modifiers = EmitModifiers(type);
+            TypeKind = GetTypeKind(type);
+
             // Types
             BaseType = EmitExtends(type.GetTypeInfo().BaseType);
+            ImplementedInterfaces = EmitTypes(type.GetInterfaces());
             DeclaringType = EmitType(type.DeclaringType);
             NestedTypes = EmitTypes(type.GetNestedTypes(AllAccessLevels));
             Attributes = EmitAttributes(type.GetCustomAttributes(false).Cast<Attribute>());
@@ -23,17 +57,10 @@ namespace Model.Reflection.MetadataModels
             Events = EmitEvents(type.GetEvents(AllAccessLevels));
             GenericArguments = type.IsGenericTypeDefinition ? EmitGenericArguments(type.GetGenericArguments()) : null;
             Properties = EmitProperties(type.GetProperties(AllAccessLevels));
-            ImplementedInterfaces = EmitTypes(type.GetInterfaces());
 
             // Methods
             Constructors = MethodMetadata.EmitMethods(type.GetConstructors(AllAccessLevels));
             Methods = MethodMetadata.EmitMethods(type.GetMethods(AllAccessLevels));
-
-            // Infos
-            TypeName = type.Name;
-            FullName = type.FullName ?? type.Namespace + "." + type.Name;
-            Modifiers = EmitModifiers(type);
-            TypeKind = GetTypeKind(type);
         }
 
         internal static IEnumerable<TypeMetadata> EmitGenericArguments(IEnumerable<Type> arguments)
@@ -160,33 +187,6 @@ namespace Model.Reflection.MetadataModels
 
             return EmitReference(baseType);
         }
-
-        #endregion
-
-        #region Variables
-
-        [DataMember] public string TypeName { get; internal set; }
-        [DataMember] public string NamespaceName { get; internal set; }
-        [DataMember] public TypeMetadata BaseType { get; internal set; }
-        [DataMember] public TypeMetadata DeclaringType { get; internal set; }
-        [DataMember] public TypeKind TypeKind { get; internal set; }
-        [DataMember] public Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers { get; internal set; }
-        [DataMember] public IEnumerable<FieldMetadata> Fields { get; internal set; }
-        [DataMember] public IEnumerable<TypeMetadata> GenericArguments { get; internal set; }
-        [DataMember] public IEnumerable<TypeMetadata> Attributes { get; internal set; }
-        [DataMember] public IEnumerable<TypeMetadata> ImplementedInterfaces { get; internal set; }
-        [DataMember] public IEnumerable<TypeMetadata> NestedTypes { get; internal set; }
-        [DataMember] public IEnumerable<PropertyMetadata> Properties { get; internal set; }
-        [DataMember] public IEnumerable<MethodMetadata> Methods { get; internal set; }
-        [DataMember] public IEnumerable<MethodMetadata> Constructors { get; internal set; }
-        [DataMember] public IEnumerable<EventMetadata> Events { get; internal set; }
-        [DataMember] public string FullName { get; internal set; }
-
-        const BindingFlags AllAccessLevels = BindingFlags.NonPublic
-                                             | BindingFlags.DeclaredOnly
-                                             | BindingFlags.Public
-                                             | BindingFlags.Static
-                                             | BindingFlags.Instance;
 
         #endregion
     }

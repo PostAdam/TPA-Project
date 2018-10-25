@@ -70,7 +70,6 @@ namespace CLI
         #region Fields
 
         private const char FoldKey = '\ufffc';
-
         private IList<MetadataBaseViewModel> _currentLevelNodes;
         private readonly List<int> _pathFromRoot = new List<int>();
         private readonly Stack<List<MetadataBaseViewModel>> _nodesBelowPath = new Stack<List<MetadataBaseViewModel>>();

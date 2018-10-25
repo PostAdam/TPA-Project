@@ -53,11 +53,11 @@ namespace Model
             }
         }
 
-        private void InitTextWriterTraceListener()
-        {
-            string filename = ConfigurationManager.AppSettings["filename"];
-            filename = string.IsNullOrEmpty(filename) ? "TraceDump.xml" : filename;
-            _traceListener = new TextWriterTraceListener(filename);
-        }
+//        private void InitTextWriterTraceListener()
+//        {
+//            string filename = ConfigurationManager.AppSettings["filename"];
+//            filename = string.IsNullOrEmpty(filename) ? "TraceDump.xml" : filename;
+//            _traceListener = new TextWriterTraceListener(filename);
+//        }
     }
 }

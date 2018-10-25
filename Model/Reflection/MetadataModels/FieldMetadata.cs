@@ -15,9 +15,9 @@ namespace Model.Reflection.MetadataModels
         {
             Name = fieldInfo.Name;
             TypeMetadata = TypeMetadata.EmitType(fieldInfo.FieldType);
+            FieldAttributes = TypeMetadata.EmitAttributes(fieldInfo.GetCustomAttributes());
             Modifiers = GetModifier(fieldInfo);
             IsStatic = fieldInfo.IsStatic ? StaticEnum.Static : StaticEnum.NotStatic;
-            FieldAttributes = TypeMetadata.EmitAttributes(fieldInfo.GetCustomAttributes());
         }
 
         #endregion

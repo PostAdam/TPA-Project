@@ -13,11 +13,11 @@ namespace Model.Reflection.MetadataModels
 
         internal PropertyMetadata(PropertyInfo propertyInfo)
         {
-            Getter = MethodMetadata.EmitMethod(propertyInfo.GetGetMethod(true));
-            Setter = MethodMetadata.EmitMethod(propertyInfo.GetSetMethod(true));
             Modifiers = GetModifier();
             TypeMetadata = TypeMetadata.EmitType(propertyInfo.PropertyType);
             PropertyAttributes = TypeMetadata.EmitAttributes(propertyInfo.GetCustomAttributes());
+            Getter = MethodMetadata.EmitMethod(propertyInfo.GetGetMethod(true));
+            Setter = MethodMetadata.EmitMethod(propertyInfo.GetSetMethod(true));
         }
 
         #endregion

@@ -31,22 +31,22 @@ namespace ViewModel
         private void LoadLogger()
         {
             string loggerType = ConfigurationManager.AppSettings["loggerType"];
-            Logger = Loggers.FirstOrDefault(logger => (string)logger.Metadata["destination"] == loggerType)?.Value;
+            Logger = Loggers.FirstOrDefault(logger => (string) logger.Metadata["destination"] == loggerType)?.Value;
             if (Logger != null)
             {
                 string logLevel = ConfigurationManager.AppSettings["logLevel"];
 
                 if (int.TryParse(logLevel, out var level))
                 {
-                    Logger.Level = (LogLevel)level;
+                    Logger.Level = (LogLevel) level;
                 }
                 else
                 {
                     Logger.Level = LogLevel.Warning;
                 }
             }
-
         }
+
         #endregion
 
         #region DataContext
@@ -109,7 +109,7 @@ namespace ViewModel
         {
             Logger?.Log("Reading from file " + filename + ".", LogLevel.Information);
             AssemblyMetadata data = Serializer.Deserialize<AssemblyMetadata>(filename);
-            AddClassesToDirectory(data);    
+            AddClassesToDirectory(data);
             InitTreeView(data);
             Logger?.Log("File " + filename + " deserialized successfully.", LogLevel.Trace);
         }
@@ -133,10 +133,10 @@ namespace ViewModel
 
         internal void InitTreeView(AssemblyMetadata assemblyMetadata)
         {
-            Logger.Log("Initializing treeView.", LogLevel.Information);
+            Logger?.Log("Initializing treeView.", LogLevel.Information);
             MetadataBaseViewModel metadataViewModel = new AssemblyMetadataViewModel(assemblyMetadata);
             Items.Add(metadataViewModel);
-            Logger.Log("TreeView initialized!", LogLevel.Information);
+            Logger?.Log("TreeView initialized!", LogLevel.Information);
         }
 
         public void Init(string filename)
