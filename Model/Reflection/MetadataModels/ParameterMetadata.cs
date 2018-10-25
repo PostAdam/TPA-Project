@@ -18,8 +18,12 @@ namespace Model.Reflection.MetadataModels
             ParameterAttributes = TypeMetadata.EmitAttributes(parameterInfo.GetCustomAttributes());
             Kind = GetParameterKind(parameterInfo);
             Position = parameterInfo.Position;
-            if(parameterInfo.HasDefaultValue)
-            DefaultValue = parameterInfo.DefaultValue != null ? parameterInfo.DefaultValue.ToString() : String.Empty;
+            if (parameterInfo.HasDefaultValue)
+            {
+                DefaultValue = parameterInfo.DefaultValue != null
+                    ? parameterInfo.DefaultValue.ToString()
+                    : String.Empty;
+            }
         }
 
         #endregion

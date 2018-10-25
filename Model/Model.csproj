@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger.cs" />
+    <Compile Include="DataBaseLogger.cs" />
+    <Compile Include="TextLogger.cs" />
     <Compile Include="Reflection\Enums\AbstractEnum.cs" />
     <Compile Include="Reflection\Enums\AccessLevel.cs" />
     <Compile Include="Reflection\Enums\ParameterKindEnum.cs" />

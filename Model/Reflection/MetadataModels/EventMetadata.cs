@@ -11,8 +11,8 @@ namespace Model.Reflection.MetadataModels
 
         internal EventMetadata(EventInfo eventInfo)
         {
-            TypeMetadata = TypeMetadata.EmitType(eventInfo.EventHandlerType);
             Name = eventInfo.Name;
+            TypeMetadata = TypeMetadata.EmitType(eventInfo.EventHandlerType);
             EventAttributes = TypeMetadata.EmitAttributes(eventInfo.GetCustomAttributes());
             AddMethodMetadata = MethodMetadata.EmitMethod(eventInfo.AddMethod);
             RaiseMethodMetadata = MethodMetadata.EmitMethod(eventInfo.RaiseMethod);

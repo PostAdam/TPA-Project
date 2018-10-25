@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using ViewModel;
 
@@ -7,6 +6,7 @@ namespace CLI
 {
     class Program
     {
+        //TODO: move to another class, refactor code
         static void Main()
         {
             ConfigureConsoleWindow();
