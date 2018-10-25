@@ -20,7 +20,7 @@ namespace ProjectTest
             {
                 logFile.Delete();
             }
-            _logger.Log( "Test" );
+            _logger.Write( "Test" );
             logFile.Refresh();
             Assert.IsTrue( logFile.Exists );
             Assert.IsTrue( logFile.Length > 10 );

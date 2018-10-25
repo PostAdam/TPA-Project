@@ -151,7 +151,7 @@ namespace ViewModel
 
         internal void LoadDll(string path)
         {
-            Logger.WriteLine( "Loading DLL." + path, LogLevel.Trace.ToString() );
+            Logger?.WriteLine( "Loading DLL." + path, LogLevel.Trace.ToString() );
             Reflector reflector = new Reflector();
             reflector.Reflect(path);
             AssemblyMetadata = reflector.AssemblyModel;
