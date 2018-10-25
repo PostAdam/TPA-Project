@@ -36,7 +36,7 @@ namespace ViewModel
             {
                 string logLevel = ConfigurationManager.AppSettings["logLevel"];
 
-                if (int.TryParse(logLevel, out var level))
+                if (int.TryParse(logLevel, out int level))
                 {
                     Logger.Level = (LogLevel) level;
                 }
@@ -62,7 +62,7 @@ namespace ViewModel
 
         private void Compose()
         {
-            var catalog = new AggregateCatalog();
+            AggregateCatalog catalog = new AggregateCatalog();
             catalog.Catalogs.Add(new DirectoryCatalog("../../../Model/bin/Debug", "*.dll"));
             CompositionContainer container = new CompositionContainer(catalog);
 

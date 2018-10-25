@@ -6,8 +6,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Model
 {
-    [Export(typeof(ITrace))]
-    [ExportMetadata("destination","file")]
+    [Export( typeof(ITrace) )]
+    [ExportMetadata( "destination", "file" )]
     public class TextLogger : ITrace
     {
         private TraceListener _traceListener;
@@ -18,17 +18,17 @@ namespace Model
             LoadLoggerConfiguration();
         }
 
-        public void Log(string message)
+        public void Log( string message )
         {
-            _traceListener.WriteLine(message);
+            _traceListener.WriteLine( message );
             _traceListener.Flush();
         }
 
-        public void Log(string message, LogLevel logLevel)
+        public void Log( string message, LogLevel logLevel )
         {
             if (logLevel <= Level)
             {
-                _traceListener.WriteLine(message, logLevel.ToString());
+                _traceListener.WriteLine( message, logLevel.ToString() );
                 _traceListener.Flush();
             }
         }
@@ -36,14 +36,15 @@ namespace Model
         private void LoadLoggerConfiguration()
         {
             string filename = ConfigurationManager.AppSettings["filename"];
-            _traceListener = new TextWriterTraceListener(filename);
+            _traceListener = new TextWriterTraceListener( filename );
             LoadLogLevel();
         }
+
         private void LoadLogLevel()
         {
             string logLevel = ConfigurationManager.AppSettings["logLevel"];
 
-            if (int.TryParse(logLevel, out var level))
+            if (int.TryParse( logLevel, out int level ))
             {
                 Level = (LogLevel) level;
             }

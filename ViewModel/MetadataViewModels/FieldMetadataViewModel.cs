@@ -50,7 +50,7 @@ namespace ViewModel.MetadataViewModels
                 Children.Add(new TypeMetadataViewModel(_fieldMetadata.TypeMetadata));
             }
 
-            foreach (var attribute in _fieldMetadata.FieldAttributes)
+            foreach (TypeMetadata attribute in _fieldMetadata.FieldAttributes)
             {
                 if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
                 {

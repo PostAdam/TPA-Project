@@ -15,7 +15,7 @@ namespace ViewModel
 
             string attributes = Empty;
 
-            foreach (var attributeMetadata in attributesMetadata)
+            foreach (TypeMetadata attributeMetadata in attributesMetadata)
             {
                 attributes += "[" + attributeMetadata.TypeName.Replace("Attribute", Empty) + "]";
             }

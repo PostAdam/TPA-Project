@@ -56,12 +56,12 @@ namespace CLI
                     case "ls":
                         Console.WriteLine();
                         Console.WriteLine("Directory list:");
-                        foreach (var directory in Directory.EnumerateDirectories(Directory.GetCurrentDirectory()))
+                        foreach (string directory in Directory.EnumerateDirectories(Directory.GetCurrentDirectory()))
                         {
                             Console.WriteLine(Path.GetDirectoryName(directory));
                         }
 
-                        foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory()))
+                        foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory()))
                         {
                             Console.WriteLine(Path.GetFileName(file));
                         }

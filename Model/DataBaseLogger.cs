@@ -12,6 +12,9 @@ namespace Model
     public class DataBaseLogger : ITrace
     {
         private TraceListener _traceListener;
+        private SqlConnection _connection;
+        private string _connectionString;
+        private DataTable _table;
 
         public void Log(string message)
         {
