@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ViewModel.Commands
@@ -24,7 +25,7 @@ namespace ViewModel.Commands
 
         public void Execute( object parameter )
         {
-            _action();
+            Task.Run( () => _action() );
         }
 
         public bool CanExecute( object parameter )

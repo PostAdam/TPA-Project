@@ -5,6 +5,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
 using Microsoft.Extensions.Logging;
@@ -24,7 +25,7 @@ namespace ViewModel
         {
             Compose();
             LoadLogger();
-            Items = new ObservableCollection<MetadataBaseViewModel>();
+            Items = new AsyncObservableCollection<MetadataBaseViewModel>();
             ClickSave = new DelegateCommand(Save);
         }
 
@@ -51,9 +52,14 @@ namespace ViewModel
 
         #region DataContext
 
-        [ImportMany(typeof(ITrace))] public IEnumerable<Lazy<ITrace, IDictionary<string, object>>> Loggers;
+        [ImportMany(typeof( ITrace ) )]
+        public IEnumerable<Lazy<ITrace, IDictionary<string, object>>> Loggers;
+
         public ITrace Logger;
-        [Import(typeof(ISerializer))] public ISerializer Serializer;
+
+        [Import(typeof(ISerializer))]
+        public ISerializer Serializer;
+
         public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
 
         #endregion
@@ -83,17 +89,15 @@ namespace ViewModel
 
         public void Save()
         {
-            Logger?.Log("Starting serializaton process.", LogLevel.Warning);
+            Logger?.WriteLine("Starting serializaton process.", LogLevel.Warning.ToString());
             Serializer.Serialize<AssemblyMetadata>(AssemblyMetadata);
-            Logger?.Log("Serializaton completed!", LogLevel.Error);
+            Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString());
         }
 
-        public void Open(string fileName)
+        public async Task Open(string fileName)
         {
-            Logger?.Log("Opening portable execution file: " + fileName, LogLevel.Debug);
-
-            LoadDll(fileName);
-            InitTreeView(AssemblyMetadata);
+            Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString());
+            await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
         }
 
         public void Read(string fileName)
@@ -107,16 +111,16 @@ namespace ViewModel
 
         public void ReadFromFile(string filename)
         {
-            Logger?.Log("Reading from file " + filename + ".", LogLevel.Information);
+            Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString());
             AssemblyMetadata data = Serializer.Deserialize<AssemblyMetadata>(filename);
             AddClassesToDirectory(data);
             InitTreeView(data);
-            Logger?.Log("File " + filename + " deserialized successfully.", LogLevel.Trace);
+            Logger?.WriteLine( "File " + filename + " deserialized successfully.", LogLevel.Trace.ToString() );
         }
 
         internal void AddClassesToDirectory(AssemblyMetadata assemblyMetadata)
         {
-            Logger?.Log("Adding classes to directory.", LogLevel.Information);
+            Logger?.WriteLine( "Adding classes to directory.", LogLevel.Information.ToString() );
             foreach (NamespaceMetadata dataNamespace in assemblyMetadata.Namespaces)
             {
                 foreach (TypeMetadata type in dataNamespace.Types)
@@ -128,15 +132,15 @@ namespace ViewModel
                 }
             }
 
-            Logger?.Log("Classes added to directory!", LogLevel.Information);
+            Logger?.WriteLine( "Classes added to directory!", LogLevel.Information.ToString() );
         }
 
         internal void InitTreeView(AssemblyMetadata assemblyMetadata)
         {
-            Logger?.Log("Initializing treeView.", LogLevel.Information);
+            Logger?.WriteLine( "Initializing treeView.", LogLevel.Information.ToString() );
             MetadataBaseViewModel metadataViewModel = new AssemblyMetadataViewModel(assemblyMetadata);
             Items.Add(metadataViewModel);
-            Logger?.Log("TreeView initialized!", LogLevel.Information);
+            Logger?.WriteLine( "TreeView initialized!", LogLevel.Information.ToString() );
         }
 
         public void Init(string filename)
@@ -147,11 +151,11 @@ namespace ViewModel
 
         internal void LoadDll(string path)
         {
-            Logger?.Log("Loading DLL." + path, LogLevel.Trace);
+            Logger.WriteLine( "Loading DLL." + path, LogLevel.Trace.ToString() );
             Reflector reflector = new Reflector();
             reflector.Reflect(path);
             AssemblyMetadata = reflector.AssemblyModel;
-            Logger?.Log("DLL loaded!", LogLevel.Information);
+            Logger?.WriteLine( "DLL loaded!", LogLevel.Information.ToString() );
         }
 
         #endregion

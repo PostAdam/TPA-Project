@@ -4,18 +4,19 @@ using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Reflection;
+using MEFDefinitions;
 using Microsoft.Extensions.Logging;
 
 namespace Model
 {
-    [Export( typeof(TraceListener) )]
-    [ExportMetadata("destination", "db")]
-    class DataBaseTraceListener : TraceListener
+    [Export( typeof( ITrace ) )]
+    [ExportMetadata( "destination", "db" )]
+    class DataBaseTraceListener : ITrace
     {
         private readonly string _connectionString;
         private readonly Dictionary<string, string> _logLevelToTableNameDictionary;
+        public LogLevel Level { get; set; }
 
         public DataBaseTraceListener()
         {
@@ -23,24 +24,18 @@ namespace Model
             _logLevelToTableNameDictionary = GetLogLevelToTableNameDictionary();
         }
 
-        public override void Write( string message )
+        public void Write( string message )
         {
             this.WriteLine( message, null );
         }
 
-        public override void Write( string message, string category )
+        public void WriteLine( string message, string category )
         {
-            this.WriteLine( message, category );
-        }
-
-        public override void WriteLine( string message )
-        {
-            this.WriteLine( message, null );
-        }
-
-        public override void WriteLine( string message, string category )
-        {
-            SaveLogEntry( message, category );
+            LogLevel logLevelTreshold = (LogLevel) Enum.Parse( typeof(LogLevel), category );
+            if (logLevelTreshold <= Level)
+            {
+                SaveLogEntry( message, category );
+            }
         }
 
         private void SaveLogEntry( string message, string category )
@@ -52,11 +47,10 @@ namespace Model
                     DateTime time = DateTime.Now;
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = @"INSERT INTO @tableName( MESSAGE ) 
-                                               VALUES( @time, @message )";
+                    string tableName = _logLevelToTableNameDictionary[ category ];
+                    sqlCommand.CommandText = $@"INSERT INTO {tableName} ( TIME, MESSAGE ) 
+                                                VALUES( @time, @message )";
 
-                    string tableName = _logLevelToTableNameDictionary[category];
-                    sqlCommand.Parameters.AddWithValue( "@tableName", tableName );
                     sqlCommand.Parameters.AddWithValue( "@time", time );
                     sqlCommand.Parameters.AddWithValue( "@message", message );
 

@@ -58,13 +58,22 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBaseLogger.cs" />
     <Compile Include="DataBaseTraceListener.cs" />
-    <Compile Include="DBTraceListener.cs" />
+    <Compile Include="LoggingDataBaseDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoggingDataBaseDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="TextLogger.cs" />
     <Compile Include="Reflection\Enums\AbstractEnum.cs" />
     <Compile Include="Reflection\Enums\AccessLevel.cs" />
@@ -88,7 +97,23 @@
     <Compile Include="Serializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="LoggingDataBaseDataSet.xsc">
+      <DependentUpon>LoggingDataBaseDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LoggingDataBaseDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LoggingDataBaseDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LoggingDataBaseDataSet.xss">
+      <DependentUpon>LoggingDataBaseDataSet.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MEFDefinitions\MEFDefinitions.csproj">
@@ -98,10 +123,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="LoggingDataBase.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="LoggingDataBase_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>LoggingDataBase.mdf</DependentUpon>
     </Content>
   </ItemGroup>

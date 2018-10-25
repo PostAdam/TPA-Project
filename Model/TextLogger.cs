@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Diagnostics;
 using MEFDefinitions;
@@ -18,17 +19,18 @@ namespace Model
             LoadLoggerConfiguration();
         }
 
-        public void Log( string message )
+        public void Write( string message )
         {
             _traceListener.WriteLine( message );
             _traceListener.Flush();
         }
 
-        public void Log( string message, LogLevel logLevel )
+        public void WriteLine( string message, string category )
         {
-            if (logLevel <= Level)
+            LogLevel logLevelTreshold = (LogLevel) Enum.Parse( typeof(LogLevel), category );
+            if (logLevelTreshold <= Level)
             {
-                _traceListener.WriteLine( message, logLevel.ToString() );
+                _traceListener.WriteLine( message, category.ToString() );
                 _traceListener.Flush();
             }
         }
