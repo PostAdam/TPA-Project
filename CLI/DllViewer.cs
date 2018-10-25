@@ -122,7 +122,7 @@ namespace CLI
         {
             List<MetadataBaseViewModel> remainingNodes = new List<MetadataBaseViewModel>();
 
-            for (var index = 0; index < _currentLevelNodes.Count; index++)
+            for (int index = 0; index < _currentLevelNodes.Count; index++)
             {
                 MetadataBaseViewModel node = _currentLevelNodes[index];
                 if (_pathFromRoot.Count > currentLevel &&
@@ -161,7 +161,7 @@ namespace CLI
             while (_nodesBelowPath.Count > 0)
             {
                 List<MetadataBaseViewModel> nodes = _nodesBelowPath.Pop();
-                foreach (var node in nodes)
+                foreach (MetadataBaseViewModel node in nodes)
                 {
                     for (int j = _nodesBelowPath.Count; j > 0; j--)
                         Console.Write(@"  ");

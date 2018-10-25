@@ -22,7 +22,7 @@ namespace WPF.View
 
         private void Compose()
         {
-            var catalog = new AggregateCatalog();
+            AggregateCatalog catalog = new AggregateCatalog();
             catalog.Catalogs.Add(new AssemblyCatalog(typeof(MainWindow).Assembly));
 
             _container = new CompositionContainer(catalog);

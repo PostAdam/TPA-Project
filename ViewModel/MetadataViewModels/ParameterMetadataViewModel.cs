@@ -55,7 +55,7 @@ namespace ViewModel.MetadataViewModels
                 Children.Add(new TypeMetadataViewModel(_parameterMetadata.TypeMetadata));
             }
 
-            foreach (var attribute in _parameterMetadata.ParameterAttributes)
+            foreach (TypeMetadata attribute in _parameterMetadata.ParameterAttributes)
             {
                 if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
                 {

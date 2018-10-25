@@ -41,7 +41,7 @@ namespace ViewModel.MetadataViewModels
                 Children.Add(new TypeMetadataViewModel(_eventMetadata.TypeMetadata));
             }
 
-            foreach (var attribute in _eventMetadata.EventAttributes)
+            foreach (TypeMetadata attribute in _eventMetadata.EventAttributes)
             {
                 if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
                 {

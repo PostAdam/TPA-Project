@@ -82,6 +82,7 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncObservableCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />

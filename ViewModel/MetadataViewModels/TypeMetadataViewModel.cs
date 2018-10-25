@@ -61,7 +61,7 @@ namespace ViewModel.MetadataViewModels
             if (_typeMetadata.ImplementedInterfaces != null && _typeMetadata.ImplementedInterfaces.Any())
             {
                 interfaces += "";
-                foreach (var implementedInterface in _typeMetadata.ImplementedInterfaces)
+                foreach (TypeMetadata implementedInterface in _typeMetadata.ImplementedInterfaces)
                 {
                     interfaces += implementedInterface.TypeName;
                     interfaces += StringUtility.GetGenerics(implementedInterface);

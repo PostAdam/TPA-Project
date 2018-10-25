@@ -108,7 +108,7 @@ namespace ViewModel.MetadataViewModels
                     Children.Add(new TypeMetadataViewModel(_methodMetadata.ReturnType));
                 }
 
-            foreach (var attribute in _methodMetadata.MethodAttributes)
+            foreach (TypeMetadata attribute in _methodMetadata.MethodAttributes)
             {
                 if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
                 {

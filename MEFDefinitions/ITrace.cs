@@ -4,8 +4,8 @@ namespace MEFDefinitions
 {
     public interface ITrace
     {
-        void Log(string message);
-        void Log(string message, LogLevel logLevel);
+        void Write(string message);
+        void WriteLine(string message, string category );
         LogLevel Level { get; set; }
 
     }
