@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Model.Reflection.MetadataModels;
-using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {

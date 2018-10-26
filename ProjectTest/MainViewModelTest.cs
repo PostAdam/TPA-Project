@@ -47,7 +47,7 @@ namespace ProjectTest
         [TestMethod]
         public void ChildTest()
         {
-            MainViewModel viewModel = new MainViewModel();
+            MainViewModel viewModel = new MainViewModel(null);
             viewModel.LoadDll(@"..\..\ClassLibrary1.dll");
             viewModel.InitTreeView(viewModel.AssemblyMetadata);
 
@@ -86,7 +86,7 @@ namespace ProjectTest
         [TestMethod]
         public void ChildLifetimeTest()
         {
-            MainViewModel viewModel = new MainViewModel();
+            MainViewModel viewModel = new MainViewModel(null);
             viewModel.LoadDll(@"..\..\ClassLibrary1.dll");
             viewModel.InitTreeView(viewModel.AssemblyMetadata);
 

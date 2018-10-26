@@ -86,6 +86,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PathResolver.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Page Include="StyleResources\ButtonStyle.xaml">
       <SubType>Designer</SubType>
@@ -138,10 +139,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{5959593D-9565-46CD-BE35-983E93145117}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{51b15253-d924-4f13-bb50-25b221cbc86b}</Project>
       <Name>ViewModel</Name>
