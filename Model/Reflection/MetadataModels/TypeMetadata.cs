@@ -84,13 +84,13 @@ namespace Model.Reflection.MetadataModels
                 return null;
             }
 
-            if (!TypesDictionary.ReflectedTypes.ContainsKey(type.FullName ?? type.Namespace + " . " + type.Name))
+            if (!ReflectedTypes.ContainsKey(type.FullName ?? type.Namespace + " . " + type.Name))
             {
-                TypesDictionary.ReflectedTypes.Add(type.FullName ?? type.Namespace + " . " + type.Name,
+                ReflectedTypes.Add(type.FullName ?? type.Namespace + " . " + type.Name,
                     new TypeMetadata(type));
             }
 
-            return TypesDictionary.ReflectedTypes[type.FullName ?? type.Namespace + " . " + type.Name];
+            return ReflectedTypes[ type.FullName ?? type.Namespace + " . " + type.Name];
         }
 
         internal static IEnumerable<TypeMetadata> EmitAttributes(IEnumerable<Attribute> attributes)
@@ -101,6 +101,8 @@ namespace Model.Reflection.MetadataModels
         }
 
         #endregion
+
+        private static readonly ReflectedTypes ReflectedTypes = ReflectedTypes.Instance;
 
         #region Private Constructors
 

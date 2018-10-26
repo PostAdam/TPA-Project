@@ -29,6 +29,7 @@ namespace ViewModel.MetadataViewModels
 
         #region Private
 
+        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
         private readonly TypeMetadata _attributeMetadata;
 
         #endregion
@@ -36,10 +37,10 @@ namespace ViewModel.MetadataViewModels
         protected override void BuildMyself()
         {
             Children.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_attributeMetadata.FullName))
+            if ( _reflectedTypes.ContainsKey(_attributeMetadata.FullName))
             {
                 Children.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_attributeMetadata.FullName]));
+                    _reflectedTypes[ _attributeMetadata.FullName]));
             }
             else
             {

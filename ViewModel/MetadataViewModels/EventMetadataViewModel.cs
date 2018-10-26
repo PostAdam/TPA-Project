@@ -6,6 +6,8 @@ namespace ViewModel.MetadataViewModels
 {
     public class EventMetadataViewModel : MetadataBaseViewModel
     {
+        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
+
         public override string ToString()
         {
             string fullname = "";
@@ -31,10 +33,10 @@ namespace ViewModel.MetadataViewModels
         protected override void BuildMyself()
         {
             Children.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_eventMetadata.TypeMetadata.FullName))
+            if ( _reflectedTypes.ContainsKey(_eventMetadata.TypeMetadata.FullName))
             {
                 Children.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_eventMetadata.TypeMetadata.FullName]));
+                    _reflectedTypes[ _eventMetadata.TypeMetadata.FullName]));
             }
             else
             {
@@ -43,10 +45,10 @@ namespace ViewModel.MetadataViewModels
 
             foreach (TypeMetadata attribute in _eventMetadata.EventAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
+                if ( _reflectedTypes.ContainsKey(attribute.FullName))
                 {
                     Children.Add(new AttributeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.FullName]));
+                        _reflectedTypes[ attribute.FullName]));
                 }
                 else
                 {

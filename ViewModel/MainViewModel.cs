@@ -66,6 +66,8 @@ namespace ViewModel
 
         #region Private
 
+        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
+
         private void Compose()
         {
             AggregateCatalog catalog = new AggregateCatalog();
@@ -125,9 +127,9 @@ namespace ViewModel
             {
                 foreach (TypeMetadata type in dataNamespace.Types)
                 {
-                    if (TypesDictionary.ReflectedTypes.ContainsKey(type.TypeName) == false)
+                    if (_reflectedTypes.ContainsKey(type.TypeName) == false)
                     {
-                        TypesDictionary.ReflectedTypes.Add(type.TypeName, type);
+                        _reflectedTypes.Add(type.TypeName, type);
                     }
                 }
             }

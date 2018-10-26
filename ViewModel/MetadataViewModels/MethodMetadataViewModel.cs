@@ -47,8 +47,9 @@ namespace ViewModel.MetadataViewModels
 
         #region Private
 
-        private readonly MethodMetadata _methodMetadata;
+        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
 
+        private readonly MethodMetadata _methodMetadata;
 
         private string GetParameterNames()
         {
@@ -98,10 +99,10 @@ namespace ViewModel.MetadataViewModels
             }
 
             if (_methodMetadata.ReturnType != null)
-                if (TypesDictionary.ReflectedTypes.ContainsKey(_methodMetadata.ReturnType.FullName))
+                if (_reflectedTypes.ContainsKey(_methodMetadata.ReturnType.FullName))
                 {
                     Children.Add(new TypeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[_methodMetadata.ReturnType.FullName]));
+                        _reflectedTypes[_methodMetadata.ReturnType.FullName]));
                 }
                 else
                 {
@@ -110,10 +111,10 @@ namespace ViewModel.MetadataViewModels
 
             foreach (TypeMetadata attribute in _methodMetadata.MethodAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
+                if (_reflectedTypes.ContainsKey(attribute.FullName))
                 {
                     Children.Add(new AttributeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.FullName]));
+                        _reflectedTypes[attribute.FullName]));
                 }
                 else
                 {

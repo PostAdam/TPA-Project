@@ -38,6 +38,8 @@ namespace ViewModel.MetadataViewModels
 
         #region Private
 
+        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
+
         private readonly PropertyMetadata _propertyMetadata;
 
         #endregion
@@ -46,10 +48,10 @@ namespace ViewModel.MetadataViewModels
         {
             Children.Clear();
 
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_propertyMetadata.TypeMetadata.FullName))
+            if (_reflectedTypes.ContainsKey(_propertyMetadata.TypeMetadata.FullName))
             {
                 Children.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_propertyMetadata.TypeMetadata.FullName]));
+                    _reflectedTypes[_propertyMetadata.TypeMetadata.FullName]));
             }
             else
             {
@@ -58,10 +60,10 @@ namespace ViewModel.MetadataViewModels
 
             foreach (TypeMetadata attribute in _propertyMetadata.PropertyAttributes)
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
+                if (_reflectedTypes.ContainsKey(attribute.FullName))
                 {
                     Children.Add(new AttributeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.FullName]));
+                        _reflectedTypes[attribute.FullName]));
                 }
                 else
                 {
