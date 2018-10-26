@@ -16,50 +16,10 @@ namespace WPF.View
         {
             PresentationTraceSources.Refresh();
             InitializeComponent();
-            ViewModel = new MainViewModel();
+            PathResolver pathResolver = new PathResolver();
+            ViewModel = new MainViewModel( pathResolver );
             DataContext = ViewModel;
         }
 
-        private void Compose()
-        {
-            AggregateCatalog catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof(MainWindow).Assembly));
-
-            _container = new CompositionContainer(catalog);
-            try
-            {
-                this._container.ComposeParts(this);
-            }
-            catch (CompositionException compositionException)
-            {
-                Console.WriteLine(compositionException.ToString());
-            }
-        }
-
-        private void Open(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "Dynamic Library (*.dll)|*.dll",
-                RestoreDirectory = true
-            };
-            if (openFileDialog.ShowDialog() == true)
-            {
-                ViewModel.Open(openFileDialog.FileName);
-            }
-        }
-        private void Read(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "XML File (*.xml)|*.xml",
-                RestoreDirectory = true
-            };
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                ViewModel.Read(openFileDialog.FileName);
-            }
-        }
     }
 }

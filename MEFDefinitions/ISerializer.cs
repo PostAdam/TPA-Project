@@ -2,7 +2,7 @@
 {
     public interface ISerializer
     {
-        void Serialize<T>(T type);
-        T Deserialize<T>(string filename);
+        void Serialize<T>(T type, string fileName);
+        T Deserialize<T>(string fileName);
     }
 }

@@ -25,7 +25,8 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:AssemblyMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14"  Margin="0,0,20,0" Foreground="WhiteSmoke" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,20,0"
+                                       Foreground="WhiteSmoke" />
                             <TextBlock Text="– Assembly" FontWeight="Bold"
                                        VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="WhiteSmoke" />
                         </DockPanel>
@@ -33,7 +34,8 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:TypeMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0" Foreground="#0BE25F" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0"
+                                       Foreground="#0BE25F" />
                             <TextBlock Text="– Type" FontWeight="Bold"
                                        VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#0BE25F" />
                         </DockPanel>
@@ -41,7 +43,8 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:PropertyMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0" Foreground="#E9DE00" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0"
+                                       Foreground="#E9DE00" />
                             <TextBlock Text="– Property" FontWeight="Bold"
                                        VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#E9DE00" />
                         </DockPanel>
@@ -49,7 +52,8 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:ParameterMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0" Foreground="#D98A1C" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0"
+                                       Foreground="#D98A1C" />
                             <TextBlock Text="– Parameter" FontWeight="Bold"
                                        VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#D98A1C" />
                         </DockPanel>
@@ -57,7 +61,8 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:MethodMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0" Foreground="#D91C1C" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0"
+                                       Foreground="#D91C1C" />
                             <TextBlock Text="– Method" FontWeight="Bold"
                                        VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#D91C1C" />
                         </DockPanel>
@@ -65,7 +70,8 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:NamespaceMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0" Foreground="#8A20FF" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0"
+                                       Foreground="#8A20FF" />
                             <TextBlock Text="– Namespace" FontWeight="Bold"
                                        VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#8A20FF" />
                         </DockPanel>
@@ -73,21 +79,24 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:FieldMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0" Foreground="#1B85FF" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0"
+                                       Foreground="#1B85FF" />
                             <TextBlock Text="– Field" FontWeight="Bold" Foreground="#1B85FF" />
                         </DockPanel>
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:AttributeMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0" Foreground="#17DED0" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0"
+                                       Foreground="#17DED0" />
                             <TextBlock Text="– Attribute" FontWeight="Bold" Foreground="#17DED0" />
                         </DockPanel>
-                    </HierarchicalDataTemplate>                    
+                    </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
                                               DataType="{x:Type assembly:EventMetadataViewModel}">
                         <DockPanel>
-                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0" Foreground="#FE00FF" />
+                            <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,10,0"
+                                       Foreground="#FE00FF" />
                             <TextBlock Text="– Event" FontWeight="Bold" Foreground="#FE00FF" />
                         </DockPanel>
                     </HierarchicalDataTemplate>
@@ -108,7 +117,7 @@
                 <Border Style="{StaticResource RoundCornerRectangle}"
                         Grid.Row="0">
                     <Button view:Name="OpenButton" Content="Open"
-                            Click="Open"
+                            Command="{Binding ClickOpen}"
                             Style="{StaticResource ButtonStyle}" />
                 </Border>
                 <Border Style="{StaticResource RoundCornerRectangle}"
@@ -120,7 +129,7 @@
                 <Border Style="{StaticResource RoundCornerRectangle}"
                         Grid.Row="2">
                     <Button view:Name="ReadButton" Content="Read"
-                            Click="Read"
+                            Command="{Binding ClickRead}"
                             Style="{StaticResource ButtonStyle}" />
                 </Border>
             </Grid>

@@ -14,7 +14,7 @@ namespace ViewModel.Commands
 
         #region Constructor
 
-        public DelegateCommand( Action action )
+        public DelegateCommand(Action action)
         {
             _action = action;
         }
@@ -23,12 +23,12 @@ namespace ViewModel.Commands
 
         #region Command Functionality
 
-        public void Execute( object parameter )
+        public void Execute(object parameter)
         {
-            Task.Run( () => _action() );
+            _action();
         }
 
-        public bool CanExecute( object parameter )
+        public bool CanExecute(object parameter)
         {
             return true;
         }

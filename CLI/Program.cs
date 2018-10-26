@@ -18,7 +18,7 @@ namespace CLI
             {
                 command = Console.ReadLine();
 
-                switch (command)
+                switch ( command )
                 {
                     case "open":
                         try
@@ -26,27 +26,25 @@ namespace CLI
                             Console.WriteLine();
                             Console.WriteLine(@"Provide filename:");
                             Console.Write(">");
-                            string filename = GetFilename();
-                            viewModel.Init(filename);
+                            viewModel.ClickOpen.Execute(null);
                             dllViewer.RootNodes = viewModel.Items;
                             dllViewer.DisplayTree();
                         }
-                        catch (FileNotFoundException fnfe)
+                        catch ( FileNotFoundException fnfe )
                         {
                             Console.WriteLine(fnfe.Message);
                         }
 
                         break;
                     case "save":
-                        viewModel.Save();
+                        viewModel.ClickSave.Execute(null);
                         Console.WriteLine("Serialized to Test.xml");
                         break;
                     case "read":
                         Console.WriteLine();
                         Console.WriteLine(@"Read filename:");
                         Console.Write(">");
-                        string fn = Console.ReadLine();
-                        viewModel.ReadFromFile(fn);
+                        viewModel.ClickRead.Execute(null);
                         dllViewer.RootNodes = viewModel.Items;
                         dllViewer.DisplayTree();
                         break;
@@ -56,12 +54,12 @@ namespace CLI
                     case "ls":
                         Console.WriteLine();
                         Console.WriteLine("Directory list:");
-                        foreach (string directory in Directory.EnumerateDirectories(Directory.GetCurrentDirectory()))
+                        foreach ( string directory in Directory.EnumerateDirectories(Directory.GetCurrentDirectory()) )
                         {
                             Console.WriteLine(Path.GetDirectoryName(directory));
                         }
 
-                        foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory()))
+                        foreach ( string file in Directory.GetFiles(Directory.GetCurrentDirectory()) )
                         {
                             Console.WriteLine(Path.GetFileName(file));
                         }
@@ -73,8 +71,6 @@ namespace CLI
                         Console.WriteLine("Move to:");
                         Console.Write(">");
                         string dir = Directory.GetCurrentDirectory();
-                        string f = Console.ReadLine();
-                        Directory.SetCurrentDirectory(dir + "\\" + f);
                         break;
                     case "exit":
                         Console.WriteLine(@"Have an awesome day!");
@@ -83,7 +79,7 @@ namespace CLI
                         Console.WriteLine(@"Not an option");
                         break;
                 }
-            } while (command != "exit");
+            } while ( command != "exit" );
 
 
             Console.ReadKey();
@@ -91,7 +87,9 @@ namespace CLI
 
         private static MainViewModel InitViewModel()
         {
-            MainViewModel viewmodel = new MainViewModel();
+            IPathResolver pathResolver = new PathResolver();
+            MainViewModel viewmodel = new MainViewModel(pathResolver);
+
             return viewmodel;
         }
 
@@ -110,19 +108,6 @@ namespace CLI
             Console.WriteLine("Press [ls] for unix ls command.");
             Console.WriteLine("Press [cd] for unix cd command.");
             Console.WriteLine("Press [exit] to quit.");
-        }
-
-        private static string GetFilename()
-        {
-            string filename = Console.ReadLine();
-            string directory = Directory.GetCurrentDirectory();
-            string fullPath = directory + "\\" + filename;
-            if (!File.Exists(fullPath))
-            {
-                throw new FileNotFoundException($"File {fullPath} doesn't exist.");
-            }
-
-            return fullPath;
         }
     }
 }

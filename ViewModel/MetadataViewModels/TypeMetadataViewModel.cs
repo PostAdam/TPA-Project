@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Model.Reflection;
-using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
-using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace ViewModel.MetadataBaseViewModels
+namespace ViewModel
 {
     public abstract class MetadataBaseViewModel : BaseViewModel
     {
