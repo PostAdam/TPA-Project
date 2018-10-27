@@ -5,7 +5,6 @@ using System.Text;
 using Model.Reflection;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
-using ViewModel.MetadataBaseViewModels;
 
 namespace ViewModel.MetadataViewModels
 {
