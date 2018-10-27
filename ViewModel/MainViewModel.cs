@@ -78,6 +78,7 @@ namespace ViewModel
             };
             AggregateCatalog catalog = new AggregateCatalog( directoryCatalogs );
             CompositionContainer container = new CompositionContainer( catalog );
+
             try
             {
                 container.ComposeParts( this );
