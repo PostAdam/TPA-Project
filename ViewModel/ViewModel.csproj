@@ -108,6 +108,14 @@
       <Project>{5959593d-9565-46cd-be35-983e93145117}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <Project>{8a07faa5-5d40-4d0a-9dbc-9ae4fdf89703}</Project>
+      <Name>Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Trace\Trace.csproj">
+      <Project>{12005e57-2655-404f-b360-3eaf12bd044c}</Project>
+      <Name>Trace</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISerializer.cs" />
+    <Compile Include="IRepository.cs" />
     <Compile Include="ITrace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModel", "ViewModel\View
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEFDefinitions", "MEFDefinitions\MEFDefinitions.csproj", "{130FE00A-39E7-4462-A52A-5614B4F5CF74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{8A07FAA5-5D40-4D0A-9DBC-9AE4FDF89703}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trace", "Trace\Trace.csproj", "{12005E57-2655-404F-B360-3EAF12BD044C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,12 +49,20 @@ Global
 		{130FE00A-39E7-4462-A52A-5614B4F5CF74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{130FE00A-39E7-4462-A52A-5614B4F5CF74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{130FE00A-39E7-4462-A52A-5614B4F5CF74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A07FAA5-5D40-4D0A-9DBC-9AE4FDF89703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A07FAA5-5D40-4D0A-9DBC-9AE4FDF89703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A07FAA5-5D40-4D0A-9DBC-9AE4FDF89703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A07FAA5-5D40-4D0A-9DBC-9AE4FDF89703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12005E57-2655-404F-B360-3EAF12BD044C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12005E57-2655-404F-B360-3EAF12BD044C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12005E57-2655-404F-B360-3EAF12BD044C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12005E57-2655-404F-B360-3EAF12BD044C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EF7208FB-6259-4E54-B98D-64AE25FD4966}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {EF7208FB-6259-4E54-B98D-64AE25FD4966}
 	EndGlobalSection
 EndGlobal

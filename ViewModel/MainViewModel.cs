@@ -5,6 +5,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
@@ -32,7 +33,7 @@ namespace ViewModel
         private void LoadLogger()
         {
             string loggerType = ConfigurationManager.AppSettings["loggerType"];
-            Logger = Loggers.FirstOrDefault(logger => (string) logger.Metadata["destination"] == loggerType)?.Value;
+            Logger = Loggers.FirstOrDefault( logger => (string) logger.Metadata["destination"] == loggerType )?.Value;
             if (Logger != null)
             {
                 string logLevel = ConfigurationManager.AppSettings["logLevel"];
@@ -57,8 +58,8 @@ namespace ViewModel
 
         public ITrace Logger;
 
-        [Import(typeof(ISerializer))]
-        public ISerializer Serializer;
+        [Import(typeof(IRepository))]
+        public IRepository Serializer;
 
         public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
 
@@ -70,17 +71,28 @@ namespace ViewModel
 
         private void Compose()
         {
-            AggregateCatalog catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog("../../../Model/bin/Debug", "*.dll"));
-            CompositionContainer container = new CompositionContainer(catalog);
-
+            List<DirectoryCatalog> directoryCatalogs = new List<DirectoryCatalog>()
+            {
+                new DirectoryCatalog("../../../Repository/bin/Debug", "*.dll"),
+                new DirectoryCatalog("../../../Trace/bin/Debug", "*.dll")
+            };
+            AggregateCatalog catalog = new AggregateCatalog( directoryCatalogs );
+            CompositionContainer container = new CompositionContainer( catalog );
             try
             {
-                container.ComposeParts(this);
+                container.ComposeParts( this );
             }
             catch (CompositionException compositionException)
             {
-                Console.WriteLine(compositionException.ToString());
+                Console.WriteLine( compositionException.ToString() );
+            }
+            catch ( Exception exception ) when( exception is ReflectionTypeLoadException )
+            {
+                ReflectionTypeLoadException typeLoadException = (ReflectionTypeLoadException) exception;
+                Exception[] loaderExceptions = typeLoadException.LoaderExceptions;
+                loaderExceptions.ToList().ForEach( ex => Console.WriteLine( ex.StackTrace ) );
+
+                throw;
             }
         }
 
@@ -92,7 +104,7 @@ namespace ViewModel
         public void Save()
         {
             Logger?.WriteLine("Starting serializaton process.", LogLevel.Warning.ToString());
-            Serializer.Serialize<AssemblyMetadata>(AssemblyMetadata);
+            Serializer.Write<AssemblyMetadata>(AssemblyMetadata);
             Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString());
         }
 
@@ -114,7 +126,7 @@ namespace ViewModel
         public void ReadFromFile(string filename)
         {
             Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString());
-            AssemblyMetadata data = Serializer.Deserialize<AssemblyMetadata>(filename);
+            AssemblyMetadata data = Serializer.Read<AssemblyMetadata>(filename);
             AddClassesToDirectory(data);
             InitTreeView(data);
             Logger?.WriteLine( "File " + filename + " deserialized successfully.", LogLevel.Trace.ToString() );

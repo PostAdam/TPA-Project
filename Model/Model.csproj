@@ -63,18 +63,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBaseTraceListener.cs" />
-    <Compile Include="LoggingDataBaseDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LoggingDataBaseDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="TextLogger.cs" />
     <Compile Include="Reflection\Enums\AbstractEnum.cs" />
     <Compile Include="Reflection\Enums\AccessLevel.cs" />
     <Compile Include="Reflection\Enums\ParameterKindEnum.cs" />
@@ -94,21 +87,9 @@
     <Compile Include="Reflection\ReflectedTypes.cs" />
     <Compile Include="Reflection\Reflector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="LoggingDataBaseDataSet.xsc">
-      <DependentUpon>LoggingDataBaseDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="LoggingDataBaseDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>LoggingDataBaseDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="LoggingDataBaseDataSet.xss">
-      <DependentUpon>LoggingDataBaseDataSet.xsd</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -120,15 +101,6 @@
       <Project>{130fe00a-39e7-4462-a52a-5614b4f5cf74}</Project>
       <Name>MEFDefinitions</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="LoggingDataBase.mdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="LoggingDataBase_log.ldf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DependentUpon>LoggingDataBase.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

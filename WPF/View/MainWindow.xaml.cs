@@ -23,16 +23,16 @@ namespace WPF.View
         private void Compose()
         {
             AggregateCatalog catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof(MainWindow).Assembly));
+            catalog.Catalogs.Add( new AssemblyCatalog( typeof( MainWindow ).Assembly ) );
 
-            _container = new CompositionContainer(catalog);
+            _container = new CompositionContainer( catalog );
             try
             {
-                this._container.ComposeParts(this);
+                this._container.ComposeParts( this );
             }
             catch (CompositionException compositionException)
             {
-                Console.WriteLine(compositionException.ToString());
+                Console.WriteLine( compositionException.ToString() );
             }
         }
 
