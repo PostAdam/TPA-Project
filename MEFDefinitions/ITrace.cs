@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace MEFDefinitions
+﻿namespace MEFDefinitions
 {
     public interface ITrace
     {

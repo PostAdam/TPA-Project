@@ -6,7 +6,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
 using MEFDefinitions;
-using Microsoft.Extensions.Logging;
 
 namespace Trace
 {

@@ -3,7 +3,6 @@ using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Diagnostics;
 using MEFDefinitions;
-using Microsoft.Extensions.Logging;
 
 namespace Trace
 {

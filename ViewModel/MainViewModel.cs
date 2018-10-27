@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
-using Microsoft.Extensions.Logging;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
 using ViewModel.Commands;
