@@ -16,6 +16,11 @@ namespace CLI
             return GetFilename();
         }
 
+        public string ReadFilePath()
+        {
+            return GetFilename();
+        }
+
         private static string GetFilename()
         {
             string filename = Console.ReadLine();
