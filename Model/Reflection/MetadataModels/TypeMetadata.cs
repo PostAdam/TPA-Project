@@ -79,28 +79,30 @@ namespace Model.Reflection.MetadataModels
 
         internal static TypeMetadata EmitType(Type type)
         {
-            if ( type == null )
+            if (type == null)
             {
                 return null;
             }
 
-            if ( !TypesDictionary.ReflectedTypes.ContainsKey(type.FullName ?? type.Namespace + " . " + type.Name) )
+            if (!ReflectedTypes.ContainsKey(type.FullName ?? type.Namespace + " . " + type.Name))
             {
-                TypesDictionary.ReflectedTypes.Add(type.FullName ?? type.Namespace + " . " + type.Name,
+                ReflectedTypes.Add(type.FullName ?? type.Namespace + " . " + type.Name,
                     new TypeMetadata(type));
             }
 
-            return TypesDictionary.ReflectedTypes[type.FullName ?? type.Namespace + " . " + type.Name];
+            return ReflectedTypes[ type.FullName ?? type.Namespace + " . " + type.Name];
         }
 
         internal static IEnumerable<TypeMetadata> EmitAttributes(IEnumerable<Attribute> attributes)
         {
-            if ( attributes == null ) return null;
+            if (attributes == null) return null;
             IEnumerable<Type> attributesTypes = from attribute in attributes select attribute.GetType();
             return EmitTypes(attributesTypes);
         }
 
         #endregion
+
+        private static readonly ReflectedTypes ReflectedTypes = ReflectedTypes.Instance;
 
         #region Private Constructors
 
@@ -147,20 +149,20 @@ namespace Model.Reflection.MetadataModels
         private static Tuple<AccessLevel, SealedEnum, AbstractEnum> EmitModifiers(Type type)
         {
             AccessLevel access = AccessLevel.Private;
-            if ( type.IsPublic )
+            if (type.IsPublic)
                 access = AccessLevel.Public;
-            else if ( type.IsNestedPublic )
+            else if (type.IsNestedPublic)
                 access = AccessLevel.Public;
-            else if ( type.IsNestedFamily )
+            else if (type.IsNestedFamily)
                 access = AccessLevel.Protected;
-            else if ( type.IsNestedFamANDAssem )
+            else if (type.IsNestedFamANDAssem)
                 access = AccessLevel.Internal;
 
             SealedEnum _sealed = SealedEnum.NotSealed;
-            if ( type.IsSealed ) _sealed = SealedEnum.Sealed;
+            if (type.IsSealed) _sealed = SealedEnum.Sealed;
 
             AbstractEnum _abstract = AbstractEnum.NotAbstract;
-            if ( type.IsAbstract )
+            if (type.IsAbstract)
                 _abstract = AbstractEnum.Abstract;
 
             return new Tuple<AccessLevel, SealedEnum, AbstractEnum>(access, _sealed, _abstract);
@@ -168,7 +170,7 @@ namespace Model.Reflection.MetadataModels
 
         private static TypeMetadata EmitReference(Type type)
         {
-            if ( !type.IsGenericType )
+            if (!type.IsGenericType)
             {
                 return new TypeMetadata(type.Name, type.GetNamespace());
             }
@@ -179,8 +181,8 @@ namespace Model.Reflection.MetadataModels
 
         private static TypeMetadata EmitExtends(Type baseType)
         {
-            if ( baseType == null || baseType == typeof(Object) || baseType == typeof(ValueType) ||
-                 baseType == typeof(Enum) )
+            if (baseType == null || baseType == typeof(Object) || baseType == typeof(ValueType) ||
+                baseType == typeof(Enum))
             {
                 return null;
             }
