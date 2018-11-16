@@ -1,12 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
 
 namespace MEFDefinitions
 {
     public interface ITrace
     {
-        void Write(string message);
-        void WriteLine(string message, string category );
+        Task Write( string message );
+        Task WriteLine( string message, string category );
         LogLevel Level { get; set; }
-
     }
 }

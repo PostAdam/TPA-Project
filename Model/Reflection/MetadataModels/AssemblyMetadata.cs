@@ -11,6 +11,10 @@ namespace Model.Reflection.MetadataModels
     {
         #region Constructor
 
+        public AssemblyMetadata()
+        {
+        }
+
         internal AssemblyMetadata(Assembly assembly)
         {
             Name = assembly.ManifestModule.Name;
@@ -23,7 +27,7 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
         [DataMember] public string Name { get; set; }
 

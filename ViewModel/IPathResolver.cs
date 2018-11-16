@@ -4,5 +4,6 @@
     {
         string OpenFilePath();
         string SaveFilePath();
+        string ReadFilePath();
     }
 }

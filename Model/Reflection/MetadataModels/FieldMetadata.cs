@@ -22,13 +22,15 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
-        [DataMember] public string Name;
-        [DataMember] public TypeMetadata TypeMetadata;
-        [DataMember] public Tuple<AccessLevel, StaticEnum> Modifiers;
-        [DataMember] public StaticEnum IsStatic;
-        [DataMember] public IEnumerable<TypeMetadata> FieldAttributes;
+        [DataMember] public string Name { get; set; }
+        [DataMember] public TypeMetadata TypeMetadata { get; set; }
+        [DataMember] public Tuple<AccessLevel, StaticEnum> Modifiers { get; set; }
+        [DataMember] public StaticEnum IsStatic { get; set; }
+        [DataMember] public IEnumerable<TypeMetadata> FieldAttributes { get; set; }
+
+        #endregion
 
         internal static Tuple<AccessLevel, StaticEnum> GetModifier(FieldInfo fieldInfo)
         {
@@ -47,8 +49,6 @@ namespace Model.Reflection.MetadataModels
                 _static = StaticEnum.Static;
 
             return new Tuple<AccessLevel, StaticEnum>(access,_static);
-        }
-
-        #endregion
+        }   
     }
 }

@@ -20,7 +20,7 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
         [DataMember]
         public string NamespaceName { get; set; }

@@ -12,7 +12,7 @@ namespace ViewModel.MetadataViewModels
         public override string ToString()
         {
             string fullname = "";
-            fullname += StringUtility.GetAttributes(_fieldMetadata.FieldAttributes);
+            fullname += StringUtility.GetAttributes( _fieldMetadata.FieldAttributes );
             fullname += GetModifiers();
             fullname += _fieldMetadata.TypeMetadata.TypeName + " ";
             fullname += _fieldMetadata.Name;
@@ -23,7 +23,7 @@ namespace ViewModel.MetadataViewModels
 
         #region Constructor
 
-        internal FieldMetadataViewModel(FieldMetadata fieldMetadata)
+        internal FieldMetadataViewModel( FieldMetadata fieldMetadata )
         {
             _fieldMetadata = fieldMetadata;
         }
@@ -32,6 +32,8 @@ namespace ViewModel.MetadataViewModels
 
         #region Private 
 
+        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
+
         private readonly FieldMetadata _fieldMetadata;
 
         #endregion
@@ -39,26 +41,26 @@ namespace ViewModel.MetadataViewModels
         protected override void BuildMyself()
         {
             Children.Clear();
-            if (TypesDictionary.ReflectedTypes.ContainsKey(_fieldMetadata.TypeMetadata.FullName))
+            if ( _reflectedTypes.ContainsKey( _fieldMetadata.TypeMetadata.FullName ) )
             {
-                Children.Add(new TypeMetadataViewModel(
-                    TypesDictionary.ReflectedTypes[_fieldMetadata.TypeMetadata.FullName]));
+                Children.Add( new TypeMetadataViewModel(
+                    _reflectedTypes[ _fieldMetadata.TypeMetadata.FullName ] ) );
             }
             else
             {
-                Children.Add(new TypeMetadataViewModel(_fieldMetadata.TypeMetadata));
+                Children.Add( new TypeMetadataViewModel( _fieldMetadata.TypeMetadata ) );
             }
 
-            foreach (TypeMetadata attribute in _fieldMetadata.FieldAttributes)
+            foreach ( TypeMetadata attribute in _fieldMetadata.FieldAttributes )
             {
-                if (TypesDictionary.ReflectedTypes.ContainsKey(attribute.FullName))
+                if ( _reflectedTypes.ContainsKey( attribute.FullName ) )
                 {
-                    Children.Add(new AttributeMetadataViewModel(
-                        TypesDictionary.ReflectedTypes[attribute.FullName]));
+                    Children.Add( new AttributeMetadataViewModel(
+                        _reflectedTypes[ attribute.FullName ] ) );
                 }
                 else
                 {
-                    Children.Add(new AttributeMetadataViewModel(attribute));
+                    Children.Add( new AttributeMetadataViewModel( attribute ) );
                 }
             }
 
@@ -67,7 +69,8 @@ namespace ViewModel.MetadataViewModels
 
         private string GetModifiers()
         {
-            if (_fieldMetadata.Modifiers == null) return String.Empty;
+            if ( _fieldMetadata.Modifiers == null )
+                return String.Empty;
 
             string mods = String.Empty;
             mods += _fieldMetadata.Modifiers.Item1 + " ";

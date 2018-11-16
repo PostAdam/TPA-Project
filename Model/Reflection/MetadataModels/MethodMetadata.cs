@@ -28,15 +28,15 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Variables
+        #region Properties
 
-        [DataMember] public string Name;
-        [DataMember] public bool Extension;
-        [DataMember] public TypeMetadata ReturnType;
-        [DataMember] public IEnumerable<TypeMetadata> MethodAttributes;
-        [DataMember] public IEnumerable<ParameterMetadata> Parameters;
-        [DataMember] public IEnumerable<TypeMetadata> GenericArguments;
-        [DataMember] public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers;
+        [DataMember] public string Name { get; set; }
+        [DataMember] public bool Extension { get; set; }
+        [DataMember] public TypeMetadata ReturnType { get; set; }
+        [DataMember] public IEnumerable<TypeMetadata> MethodAttributes { get; set; }
+        [DataMember] public IEnumerable<ParameterMetadata> Parameters { get; set; }
+        [DataMember] public IEnumerable<TypeMetadata> GenericArguments { get; set; }
+        [DataMember] public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
 
         #endregion
 

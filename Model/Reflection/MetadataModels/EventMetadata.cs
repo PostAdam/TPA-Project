@@ -22,15 +22,15 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
-        [DataMember] public string Name;
-        [DataMember] public TypeMetadata TypeMetadata;
-        [DataMember] public MethodMetadata AddMethodMetadata;
-        [DataMember] public MethodMetadata RaiseMethodMetadata;
-        [DataMember] public MethodMetadata RemoveMethodMetadata;
-        [DataMember] public bool Multicast;
-        [DataMember] public IEnumerable<TypeMetadata> EventAttributes;
+        [DataMember] public string Name { get; set; }
+        [DataMember] public TypeMetadata TypeMetadata { get; set; }
+        [DataMember] public MethodMetadata AddMethodMetadata { get; set; }
+        [DataMember] public MethodMetadata RaiseMethodMetadata { get; set; }
+        [DataMember] public MethodMetadata RemoveMethodMetadata { get; set; }
+        [DataMember] public bool Multicast { get; set; }
+        [DataMember] public IEnumerable<TypeMetadata> EventAttributes { get; set; }
 
         #endregion
     }

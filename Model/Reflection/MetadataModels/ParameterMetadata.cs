@@ -28,14 +28,14 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
-        [DataMember] public string Name;
-        [DataMember] public TypeMetadata TypeMetadata;
-        [DataMember] public int Position;
-        [DataMember] public ParameterKindEnum Kind;
-        [DataMember] public IEnumerable<TypeMetadata> ParameterAttributes;
-        [DataMember] public string DefaultValue;
+        [DataMember] public string Name { get; set; }
+        [DataMember] public TypeMetadata TypeMetadata { get; set; }
+        [DataMember] public int Position { get; set; }
+        [DataMember] public ParameterKindEnum Kind { get; set; }
+        [DataMember] public IEnumerable<TypeMetadata> ParameterAttributes { get; set; }
+        [DataMember] public string DefaultValue { get; set; }
 
         #endregion
 

@@ -5,13 +5,14 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
-using Microsoft.Extensions.Logging;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
 using ViewModel.Commands;
+using ViewModel.Commands.AsyncCommand;
 using ViewModel.MetadataViewModels;
 
 namespace ViewModel
@@ -22,27 +23,29 @@ namespace ViewModel
 
         private readonly IPathResolver _pathResolver;
 
-        private delegate string GetFilePath();
-        public MainViewModel(IPathResolver pathResolver)
+//        private delegate string GetFilePath();
+
+        public MainViewModel( IPathResolver pathResolver )
         {
             _pathResolver = pathResolver;
             Compose();
             LoadLogger();
+            LoadRepository();
             Items = new AsyncObservableCollection<MetadataBaseViewModel>();
-            ClickSave = new DelegateCommand(Save);
-            ClickOpen = new DelegateCommand(Open);
-            ClickRead = new DelegateCommand(Read);
+            ClickSave = new AsyncCommand( Save );
+            ClickOpen = new AsyncCommand( Open );
+            ClickRead = new AsyncCommand( Read );
         }
 
         private void LoadLogger()
         {
             string loggerType = ConfigurationManager.AppSettings["loggerType"];
-            Logger = Loggers.FirstOrDefault(logger => (string) logger.Metadata["destination"] == loggerType)?.Value;
+            Logger = Loggers.FirstOrDefault( logger => (string) logger.Metadata["destination"] == loggerType )?.Value;
             if ( Logger != null )
             {
                 string logLevel = ConfigurationManager.AppSettings["logLevel"];
 
-                if ( int.TryParse(logLevel, out int level) )
+                if ( int.TryParse( logLevel, out int level ) )
                 {
                     Logger.Level = (LogLevel) level;
                 }
@@ -53,15 +56,28 @@ namespace ViewModel
             }
         }
 
+        private void LoadRepository()
+        {
+            string repositoryType = ConfigurationManager.AppSettings["repositoryType"];
+            Repository = Repositories
+                .FirstOrDefault( repository => (string) repository.Metadata["destination"] == repositoryType )?.Value;
+        }
+
         #endregion
 
         #region DataContext
 
-        [ImportMany(typeof(ITrace))] public IEnumerable<Lazy<ITrace, IDictionary<string, object>>> Loggers;
+        [ImportMany( typeof( ITrace ) )] public IEnumerable<Lazy<ITrace, IDictionary<string, object>>> Loggers;
 
         public ITrace Logger;
 
-        [Import(typeof(ISerializer))] public ISerializer Serializer;
+        [ImportMany( typeof( IRepository ) )]
+        public IEnumerable<Lazy<IRepository, IDictionary<string, object>>> Repositories;
+
+        public IRepository Repository;
+
+//        [Import( typeof( IRepository ) )]
+//        public IRepository Serializer;
 
         public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
 
@@ -69,21 +85,40 @@ namespace ViewModel
 
         #region Private
 
+        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
+
         private void Compose()
         {
-            AggregateCatalog catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog("../../../Model/bin/Debug", "*.dll"));
-            CompositionContainer container = new CompositionContainer(catalog);
+            List<DirectoryCatalog> directoryCatalogs = new List<DirectoryCatalog>()
+            {
+                new DirectoryCatalog( "../../../XmlRepository/bin/Debug", "*.dll" ),
+                new DirectoryCatalog( "../../../DataBaseRepository/bin/Debug", "*.dll" ),
+                new DirectoryCatalog( "../../../DataBaseLogger/bin/Debug", "*.dll" ),
+                new DirectoryCatalog( "../../../FileLogger/bin/Debug", "*.dll" )
+            };
+            AggregateCatalog catalog = new AggregateCatalog( directoryCatalogs );
+            CompositionContainer container = new CompositionContainer( catalog );
 
             try
             {
-                container.ComposeParts(this);
+                container.ComposeParts( this );
             }
             catch ( CompositionException compositionException )
             {
-                Console.WriteLine(compositionException.ToString());
+                Console.WriteLine( compositionException.ToString() );
+
+                throw;
+            }
+            catch ( Exception exception ) when ( exception is ReflectionTypeLoadException )
+            {
+                ReflectionTypeLoadException typeLoadException = (ReflectionTypeLoadException) exception;
+                Exception[] loaderExceptions = typeLoadException.LoaderExceptions;
+                loaderExceptions.ToList().ForEach( ex => Console.WriteLine( ex.StackTrace ) );
+
+                throw;
             }
         }
+
 
         public ICommand ClickSave { get; }
         public ICommand ClickOpen { get; }
@@ -92,73 +127,74 @@ namespace ViewModel
 
         #region Methods
 
-        public void Save()
+        public async Task Save()
         {
-            Logger?.WriteLine("Starting serializaton process.", LogLevel.Warning.ToString());
-            string fileName = _pathResolver.SaveFilePath();
-            Serializer.Serialize<AssemblyMetadata>(AssemblyMetadata, fileName);
-            Logger?.WriteLine("Serializaton completed!", LogLevel.Error.ToString());
+            Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
+//            string fileName = _pathResolver.SaveFilePath();
+//            await Repository.Write<AssemblyMetadata>( AssemblyMetadata, fileName );
+            await Repository.Write<AssemblyMetadata>( AssemblyMetadata, "Test.xml" );
+            Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
         }
 
-        public async void Open()
+        public async Task Open()
         {
             string fileName = _pathResolver.OpenFilePath();
-            Logger?.WriteLine("Opening portable execution file: " + fileName, LogLevel.Debug.ToString());
-            await Task.Run(() => LoadDll(fileName)).ContinueWith(_ => InitTreeView(AssemblyMetadata));
+            Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
+            await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
         }
 
-        public void Read()
+        public async Task Read()
         {
-            string fileName = _pathResolver.OpenFilePath();
-            ReadFromFile(fileName);
+            string fileName = _pathResolver.ReadFilePath();
+            await ReadFromFile( fileName );
         }
 
         #endregion
 
         #region Help Methods
 
-        private void ReadFromFile(string filename)
+        private async Task ReadFromFile( string filename )
         {
-            Logger?.WriteLine("Reading from file " + filename + ".", LogLevel.Information.ToString());
-            AssemblyMetadata data = Serializer.Deserialize<AssemblyMetadata>(filename);
-            AddClassesToDirectory(data);
-            InitTreeView(data);
-            Logger?.WriteLine("File " + filename + " deserialized successfully.", LogLevel.Trace.ToString());
+            Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
+            AssemblyMetadata data = await Repository.Read<AssemblyMetadata>( filename );
+            AddClassesToDirectory( data );
+            InitTreeView( data );
+            Logger?.WriteLine( "File " + filename + " deserialized successfully.", LogLevel.Trace.ToString() );
         }
 
-        internal void AddClassesToDirectory(AssemblyMetadata assemblyMetadata)
+        internal void AddClassesToDirectory( AssemblyMetadata assemblyMetadata )
         {
-            Logger?.WriteLine("Adding classes to directory.", LogLevel.Information.ToString());
+            Logger?.WriteLine( "Adding classes to directory.", LogLevel.Information.ToString() );
             foreach ( NamespaceMetadata dataNamespace in assemblyMetadata.Namespaces )
             {
                 foreach ( TypeMetadata type in dataNamespace.Types )
                 {
-                    if ( TypesDictionary.ReflectedTypes.ContainsKey(type.TypeName) == false )
+                    if ( _reflectedTypes.ContainsKey( type.FullName ) == false )
                     {
-                        TypesDictionary.ReflectedTypes.Add(type.TypeName, type);
+                        _reflectedTypes.Add( type.FullName, type );
                     }
                 }
             }
 
-            Logger?.WriteLine("Classes added to directory!", LogLevel.Information.ToString());
+            Logger?.WriteLine( "Classes added to directory!", LogLevel.Information.ToString() );
         }
 
-        internal void InitTreeView(AssemblyMetadata assemblyMetadata)
+        internal void InitTreeView( AssemblyMetadata assemblyMetadata )
         {
-            Logger?.WriteLine("Initializing treeView.", LogLevel.Information.ToString());
-            MetadataBaseViewModel metadataViewModel = new AssemblyMetadataViewModel(assemblyMetadata);
-            Items.Add(metadataViewModel);
-            Logger?.WriteLine("TreeView initialized!", LogLevel.Information.ToString());
+            Logger?.WriteLine( "Initializing treeView.", LogLevel.Information.ToString() );
+            MetadataBaseViewModel metadataViewModel = new AssemblyMetadataViewModel( assemblyMetadata );
+            Items.Add( metadataViewModel );
+            Logger?.WriteLine( "TreeView initialized!", LogLevel.Information.ToString() );
         }
 
 
-        internal void LoadDll(string path)
+        internal async Task LoadDll( string path )
         {
-            Logger?.WriteLine("Loading DLL." + path, LogLevel.Trace.ToString());
+            Logger?.WriteLine( "Loading DLL." + path, LogLevel.Trace.ToString() );
             Reflector reflector = new Reflector();
-            reflector.Reflect(path);
+            await reflector.Reflect( path );
             AssemblyMetadata = reflector.AssemblyModel;
-            Logger?.WriteLine("DLL loaded!", LogLevel.Information.ToString());
+            Logger?.WriteLine( "DLL loaded!", LogLevel.Information.ToString() );
         }
 
         #endregion
