@@ -36,7 +36,7 @@ namespace XmlRepository
 
         private T ReadData<T>( string fileName )
         {
-            DataContractSerializer serializer = new DataContractSerializer( typeof( AssemblyMetadata ) );
+            DataContractSerializer serializer = new DataContractSerializer( typeof( T ) );
             T data;
             using ( FileStream stream = File.OpenRead( fileName ) )
             {

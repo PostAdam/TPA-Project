@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 
 namespace Model.Reflection.MetadataModels
 {
-    [DataContract(IsReference = true)]
     public class MethodMetadata
     {
+        public MethodMetadata()
+        {
+        }
+
         #region Emit API
 
         internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
@@ -30,13 +32,13 @@ namespace Model.Reflection.MetadataModels
 
         #region Properties
 
-        [DataMember] public string Name { get; set; }
-        [DataMember] public bool Extension { get; set; }
-        [DataMember] public TypeMetadata ReturnType { get; set; }
-        [DataMember] public IEnumerable<TypeMetadata> MethodAttributes { get; set; }
-        [DataMember] public IEnumerable<ParameterMetadata> Parameters { get; set; }
-        [DataMember] public IEnumerable<TypeMetadata> GenericArguments { get; set; }
-        [DataMember] public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
+        public string Name { get; set; }
+        public bool Extension { get; set; }
+        public TypeMetadata ReturnType { get; set; }
+        public IEnumerable<TypeMetadata> MethodAttributes { get; set; }
+        public IEnumerable<ParameterMetadata> Parameters { get; set; }
+        public IEnumerable<TypeMetadata> GenericArguments { get; set; }
+        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
 
         #endregion
 

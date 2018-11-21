@@ -3,29 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Model.Reflection.Enums;
+using Model.Reflection.MetadataModelBases;
 
-namespace Model.Reflection.MetadataModels
+namespace Model.Reflection.NewMetadataModels
 {
-    public class TypeMetadata
+    public class TypeMetadata : TypeMetadataBase
     {
         #region Properties
 
-        public string TypeName { get; internal set; }
-        public string NamespaceName { get; internal set; }
-        public TypeMetadata BaseType { get; internal set; }
-        public TypeMetadata DeclaringType { get; internal set; }
-        public TypeKind TypeKind { get; internal set; }
-        public Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers { get; internal set; }
-        public IEnumerable<FieldMetadata> Fields { get; internal set; }
-        public IEnumerable<TypeMetadata> GenericArguments { get; internal set; }
-        public IEnumerable<TypeMetadata> Attributes { get; internal set; }
-        public IEnumerable<TypeMetadata> ImplementedInterfaces { get; internal set; }
-        public IEnumerable<TypeMetadata> NestedTypes { get; internal set; }
-        public IEnumerable<PropertyMetadata> Properties { get; internal set; }
-        public IEnumerable<MethodMetadata> Methods { get; internal set; }
-        public IEnumerable<MethodMetadata> Constructors { get; internal set; }
-        public IEnumerable<EventMetadata> Events { get; internal set; }
-        public string FullName { get; internal set; }
+        public override string TypeName { get; internal set; }
+        public override string NamespaceName { get; internal set; }
+        public override TypeMetadataBase BaseType { get; internal set; }
+        public override TypeMetadataBase DeclaringType { get; internal set; }
+        public override TypeKind TypeKind { get; internal set; }
+        public override Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers { get; internal set; }
+        public override IEnumerable<FieldMetadataBase> Fields { get; internal set; }
+        public override IEnumerable<TypeMetadataBase> GenericArguments { get; internal set; }
+        public override IEnumerable<TypeMetadataBase> Attributes { get; internal set; }
+        public override IEnumerable<TypeMetadataBase> ImplementedInterfaces { get; internal set; }
+        public override IEnumerable<TypeMetadataBase> NestedTypes { get; internal set; }
+        public override IEnumerable<PropertyMetadataBase> Properties { get; internal set; }
+        public override IEnumerable<MethodMetadataBase> Methods { get; internal set; }
+        public override IEnumerable<MethodMetadataBase> Constructors { get; internal set; }
+        public override IEnumerable<EventMetadataBase> Events { get; internal set; }
+        public override string FullName { get; internal set; }
 
         const BindingFlags AllAccessLevels = BindingFlags.NonPublic
                                              | BindingFlags.DeclaredOnly
@@ -72,7 +73,7 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Emit API
+        /*#region Emit API
 
         internal static IEnumerable<TypeMetadata> EmitTypes( IEnumerable<Type> types )
         {
@@ -105,7 +106,7 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        private static readonly ReflectedTypes ReflectedTypes = ReflectedTypes.Instance;
+        private static readonly ReflectedTypes ReflectedTypes = ReflectedTypes.Instance;*/
 
         #region Private Constructors
 

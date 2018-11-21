@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Model.Reflection.Enums;
+using Model.Reflection.MetadataModelBases;
 
-namespace Model.Reflection.MetadataModels
+namespace Model.Reflection.NewMetadataModels
 {
-    public class FieldMetadata
+    public class FieldMetadata : FieldMetadataBase
     {
         #region Constructors
 
@@ -16,8 +17,8 @@ namespace Model.Reflection.MetadataModels
         internal FieldMetadata( FieldInfo fieldInfo )
         {
             Name = fieldInfo.Name;
-            TypeMetadata = TypeMetadata.EmitType( fieldInfo.FieldType );
-            FieldAttributes = TypeMetadata.EmitAttributes( fieldInfo.GetCustomAttributes() );
+            TypeMetadata = TypeMetadataBase.EmitType( fieldInfo.FieldType );
+            FieldAttributes = TypeMetadataBase.EmitAttributes( fieldInfo.GetCustomAttributes() );
             Modifiers = GetModifier( fieldInfo );
             IsStatic = fieldInfo.IsStatic ? StaticEnum.Static : StaticEnum.NotStatic;
         }
@@ -26,11 +27,11 @@ namespace Model.Reflection.MetadataModels
 
         #region Properties
 
-        public string Name { get; set; }
-        public TypeMetadata TypeMetadata { get; set; }
-        public Tuple<AccessLevel, StaticEnum> Modifiers { get; set; }
-        public StaticEnum IsStatic { get; set; }
-        public IEnumerable<TypeMetadata> FieldAttributes { get; set; }
+        public override string Name { get; set; }
+        public override TypeMetadataBase TypeMetadata { get; set; }
+        public override Tuple<AccessLevel, StaticEnum> Modifiers { get; set; }
+        public override StaticEnum IsStatic { get; set; }
+        public override IEnumerable<TypeMetadataBase> FieldAttributes { get; set; }
 
         #endregion
 

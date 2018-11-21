@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
 
-namespace Model.Reflection.Surrogates
+namespace Model.Reflection.MetadataModelSurogates
 {
     [DataContract( IsReference = true, Name = "PropertyMetadata" )]
     public class PropertyMetadataSurrogate

@@ -1,4 +1,5 @@
-﻿using Model.Reflection.MetadataModels;
+﻿using Model.Reflection.MetadataModelBases;
+using Model.Reflection.NewMetadataModels;
 
 namespace ViewModel.MetadataViewModels
 {
@@ -15,7 +16,7 @@ namespace ViewModel.MetadataViewModels
 
         #region Constructor
 
-        public NamespaceMetadataViewModel(NamespaceMetadata namespaceMetadata)
+        public NamespaceMetadataViewModel( NamespaceMetadata namespaceMetadata )
         {
             _namespaceMetadata = namespaceMetadata;
         }
@@ -24,14 +25,14 @@ namespace ViewModel.MetadataViewModels
 
         #region Private
 
-        private readonly NamespaceMetadata _namespaceMetadata;
+        private readonly NamespaceMetadataBase _namespaceMetadata;
 
         #endregion
 
         protected override void BuildMyself()
         {
             Children.Clear();
-            foreach (TypeMetadata type in _namespaceMetadata.Types)
+            foreach ( TypeMetadata type in _namespaceMetadata.Types)
                 Children.Add(new TypeMetadataViewModel(type));
             WasBuilt = true;
         }

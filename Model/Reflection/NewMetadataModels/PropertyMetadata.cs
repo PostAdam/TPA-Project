@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Model.Reflection.Enums;
+using Model.Reflection.MetadataModelBases;
 
-namespace Model.Reflection.MetadataModels
+namespace Model.Reflection.NewMetadataModels
 {
-    public class PropertyMetadata
+    public class PropertyMetadata : PropertyMetadataBase
     {
         #region Constructors
 
@@ -16,8 +17,8 @@ namespace Model.Reflection.MetadataModels
         internal PropertyMetadata(PropertyInfo propertyInfo)
         {
             Modifiers = GetModifier();
-            TypeMetadata = TypeMetadata.EmitType(propertyInfo.PropertyType);
-            PropertyAttributes = TypeMetadata.EmitAttributes(propertyInfo.GetCustomAttributes());
+            TypeMetadata = TypeMetadataBase.EmitType(propertyInfo.PropertyType);
+            PropertyAttributes = TypeMetadataBase.EmitAttributes(propertyInfo.GetCustomAttributes());
             Getter = MethodMetadata.EmitMethod(propertyInfo.GetGetMethod(true));
             Setter = MethodMetadata.EmitMethod(propertyInfo.GetSetMethod(true));
         }
@@ -26,13 +27,13 @@ namespace Model.Reflection.MetadataModels
 
         #region Properties
 
-        public string Name { get; set; }
-        public IEnumerable<TypeMetadata> PropertyAttributes { get; set; }
-        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
-        public TypeMetadata TypeMetadata { get; set; }
-        public PropertyInfo PropertyInfo { get; set; }
-        public MethodMetadata Getter { get; set; }
-        public MethodMetadata Setter { get; set; }
+        public override string Name { get; set; }
+        public override IEnumerable<TypeMetadataBase> PropertyAttributes { get; set; }
+        public override Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
+        public override TypeMetadataBase TypeMetadata { get; set; }
+        public override PropertyInfo PropertyInfo { get; set; }
+        public override MethodMetadataBase Getter { get; set; }
+        public override MethodMetadataBase Setter { get; set; }
 
         #endregion
 

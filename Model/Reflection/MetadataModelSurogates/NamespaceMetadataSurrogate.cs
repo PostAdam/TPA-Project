@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using Model.Reflection.MetadataModels;
 
-namespace Model.Reflection.Surrogates
+namespace Model.Reflection.MetadataModelSurogates
 {
     [DataContract( IsReference = true, Name = "NamespaceMetadata" )]
     public class NamespaceMetadataSurrogate

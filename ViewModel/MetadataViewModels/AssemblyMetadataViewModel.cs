@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Model.Reflection.MetadataModels;
+using Model.Reflection.MetadataModelBases;
+using Model.Reflection.NewMetadataModels;
 
 namespace ViewModel.MetadataViewModels
 {
@@ -28,7 +29,7 @@ namespace ViewModel.MetadataViewModels
 
         #region Private
 
-        private readonly IEnumerable<NamespaceMetadata> _namespaces;
+        private readonly IEnumerable<NamespaceMetadataBase> _namespaces;
 
         #endregion
 

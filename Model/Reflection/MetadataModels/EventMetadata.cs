@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.Serialization;
 
 namespace Model.Reflection.MetadataModels
 {
-    [DataContract(IsReference = true)]
     public class EventMetadata
     {
-        #region Constructor
+        #region Constructors
+
+        public EventMetadata()
+        { }
 
         internal EventMetadata(EventInfo eventInfo)
         {
@@ -24,13 +25,13 @@ namespace Model.Reflection.MetadataModels
 
         #region Properties
 
-        [DataMember] public string Name { get; set; }
-        [DataMember] public TypeMetadata TypeMetadata { get; set; }
-        [DataMember] public MethodMetadata AddMethodMetadata { get; set; }
-        [DataMember] public MethodMetadata RaiseMethodMetadata { get; set; }
-        [DataMember] public MethodMetadata RemoveMethodMetadata { get; set; }
-        [DataMember] public bool Multicast { get; set; }
-        [DataMember] public IEnumerable<TypeMetadata> EventAttributes { get; set; }
+        public string Name { get; set; }
+        public TypeMetadata TypeMetadata { get; set; }
+        public MethodMetadata AddMethodMetadata { get; set; }
+        public MethodMetadata RaiseMethodMetadata { get; set; }
+        public MethodMetadata RemoveMethodMetadata { get; set; }
+        public bool Multicast { get; set; }
+        public IEnumerable<TypeMetadata> EventAttributes { get; set; }
 
         #endregion
     }

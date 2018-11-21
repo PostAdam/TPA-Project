@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
+using Model.Reflection.NewSurrogates;
 using Model.Reflection.MetadataModels;
-using ViewModel.Commands;
 using ViewModel.Commands.AsyncCommand;
 using ViewModel.MetadataViewModels;
 
@@ -76,9 +76,6 @@ namespace ViewModel
 
         public IRepository Repository;
 
-//        [Import( typeof( IRepository ) )]
-//        public IRepository Serializer;
-
         public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
 
         #endregion
@@ -119,11 +116,12 @@ namespace ViewModel
             }
         }
 
-
         public ICommand ClickSave { get; }
         public ICommand ClickOpen { get; }
         public ICommand ClickRead { get; }
+
         internal AssemblyMetadata AssemblyMetadata;
+        private AssemblyMetadataSurrogate _assemblyMetadataSurrogate;
 
         #region Methods
 
@@ -132,7 +130,7 @@ namespace ViewModel
             Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
 //            string fileName = _pathResolver.SaveFilePath();
 //            await Repository.Write<AssemblyMetadata>( AssemblyMetadata, fileName );
-            await Repository.Write<AssemblyMetadata>( AssemblyMetadata, "Test.xml" );
+            await Repository.Write( _assemblyMetadataSurrogate, "Test.xml" );
             Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
         }
 
@@ -141,6 +139,7 @@ namespace ViewModel
             string fileName = _pathResolver.OpenFilePath();
             Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
             await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
+//            _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( AssemblyMetadata );
         }
 
         public async Task Read()
@@ -157,8 +156,9 @@ namespace ViewModel
         {
             Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
             AssemblyMetadata data = await Repository.Read<AssemblyMetadata>( filename );
-            AddClassesToDirectory( data );
-            InitTreeView( data );
+            AssemblyMetadata = _assemblyMetadataSurrogate.GetOriginalAssemblyMetadata();
+            AddClassesToDirectory( AssemblyMetadata );
+            InitTreeView( AssemblyMetadata );
             Logger?.WriteLine( "File " + filename + " deserialized successfully.", LogLevel.Trace.ToString() );
         }
 

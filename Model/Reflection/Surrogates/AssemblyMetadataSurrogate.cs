@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Model.Reflection.MetadataModelBases;
+using Model.Reflection.NewMetadataModels;
 
 namespace Model.Reflection.Surrogates
 {
-    [DataContract]
-    public class AssemblyMetadataSurrogate : AssemblyMetadataBase
+    [DataContract( Name = "AssemblyMetadata" )]
+    public class AssemblyMetadataSurrogate
     {
-        private readonly AssemblyMetadataBase _realAssemblyMetadata;// TODO: change to AssemblyMetadata type
+        private readonly AssemblyMetadata _realAssemblyMetadata;
 
         #region Constructor
 
-        public AssemblyMetadataSurrogate( AssemblyMetadataBase realAssemblyMetadata )
+        public AssemblyMetadataSurrogate( AssemblyMetadata assemblyMetadata )
         {
-            //            _realAssemblyMetadata = realAssemblyMetadata; // TODO: need to change AssemblyMetadata structure
+            _realAssemblyMetadata = assemblyMetadata ?? new AssemblyMetadata();
         }
 
         #endregion
@@ -21,20 +21,24 @@ namespace Model.Reflection.Surrogates
         #region Properties
 
         [DataMember]
-        public int Id { get; set; } // TODO: not sure if it should only be in surrogate type
-        [DataMember]
-        public override string Name
+        public string Name
         {
             get => _realAssemblyMetadata.Name;
             set => _realAssemblyMetadata.Name = value;
         }
+
         [DataMember]
-        public override IEnumerable<NamespaceMetadataBase> Namespaces
+        public IEnumerable<NamespaceMetadata> Namespaces
         {
             get => _realAssemblyMetadata.Namespaces;
             set => _realAssemblyMetadata.Namespaces = value;
         }
 
         #endregion
+
+        public AssemblyMetadata GetOriginalAssemblyMetadata()
+        {
+            return _realAssemblyMetadata;
+        }
     }
 }
