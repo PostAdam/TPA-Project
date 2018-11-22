@@ -13,7 +13,7 @@ namespace Model.Reflection.NewSurrogates
         public ParameterMetadataSurrogate( ParameterMetadata parameterMetadata )
         {
             Name = parameterMetadata.Name;
-            TypeMetadata = _reproducedTypes.GetType( parameterMetadata.TypeMetadata )/*new TypeMetadata( parameterMetadata.TypeMetadata )*/;
+            TypeMetadata = TypeMetadataSurrogate.GetType( parameterMetadata.TypeMetadata );
             Position = parameterMetadata.Position;
             Kind = parameterMetadata.Kind;
             ParameterAttributes = CollectionTypeAccessor.GetTypesMetadata( parameterMetadata.ParameterAttributes );

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿/*using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.NewMetadataModels;
 
@@ -41,4 +41,4 @@ namespace Model.Reflection.Surrogates
             return _realAssemblyMetadata;
         }
     }
-}
+}*/

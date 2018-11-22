@@ -13,7 +13,7 @@ namespace Model.Reflection.NewSurrogates
         public AssemblyMetadataSurrogate( AssemblyMetadata assemblyMetadata )
         {
             Name = assemblyMetadata.Name;
-            Namespaces = CollectionTypeAccessor.GetNamespacesMetadata( assemblyMetadata.Namespaces.ToList() );
+            Namespaces = CollectionTypeAccessor.GetNamespacesMetadata( assemblyMetadata.Namespaces );
         }
 
         #endregion

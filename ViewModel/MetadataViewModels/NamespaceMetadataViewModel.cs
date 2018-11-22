@@ -1,5 +1,4 @@
-﻿using Model.Reflection.MetadataModelBases;
-using Model.Reflection.NewMetadataModels;
+﻿using Model.Reflection.MetadataModels;
 
 namespace ViewModel.MetadataViewModels
 {
@@ -25,7 +24,7 @@ namespace ViewModel.MetadataViewModels
 
         #region Private
 
-        private readonly NamespaceMetadataBase _namespaceMetadata;
+        private readonly NamespaceMetadata _namespaceMetadata;
 
         #endregion
 

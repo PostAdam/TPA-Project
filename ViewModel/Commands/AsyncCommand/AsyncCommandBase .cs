@@ -56,7 +56,16 @@ namespace ViewModel.Commands.AsyncCommand
 
         async void ICommand.Execute( object parameter )
         {
-            await ExecuteAsync( parameter );
+            try
+            {
+                await ExecuteAsync( parameter );
+            }
+            catch ( AggregateException e )
+            {
+                Console.WriteLine( e.Flatten() );
+                throw;
+            }
+            
         }
     }
 }

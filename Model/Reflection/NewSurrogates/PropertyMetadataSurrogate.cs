@@ -17,10 +17,10 @@ namespace Model.Reflection.NewSurrogates
             Name = propertyMetadata.Name;
             PropertyAttributes = CollectionTypeAccessor.GetTypesMetadata( propertyMetadata.PropertyAttributes );
             Modifiers = Modifiers;
-            TypeMetadata = _reproducedTypes.GetType( propertyMetadata.TypeMetadata )/*new TypeMetadata( propertyMetadata.TypeMetadata )*/;
+            TypeMetadata = TypeMetadataSurrogate.GetType( propertyMetadata.TypeMetadata );
             PropertyInfo = propertyMetadata.PropertyInfo;
-            Getter = new MethodMetadataSurrogate( propertyMetadata.Getter );
-            Setter = new MethodMetadataSurrogate( propertyMetadata.Setter );
+            Getter = propertyMetadata.Getter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Getter );
+            Setter = propertyMetadata.Setter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Setter );
         }
 
         #region Properties

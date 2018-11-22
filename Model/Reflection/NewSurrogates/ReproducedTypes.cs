@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using Model.Reflection.MetadataModels;
 
 namespace Model.Reflection.NewSurrogates
@@ -13,16 +12,5 @@ namespace Model.Reflection.NewSurrogates
         }
 
         public static ReproducedTypes Instance => _reproducedTypes ?? ( _reproducedTypes = new ReproducedTypes() );
-
-        public TypeMetadataSurrogate GetType( TypeMetadata typeMetadata )
-        {
-            string typeId = typeMetadata.FullName ?? typeMetadata.NamespaceName + " . " + typeMetadata.TypeName;
-            if ( !Instance.ContainsKey( typeId ) )
-            {
-                Instance.Add( typeId, new TypeMetadataSurrogate( typeMetadata ) );
-            }
-
-            return Instance[typeId];
-        }
     }
 }

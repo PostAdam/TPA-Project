@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
@@ -14,8 +13,15 @@ namespace Model.Reflection.NewSurrogates
 
         public TypeMetadataSurrogate( TypeMetadata typeMetadata )
         {
+
             TypeName = typeMetadata.TypeName;
             NamespaceName = typeMetadata.NamespaceName;
+            FullName = typeMetadata.FullName;
+
+            _reproducedTypes.Add( typeMetadata.FullName ?? typeMetadata.NamespaceName + " . " + typeMetadata.TypeName,
+                this );
+            //_reproducedTypes[ typeMetadata.FullName ?? typeMetadata.NamespaceName + " . " + typeMetadata.TypeName ] = this;
+
             if ( typeMetadata.BaseType != null )
             {
                 BaseType = new TypeMetadataSurrogate( typeMetadata.BaseType.TypeName,
@@ -30,20 +36,19 @@ namespace Model.Reflection.NewSurrogates
 
             TypeKind = typeMetadata.TypeKind;
             Modifiers = typeMetadata.Modifiers;
-            Fields = CollectionTypeAccessor.GetFieldsMetadata( typeMetadata.Fields.ToList() );
+            Fields = CollectionTypeAccessor.GetFieldsMetadata( typeMetadata.Fields );
 
-            GenericArguments = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.GenericArguments.ToList() );
-            Attributes = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.Attributes.ToList() );
-            ImplementedInterfaces = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.ImplementedInterfaces.ToList() );
-            NestedTypes = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.NestedTypes.ToList() );
-            Properties = CollectionTypeAccessor.GetPropertiesMetadata( typeMetadata.Properties.ToList() );
-            Methods = CollectionTypeAccessor.GetMethodsMetadata( typeMetadata.Methods.ToList() );
-            Constructors = CollectionTypeAccessor.GetMethodsMetadata( typeMetadata.Constructors.ToList() );
-            Events = CollectionTypeAccessor.GetEventsMetadata( typeMetadata.Events.ToList() );
-            FullName = typeMetadata.FullName;
+            GenericArguments = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.GenericArguments );
+            Attributes = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.Attributes );
+            ImplementedInterfaces = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.ImplementedInterfaces );
+            NestedTypes = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.NestedTypes );
+            Properties = CollectionTypeAccessor.GetPropertiesMetadata( typeMetadata.Properties );
+            Methods = CollectionTypeAccessor.GetMethodsMetadata( typeMetadata.Methods );
+            Constructors = CollectionTypeAccessor.GetMethodsMetadata( typeMetadata.Constructors );
+            Events = CollectionTypeAccessor.GetEventsMetadata( typeMetadata.Events );
         }
 
-        public TypeMetadataSurrogate( string typeName, string namespaceName )
+        private TypeMetadataSurrogate( string typeName, string namespaceName )
         {
             TypeName = typeName;
             NamespaceName = namespaceName;
@@ -51,7 +56,7 @@ namespace Model.Reflection.NewSurrogates
 
         #endregion
 
-        private readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
+        private static readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
 
         #region Properties
 
@@ -104,6 +109,37 @@ namespace Model.Reflection.NewSurrogates
         public string FullName { get; set; }
 
         #endregion
+
+        public static TypeMetadataSurrogate GetType( TypeMetadata typeMetadata )
+        {
+            if ( typeMetadata == null )
+            {
+                return null;
+            }
+
+            string typeId = typeMetadata.FullName ?? typeMetadata.NamespaceName + " . " + typeMetadata.TypeName;
+            if ( !_reproducedTypes.ContainsKey( typeId ) )
+            {
+                
+                try
+                {
+//                    _reproducedTypes.Add( typeId, new TypeMetadataSurrogate( typeMetadata ) );
+                    new TypeMetadataSurrogate( typeMetadata );
+                }
+                catch ( ArgumentException e )
+                {
+
+                    Console.WriteLine( "Type : " + typeId + "\n" );
+                    foreach ( var reproducedType in _reproducedTypes )
+                    {
+                        Console.WriteLine( "Type : " + reproducedType.Value.FullName ?? reproducedType.Value.NamespaceName + " . " + reproducedType.Value.TypeName );
+                    }
+                    throw;
+                }
+            }
+
+            return _reproducedTypes[ typeId ];
+        }
 
         public TypeMetadata GetOryginalTypeMetadata()
         {

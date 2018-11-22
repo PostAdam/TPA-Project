@@ -15,7 +15,7 @@ namespace Model.Reflection.NewSurrogates
         {
             Name = Name;
             Extension = methodMetadata.Extension;
-            ReturnType = _reproducedTypes.GetType( methodMetadata.ReturnType )/*new TypeMetadata(methodMetadata.ReturnType)*/;
+            ReturnType = TypeMetadataSurrogate.GetType( methodMetadata.ReturnType );
             MethodAttributes = CollectionTypeAccessor.GetTypesMetadata( methodMetadata.MethodAttributes );
             Parameters = CollectionTypeAccessor.GetParametersMetadata( methodMetadata.Parameters );
             GenericArguments = CollectionTypeAccessor.GetTypesMetadata( methodMetadata.GenericArguments );

@@ -12,7 +12,7 @@ namespace Model.Reflection.NewSurrogates
         public FieldMetadataSurrogate( FieldMetadata fieldMetadata )
         {
             Name = fieldMetadata.Name;
-            TypeMetadata = _reproducedTypes.GetType( fieldMetadata.TypeMetadata );
+            TypeMetadata = TypeMetadataSurrogate.GetType( fieldMetadata.TypeMetadata );
             IsStatic = fieldMetadata.IsStatic;
             FieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes );
         }
@@ -24,7 +24,7 @@ namespace Model.Reflection.NewSurrogates
             List<TypeMetadataSurrogate> typeMetadatasSurrogate = new List<TypeMetadataSurrogate>();
             foreach ( TypeMetadata typeMetadata in types )
             {
-                typeMetadatasSurrogate.Add( _reproducedTypes.GetType( typeMetadata ) );
+                typeMetadatasSurrogate.Add( TypeMetadataSurrogate.GetType( typeMetadata ) );
             }
 
             return typeMetadatasSurrogate;

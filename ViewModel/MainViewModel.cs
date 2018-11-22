@@ -12,6 +12,7 @@ using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.NewSurrogates;
 using Model.Reflection.MetadataModels;
+using ViewModel.Commands;
 using ViewModel.Commands.AsyncCommand;
 using ViewModel.MetadataViewModels;
 
@@ -33,7 +34,7 @@ namespace ViewModel
             LoadRepository();
             Items = new AsyncObservableCollection<MetadataBaseViewModel>();
             ClickSave = new AsyncCommand( Save );
-            ClickOpen = new AsyncCommand( Open );
+            ClickOpen = new DelegateCommand( Open );
             ClickRead = new AsyncCommand( Read );
         }
 
@@ -134,12 +135,12 @@ namespace ViewModel
             Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
         }
 
-        public async Task Open()
+        public async void Open()
         {
             string fileName = _pathResolver.OpenFilePath();
             Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
             await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
-//            _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( AssemblyMetadata );
+            _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( AssemblyMetadata );
         }
 
         public async Task Read()

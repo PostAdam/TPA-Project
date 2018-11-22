@@ -13,7 +13,7 @@ namespace Model.Reflection.NewSurrogates
         public NamespaceMetadataSurrogate( NamespaceMetadata namespaceMetadata )
         {
             NamespaceName = namespaceMetadata.NamespaceName;
-            Types = GetTypesMetadata( namespaceMetadata.Types.ToList() );
+            Types = GetTypesMetadata( namespaceMetadata.Types );
         }
 
         #endregion
@@ -44,7 +44,7 @@ namespace Model.Reflection.NewSurrogates
             List<TypeMetadataSurrogate> typeMetadatas = new List<TypeMetadataSurrogate>();
             foreach ( TypeMetadata typeMetadata in types )
             {
-                typeMetadatas.Add( _reproducedTypes.GetType( typeMetadata ) );
+                typeMetadatas.Add( TypeMetadataSurrogate.GetType( typeMetadata ) );
             }
 
             return typeMetadatas;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Model.Reflection.MetadataModels;
 
 namespace Model.Reflection.NewSurrogates
@@ -103,7 +102,7 @@ namespace Model.Reflection.NewSurrogates
             List<TypeMetadataSurrogate> typeMetadatasSurrogate = new List<TypeMetadataSurrogate>();
             foreach ( TypeMetadata typeMetadata in types )
             {
-                typeMetadatasSurrogate.Add( _reproducedTypes.GetType( typeMetadata )/*new TypeMetadata( typeMetadata )*/ );
+                typeMetadatasSurrogate.Add( TypeMetadataSurrogate.GetType( typeMetadata )/*new TypeMetadata( typeMetadata )*/ );
             }
 
             return typeMetadatasSurrogate;

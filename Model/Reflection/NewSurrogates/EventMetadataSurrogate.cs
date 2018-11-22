@@ -12,10 +12,10 @@ namespace Model.Reflection.NewSurrogates
         public EventMetadataSurrogate( EventMetadata eventMetadata )
         {
             Name = Name;
-            TypeMetadata = _reproducedTypes.GetType( eventMetadata.TypeMetadata )/*new TypeMetadata( eventMetadata.TypeMetadata )*/;
-            AddMethodMetadata = new MethodMetadataSurrogate( eventMetadata.AddMethodMetadata );
-            RaiseMethodMetadata = new MethodMetadataSurrogate( eventMetadata.RaiseMethodMetadata );
-            RemoveMethodMetadata = new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
+            TypeMetadata = TypeMetadataSurrogate.GetType( eventMetadata.TypeMetadata );
+            AddMethodMetadata = eventMetadata.AddMethodMetadata == null ? null : new MethodMetadataSurrogate( eventMetadata.AddMethodMetadata );
+            RaiseMethodMetadata = eventMetadata.RaiseMethodMetadata == null ? null : new MethodMetadataSurrogate( eventMetadata.RaiseMethodMetadata );
+            RemoveMethodMetadata = eventMetadata.RemoveMethodMetadata == null ? null : new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
             Multicast = eventMetadata.Multicast;
             EventAttributes = CollectionTypeAccessor.GetTypesMetadata( eventMetadata.EventAttributes );
         }
