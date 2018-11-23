@@ -3,28 +3,31 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static Model.Reflection.NewSurrogates.CollectionOryginalTypeAccessor;
 
 namespace Model.Reflection.NewSurrogates
 {
     [DataContract( IsReference = true, Name = "FieldMetadata" )]
     public class FieldMetadataSurrogate
     {
+        #region Constructor
+
         public FieldMetadataSurrogate( FieldMetadata fieldMetadata )
         {
             Name = fieldMetadata.Name;
-            TypeMetadata = TypeMetadataSurrogate.GetType( fieldMetadata.TypeMetadata );
+            TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( fieldMetadata.TypeMetadata );
             IsStatic = fieldMetadata.IsStatic;
             FieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes );
         }
 
-        private readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
+        #endregion
 
         private IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
         {
             List<TypeMetadataSurrogate> typeMetadatasSurrogate = new List<TypeMetadataSurrogate>();
             foreach ( TypeMetadata typeMetadata in types )
             {
-                typeMetadatasSurrogate.Add( TypeMetadataSurrogate.GetType( typeMetadata ) );
+                typeMetadatasSurrogate.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
             }
 
             return typeMetadatasSurrogate;
@@ -54,10 +57,10 @@ namespace Model.Reflection.NewSurrogates
             return new FieldMetadata()
             {
                 Name = Name,
-                TypeMetadata = TypeMetadata.GetOryginalTypeMetadata(),
+                TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Modifiers = Modifiers,
                 IsStatic = IsStatic,
-                FieldAttributes = CollectionOryginalTypeAccessor.GetOryginalTypesMetadata( FieldAttributes )
+                FieldAttributes = GetOryginalTypesMetadata( FieldAttributes )
             };
         }
     }

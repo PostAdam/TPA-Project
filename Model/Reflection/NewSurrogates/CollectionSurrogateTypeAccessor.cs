@@ -90,7 +90,7 @@ namespace Model.Reflection.NewSurrogates
             return propertyMetadatasSurrogate;
         }
 
-        private static readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
+        private static readonly ReproducedSurrogateTypes _reproducedTypes = ReproducedSurrogateTypes.Instance;
 
         public static IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
         {
@@ -102,7 +102,7 @@ namespace Model.Reflection.NewSurrogates
             List<TypeMetadataSurrogate> typeMetadatasSurrogate = new List<TypeMetadataSurrogate>();
             foreach ( TypeMetadata typeMetadata in types )
             {
-                typeMetadatasSurrogate.Add( TypeMetadataSurrogate.GetType( typeMetadata )/*new TypeMetadata( typeMetadata )*/ );
+                typeMetadatasSurrogate.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata )/*new TypeMetadata( typeMetadata )*/ );
             }
 
             return typeMetadatasSurrogate;

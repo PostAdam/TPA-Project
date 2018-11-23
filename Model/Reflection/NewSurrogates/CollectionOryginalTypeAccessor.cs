@@ -7,6 +7,11 @@ namespace Model.Reflection.NewSurrogates
     {
         public static IEnumerable<FieldMetadata> GetOryginalFieldsMetadata( IEnumerable<FieldMetadataSurrogate> fields )
         {
+            if ( fields == null )
+            {
+                return null;
+            }
+
             List<FieldMetadata> oryginalFields = new List<FieldMetadata>();
             foreach ( FieldMetadataSurrogate fieldMetadataSurrogate in fields )
             {
@@ -18,10 +23,15 @@ namespace Model.Reflection.NewSurrogates
 
         public static IEnumerable<TypeMetadata> GetOryginalTypesMetadata( IEnumerable<TypeMetadataSurrogate> types )
         {
+            if ( types == null )
+            {
+                return null;
+            }
+
             List<TypeMetadata> oryginalTypes = new List<TypeMetadata>();
             foreach ( TypeMetadataSurrogate typeMetadataSurrogate in types )
             {
-                oryginalTypes.Add( typeMetadataSurrogate.GetOryginalTypeMetadata() );
+                oryginalTypes.Add( typeMetadataSurrogate.EmitOriginalTypeMetadata() );
             }
 
             return oryginalTypes;
@@ -30,6 +40,11 @@ namespace Model.Reflection.NewSurrogates
         public static IEnumerable<PropertyMetadata> GetOryginalPropertiesMetadata(
             IEnumerable<PropertyMetadataSurrogate> properties )
         {
+            if ( properties == null )
+            {
+                return null;
+            }
+
             List<PropertyMetadata> oryginalProperties = new List<PropertyMetadata>();
             foreach ( PropertyMetadataSurrogate propertyMetadataSurrogate in properties )
             {
@@ -42,6 +57,11 @@ namespace Model.Reflection.NewSurrogates
         public static IEnumerable<MethodMetadata> GetOryginalMethodsMetadata(
             IEnumerable<MethodMetadataSurrogate> methods )
         {
+            if ( methods == null )
+            {
+                return null;
+            }
+
             List<MethodMetadata> oryginalMethods = new List<MethodMetadata>();
             foreach ( MethodMetadataSurrogate methodMetadataSurrogate in methods )
             {
@@ -53,6 +73,11 @@ namespace Model.Reflection.NewSurrogates
 
         public static IEnumerable<EventMetadata> GetOryginalEventsMetadata( IEnumerable<EventMetadataSurrogate> events )
         {
+            if ( events == null )
+            {
+                return null;
+            }
+
             List<EventMetadata> oryginalEvents = new List<EventMetadata>();
             foreach ( EventMetadataSurrogate eventMetadataSurrogate in events )
             {
@@ -65,6 +90,11 @@ namespace Model.Reflection.NewSurrogates
         public static IEnumerable<ParameterMetadata> GetOryginalParametersMetadata(
             IEnumerable<ParameterMetadataSurrogate> parameters )
         {
+            if ( parameters == null )
+            {
+                return null;
+            }
+
             List<ParameterMetadata> oryginalParameters = new List<ParameterMetadata>();
             foreach ( ParameterMetadataSurrogate parameterMetadataSurrogate in parameters )
             {

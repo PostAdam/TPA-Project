@@ -126,7 +126,8 @@
     <Compile Include="Reflection\NewSurrogates\NamespaceMetadataSurrogate.cs" />
     <Compile Include="Reflection\NewSurrogates\ParameterMetadataSurrogate.cs" />
     <Compile Include="Reflection\NewSurrogates\PropertyMetadataSurrogate.cs" />
-    <Compile Include="Reflection\NewSurrogates\ReproducedTypes.cs" />
+    <Compile Include="Reflection\NewSurrogates\ReproducedOriginalTypes.cs" />
+    <Compile Include="Reflection\NewSurrogates\ReproducedSurrogateTypes.cs" />
     <Compile Include="Reflection\NewSurrogates\TypeMetadataSurrogate.cs" />
     <Compile Include="Reflection\ReflectedTypes.cs" />
     <Compile Include="Reflection\Reflector.cs" />

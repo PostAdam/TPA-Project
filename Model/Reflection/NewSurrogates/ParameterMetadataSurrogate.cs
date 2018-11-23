@@ -2,23 +2,27 @@
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static Model.Reflection.NewSurrogates.CollectionOryginalTypeAccessor;
+using static Model.Reflection.NewSurrogates.CollectionTypeAccessor;
 
 namespace Model.Reflection.NewSurrogates
 {
     [DataContract( IsReference = true, Name = "ParameterMetadata" )]
     public class ParameterMetadataSurrogate
     {
-        private readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
+        #region Constructor
 
         public ParameterMetadataSurrogate( ParameterMetadata parameterMetadata )
         {
             Name = parameterMetadata.Name;
-            TypeMetadata = TypeMetadataSurrogate.GetType( parameterMetadata.TypeMetadata );
+            TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( parameterMetadata.TypeMetadata );
             Position = parameterMetadata.Position;
             Kind = parameterMetadata.Kind;
-            ParameterAttributes = CollectionTypeAccessor.GetTypesMetadata( parameterMetadata.ParameterAttributes );
+            ParameterAttributes = GetTypesMetadata( parameterMetadata.ParameterAttributes );
             DefaultValue = parameterMetadata.DefaultValue;
         }
+
+        #endregion
 
         #region Properties
 
@@ -47,10 +51,10 @@ namespace Model.Reflection.NewSurrogates
             return new ParameterMetadata()
             {
                 Name = Name,
-                TypeMetadata = TypeMetadata.GetOryginalTypeMetadata(),
+                TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Position = Position,
                 Kind = Kind,
-                ParameterAttributes = CollectionOryginalTypeAccessor.GetOryginalTypesMetadata( ParameterAttributes ),
+                ParameterAttributes = GetOryginalTypesMetadata( ParameterAttributes ),
                 DefaultValue = DefaultValue
             };
         }

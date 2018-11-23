@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using Model.Reflection.MetadataModels;
+using static Model.Reflection.NewSurrogates.CollectionTypeAccessor;
 
 namespace Model.Reflection.NewSurrogates
 {
@@ -13,7 +13,7 @@ namespace Model.Reflection.NewSurrogates
         public AssemblyMetadataSurrogate( AssemblyMetadata assemblyMetadata )
         {
             Name = assemblyMetadata.Name;
-            Namespaces = CollectionTypeAccessor.GetNamespacesMetadata( assemblyMetadata.Namespaces );
+            Namespaces = GetNamespacesMetadata( assemblyMetadata.Namespaces );
         }
 
         #endregion

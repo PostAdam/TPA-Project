@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using Model.Reflection.MetadataModels;
+using static Model.Reflection.NewSurrogates.CollectionOryginalTypeAccessor;
 
 namespace Model.Reflection.NewSurrogates
 {
@@ -33,18 +33,16 @@ namespace Model.Reflection.NewSurrogates
             return new NamespaceMetadata
             {
                 NamespaceName = NamespaceName,
-                Types = CollectionOryginalTypeAccessor.GetOryginalTypesMetadata( Types )
+                Types = GetOryginalTypesMetadata( Types )
             };
         }
-
-        private readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
 
         private IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
         {
             List<TypeMetadataSurrogate> typeMetadatas = new List<TypeMetadataSurrogate>();
             foreach ( TypeMetadata typeMetadata in types )
             {
-                typeMetadatas.Add( TypeMetadataSurrogate.GetType( typeMetadata ) );
+                typeMetadatas.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
             }
 
             return typeMetadatas;

@@ -13,7 +13,7 @@ namespace Model.Reflection
 
         public async Task Reflect( string assemblyFile )
         {
-            Assembly assembly = await Task.Run( () =>/* AppDomain.CurrentDomain.Load(*/ Assembly.LoadFile( assemblyFile /*).GetName()*/ ) );
+            Assembly assembly = await Task.Run( () => Assembly.LoadFile( assemblyFile ) );
             AssemblyModel = new AssemblyMetadata( assembly );
         }
     }

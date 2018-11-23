@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static Model.Reflection.NewSurrogates.CollectionOryginalTypeAccessor;
+using static Model.Reflection.NewSurrogates.CollectionTypeAccessor;
 
 namespace Model.Reflection.NewSurrogates
 {
     [DataContract( IsReference = true, Name = "MethodMetadata" )]
     public class MethodMetadataSurrogate
     {
-        private readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
+        #region Constructor
 
         public MethodMetadataSurrogate( MethodMetadata methodMetadata )
         {
             Name = Name;
             Extension = methodMetadata.Extension;
-            ReturnType = TypeMetadataSurrogate.GetType( methodMetadata.ReturnType );
-            MethodAttributes = CollectionTypeAccessor.GetTypesMetadata( methodMetadata.MethodAttributes );
-            Parameters = CollectionTypeAccessor.GetParametersMetadata( methodMetadata.Parameters );
-            GenericArguments = CollectionTypeAccessor.GetTypesMetadata( methodMetadata.GenericArguments );
+            ReturnType = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( methodMetadata.ReturnType );
+            MethodAttributes = GetTypesMetadata( methodMetadata.MethodAttributes );
+            Parameters = GetParametersMetadata( methodMetadata.Parameters );
+            GenericArguments = GetTypesMetadata( methodMetadata.GenericArguments );
             Modifiers = methodMetadata.Modifiers;
         }
+
+        #endregion
 
         #region Properties
 
@@ -53,14 +57,12 @@ namespace Model.Reflection.NewSurrogates
             {
                 Name = Name,
                 Extension = Extension,
-                ReturnType = ReturnType.GetOryginalTypeMetadata(),
-                MethodAttributes = CollectionOryginalTypeAccessor.GetOryginalTypesMetadata( MethodAttributes ),
-                Parameters = CollectionOryginalTypeAccessor.GetOryginalParametersMetadata( Parameters ),
-                GenericArguments = CollectionOryginalTypeAccessor.GetOryginalTypesMetadata( GenericArguments ),
+                ReturnType = ReturnType?.EmitOriginalTypeMetadata(),
+                MethodAttributes = GetOryginalTypesMetadata( MethodAttributes ),
+                Parameters = GetOryginalParametersMetadata( Parameters ),
+                GenericArguments = GetOryginalTypesMetadata( GenericArguments ),
                 Modifiers = Modifiers
             };
         }
-
-        
     }
 }

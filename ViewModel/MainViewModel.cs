@@ -34,7 +34,7 @@ namespace ViewModel
             LoadRepository();
             Items = new AsyncObservableCollection<MetadataBaseViewModel>();
             ClickSave = new AsyncCommand( Save );
-            ClickOpen = new DelegateCommand( Open );
+            ClickOpen = new AsyncCommand( Open );
             ClickRead = new AsyncCommand( Read );
         }
 
@@ -135,12 +135,12 @@ namespace ViewModel
             Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
         }
 
-        public async void Open()
+        public async Task Open()
         {
             string fileName = _pathResolver.OpenFilePath();
             Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
             await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
-            _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( AssemblyMetadata );
+            await Task.Run( () => _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( AssemblyMetadata ) );
         }
 
         public async Task Read()
@@ -156,10 +156,13 @@ namespace ViewModel
         private async Task ReadFromFile( string filename )
         {
             Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
-            AssemblyMetadata data = await Repository.Read<AssemblyMetadata>( filename );
+
+            _assemblyMetadataSurrogate = await Repository.Read<AssemblyMetadataSurrogate>( filename );
             AssemblyMetadata = _assemblyMetadataSurrogate.GetOriginalAssemblyMetadata();
+
             AddClassesToDirectory( AssemblyMetadata );
             InitTreeView( AssemblyMetadata );
+
             Logger?.WriteLine( "File " + filename + " deserialized successfully.", LogLevel.Trace.ToString() );
         }
 

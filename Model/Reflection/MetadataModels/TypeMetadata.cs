@@ -45,6 +45,7 @@ namespace Model.Reflection.MetadataModels
         {
             // Infos
             TypeName = type.Name;
+            NamespaceName = type.Namespace;
             FullName = type.FullName ?? type.Namespace + "." + type.Name;
             Modifiers = EmitModifiers( type );
             TypeKind = GetTypeKind( type );

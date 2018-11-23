@@ -4,24 +4,28 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static Model.Reflection.NewSurrogates.CollectionOryginalTypeAccessor;
+using static Model.Reflection.NewSurrogates.CollectionTypeAccessor;
 
 namespace Model.Reflection.NewSurrogates
 {
     [DataContract( IsReference = true, Name = "PropertyMetadata" )]
     public class PropertyMetadataSurrogate
     {
-        private readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
+        #region Constructor
 
         public PropertyMetadataSurrogate( PropertyMetadata propertyMetadata )
         {
             Name = propertyMetadata.Name;
-            PropertyAttributes = CollectionTypeAccessor.GetTypesMetadata( propertyMetadata.PropertyAttributes );
+            PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
             Modifiers = Modifiers;
-            TypeMetadata = TypeMetadataSurrogate.GetType( propertyMetadata.TypeMetadata );
+            TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
             PropertyInfo = propertyMetadata.PropertyInfo;
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Getter );
             Setter = propertyMetadata.Setter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Setter );
         }
+
+        #endregion
 
         #region Properties
 
@@ -53,12 +57,12 @@ namespace Model.Reflection.NewSurrogates
             return new PropertyMetadata()
             {
                 Name = Name,
-                PropertyAttributes = CollectionOryginalTypeAccessor.GetOryginalTypesMetadata( PropertyAttributes ),
+                PropertyAttributes = GetOryginalTypesMetadata( PropertyAttributes ),
                 Modifiers = Modifiers,
-                TypeMetadata = TypeMetadata.GetOryginalTypeMetadata(),
+                TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 PropertyInfo = PropertyInfo,
-                Getter = Getter.GetOryginalMethodMetadata(),
-                Setter = Setter.GetOryginalMethodMetadata()
+                Getter = Getter?.GetOryginalMethodMetadata(),
+                Setter = Setter?.GetOryginalMethodMetadata()
             };
         }
     }

@@ -1,24 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.MetadataModels;
+using static Model.Reflection.NewSurrogates.CollectionOryginalTypeAccessor;
 
 namespace Model.Reflection.NewSurrogates
 {
     [DataContract( IsReference = true, Name = "EventMetadata" )]
     public class EventMetadataSurrogate
     {
-        private readonly ReproducedTypes _reproducedTypes = ReproducedTypes.Instance;
+        #region Constructor
 
         public EventMetadataSurrogate( EventMetadata eventMetadata )
         {
             Name = Name;
-            TypeMetadata = TypeMetadataSurrogate.GetType( eventMetadata.TypeMetadata );
-            AddMethodMetadata = eventMetadata.AddMethodMetadata == null ? null : new MethodMetadataSurrogate( eventMetadata.AddMethodMetadata );
-            RaiseMethodMetadata = eventMetadata.RaiseMethodMetadata == null ? null : new MethodMetadataSurrogate( eventMetadata.RaiseMethodMetadata );
-            RemoveMethodMetadata = eventMetadata.RemoveMethodMetadata == null ? null : new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
+            TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( eventMetadata.TypeMetadata );
+            AddMethodMetadata = eventMetadata.AddMethodMetadata == null
+                ? null
+                : new MethodMetadataSurrogate( eventMetadata.AddMethodMetadata );
+            RaiseMethodMetadata = eventMetadata.RaiseMethodMetadata == null
+                ? null
+                : new MethodMetadataSurrogate( eventMetadata.RaiseMethodMetadata );
+            RemoveMethodMetadata = eventMetadata.RemoveMethodMetadata == null
+                ? null
+                : new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
             Multicast = eventMetadata.Multicast;
             EventAttributes = CollectionTypeAccessor.GetTypesMetadata( eventMetadata.EventAttributes );
         }
+
+        #endregion
 
         #region Properties
 
@@ -50,12 +59,12 @@ namespace Model.Reflection.NewSurrogates
             return new EventMetadata()
             {
                 Name = Name,
-                TypeMetadata = TypeMetadata.GetOryginalTypeMetadata(),
-                AddMethodMetadata = AddMethodMetadata.GetOryginalMethodMetadata(),
-                RaiseMethodMetadata = RaiseMethodMetadata.GetOryginalMethodMetadata(),
-                RemoveMethodMetadata = RemoveMethodMetadata.GetOryginalMethodMetadata(),
+                TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
+                AddMethodMetadata = AddMethodMetadata?.GetOryginalMethodMetadata(),
+                RaiseMethodMetadata = RaiseMethodMetadata?.GetOryginalMethodMetadata(),
+                RemoveMethodMetadata = RemoveMethodMetadata?.GetOryginalMethodMetadata(),
                 Multicast = Multicast,
-                EventAttributes = CollectionOryginalTypeAccessor.GetOryginalTypesMetadata( EventAttributes )
+                EventAttributes = GetOryginalTypesMetadata( EventAttributes )
             };
         }
     }
