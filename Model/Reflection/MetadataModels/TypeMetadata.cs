@@ -10,22 +10,22 @@ namespace Model.Reflection.MetadataModels
     {
         #region Properties
 
-        public string TypeName { get; internal set; }
-        public string NamespaceName { get; internal set; }
-        public TypeMetadata BaseType { get; internal set; }
-        public TypeMetadata DeclaringType { get; internal set; }
-        public TypeKind TypeKind { get; internal set; }
-        public Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers { get; internal set; }
-        public IEnumerable<FieldMetadata> Fields { get; internal set; }
-        public IEnumerable<TypeMetadata> GenericArguments { get; internal set; }
-        public IEnumerable<TypeMetadata> Attributes { get; internal set; }
-        public IEnumerable<TypeMetadata> ImplementedInterfaces { get; internal set; }
-        public IEnumerable<TypeMetadata> NestedTypes { get; internal set; }
-        public IEnumerable<PropertyMetadata> Properties { get; internal set; }
-        public IEnumerable<MethodMetadata> Methods { get; internal set; }
-        public IEnumerable<MethodMetadata> Constructors { get; internal set; }
-        public IEnumerable<EventMetadata> Events { get; internal set; }
-        public string FullName { get; internal set; }
+        public string TypeName { get; set; }
+        public string NamespaceName { get; set; }
+        public TypeMetadata BaseType { get; set; }
+        public TypeMetadata DeclaringType { get; set; }
+        public TypeKind TypeKind { get; set; }
+        public Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers { get; set; }
+        public IEnumerable<FieldMetadata> Fields { get; set; }
+        public IEnumerable<TypeMetadata> GenericArguments { get; set; }
+        public IEnumerable<TypeMetadata> Attributes { get; set; }
+        public IEnumerable<TypeMetadata> ImplementedInterfaces { get; set; }
+        public IEnumerable<TypeMetadata> NestedTypes { get; set; }
+        public IEnumerable<PropertyMetadata> Properties { get; set; }
+        public IEnumerable<MethodMetadata> Methods { get; set; }
+        public IEnumerable<MethodMetadata> Constructors { get; set; }
+        public IEnumerable<EventMetadata> Events { get; set; }
+        public string FullName { get; set; }
 
         const BindingFlags AllAccessLevels = BindingFlags.NonPublic
                                              | BindingFlags.DeclaredOnly

@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlRepository", "XmlReposit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{4727780E-A4BE-46E3-B414-BD3A8BDD5BD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlSerializationSurrogates", "XmlSerializationSurrogates\XmlSerializationSurrogates.csproj", "{B32E9F62-6340-4F2F-BDE2-126B8E1BA1C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,12 +77,16 @@ Global
 		{4727780E-A4BE-46E3-B414-BD3A8BDD5BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4727780E-A4BE-46E3-B414-BD3A8BDD5BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4727780E-A4BE-46E3-B414-BD3A8BDD5BD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B32E9F62-6340-4F2F-BDE2-126B8E1BA1C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B32E9F62-6340-4F2F-BDE2-126B8E1BA1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B32E9F62-6340-4F2F-BDE2-126B8E1BA1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B32E9F62-6340-4F2F-BDE2-126B8E1BA1C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EF7208FB-6259-4E54-B98D-64AE25FD4966}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {EF7208FB-6259-4E54-B98D-64AE25FD4966}
 	EndGlobalSection
 EndGlobal

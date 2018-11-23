@@ -10,11 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
-using Model.Reflection.NewSurrogates;
 using Model.Reflection.MetadataModels;
-using ViewModel.Commands;
 using ViewModel.Commands.AsyncCommand;
 using ViewModel.MetadataViewModels;
+using XmlSerializationSurrogates.MetadataSurrogates;
 
 namespace ViewModel
 {
