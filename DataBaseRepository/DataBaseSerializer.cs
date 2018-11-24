@@ -2,7 +2,9 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+using DataBaseSerializationSurrogates.MetadataSurrogates;
 using MEFDefinitions;
+using Model.Reflection.MetadataModels;
 
 namespace DataBaseRepository
 {
@@ -10,48 +12,42 @@ namespace DataBaseRepository
     [ExportMetadata( "destination", "db" )]
     public class DataBaseSerializer : IRepository
     {
-        private readonly string _connectionString;
-
-        //public DataBaseSerializer()
-        //{
-        //    _connectionString = GetConnectionString();
-        //}
-
-        public async Task Write<T>( T metadata, string fileName ) where T : class
+        public async Task Write( object metadata, string fileName )
         {
-            await Task.Run( () => WriteData( metadata, fileName ) );
+//            await Task.Run( () => WriteData( metadata, fileName ) );
+            WriteData( metadata, fileName );
         }
 
-        public async Task<T> Read<T>( string fileName ) where T : class
+        public async Task<object> Read( string fileName )
         {
-            return await Task.Run( () => ReadData<T>( fileName ) );
+            return await Task.Run( () => ReadData( fileName ) );
         }
 
-        public void WriteData<T>( T metadata, string fileName ) where T : class
+        #region Privates
+
+        private void WriteData( object metadata, string fileName )
         {
-            using ( ReflectorDbContext<T> dbContext = new ReflectorDbContext<T>() )
+            using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
-                dbContext.Assemblies.Add( metadata );
+                AssemblyMetadataSurrogate assemblyMetadataSurrogate =
+                    new AssemblyMetadataSurrogate( (AssemblyMetadata) metadata );
+                dbContext.Assemblies.Add( assemblyMetadataSurrogate );
+                dbContext.Namespaces.AddRange( assemblyMetadataSurrogate.Namespaces );
+                //                dbContext.Types.AddRange( metadata.Namespaces.Select( n => n.Types ) );
+
                 dbContext.SaveChanges();
-                var query = from b in dbContext.Assemblies
+
+                IQueryable<AssemblyMetadataSurrogate> query = from b in dbContext.Assemblies
                     select b;
                 Console.WriteLine( query );
             }
         }
 
-        private T ReadData<T>( string fileName )
+        private object ReadData( string fileName )
         {
-            return (T) ( new object() );
+            return null;
         }
 
-        /*private string GetConnectionString()
-        {
-            Configuration appConfig =
-                ConfigurationManager.OpenExeConfiguration( Assembly.GetExecutingAssembly().Location );
-            string connectionString = appConfig.ConnectionStrings
-                .ConnectionStrings[ /*"Model.Properties.Settings.LoggingDataBaseConnectionString"#1#""].ConnectionString;
-            return connectionString;
-        }*/
-
+        #endregion
     }
 }

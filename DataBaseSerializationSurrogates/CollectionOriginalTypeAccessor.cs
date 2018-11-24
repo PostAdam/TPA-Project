@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DataBaseSerializationSurrogates.MetadataSurrogates;
 using Model.Reflection.MetadataModels;
-using XmlSerializationSurrogates.MetadataSurrogates;
 
-namespace XmlSerializationSurrogates
+namespace DataBaseSerializationSurrogates
 {
     public static class CollectionOriginalTypeAccessor
     {

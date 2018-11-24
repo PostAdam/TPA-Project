@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B32E9F62-6340-4F2F-BDE2-126B8E1BA1C7}</ProjectGuid>
+    <ProjectGuid>{E396AD79-3545-4A73-A2FD-0CF3B8F60A81}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XmlSerializationSurrogates</RootNamespace>
-    <AssemblyName>XmlSerializationSurrogates</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>DataBaseSerializationSurrogate</RootNamespace>
+    <AssemblyName>DataBaseSerializationSurrogate</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,19 +42,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MetadataSurrogates\AssemblyMetadataSurrogate.cs" />
     <Compile Include="CollectionOriginalTypeAccessor.cs" />
     <Compile Include="CollectionSurrogateTypeAccessor.cs" />
+    <Compile Include="MetadataSurrogates\AssemblyMetadataSurrogate.cs" />
     <Compile Include="MetadataSurrogates\EventMetadataSurrogate.cs" />
     <Compile Include="MetadataSurrogates\FieldMetadataSurrogate.cs" />
     <Compile Include="MetadataSurrogates\MethodMetadataSurrogate.cs" />
     <Compile Include="MetadataSurrogates\NamespaceMetadataSurrogate.cs" />
     <Compile Include="MetadataSurrogates\ParameterMetadataSurrogate.cs" />
     <Compile Include="MetadataSurrogates\PropertyMetadataSurrogate.cs" />
-    <Compile Include="ReproducedOriginalTypes.cs" />
-    <Compile Include="ReproducedSurrogateTypes.cs" />
     <Compile Include="MetadataSurrogates\TypeMetadataSurrogate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReproducedOriginalTypes.cs" />
+    <Compile Include="ReproducedSurrogateTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

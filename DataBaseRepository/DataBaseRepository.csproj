@@ -48,14 +48,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddMetadataModel.cs" />
     <Compile Include="DataBaseSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectorDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataBaseSerializationSurrogates\DataBaseSerializationSurrogates.csproj">
+      <Project>{c2bcdd8e-84d4-4aa2-a055-9f0fd32826ea}</Project>
+      <Name>DataBaseSerializationSurrogates</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MEFDefinitions\MEFDefinitions.csproj">
       <Project>{130fe00a-39e7-4462-a52a-5614b4f5cf74}</Project>
       <Name>MEFDefinitions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{5959593d-9565-46cd-be35-983e93145117}</Project>
+      <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

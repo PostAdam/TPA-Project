@@ -11,9 +11,9 @@ using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
+using ViewModel.Commands;
 using ViewModel.Commands.AsyncCommand;
 using ViewModel.MetadataViewModels;
-using XmlSerializationSurrogates.MetadataSurrogates;
 
 namespace ViewModel
 {
@@ -23,8 +23,6 @@ namespace ViewModel
 
         private readonly IPathResolver _pathResolver;
 
-//        private delegate string GetFilePath();
-
         public MainViewModel( IPathResolver pathResolver )
         {
             _pathResolver = pathResolver;
@@ -32,7 +30,7 @@ namespace ViewModel
             LoadLogger();
             LoadRepository();
             Items = new AsyncObservableCollection<MetadataBaseViewModel>();
-            ClickSave = new AsyncCommand( Save );
+            ClickSave = new DelegateCommand( Save );
             ClickOpen = new AsyncCommand( Open );
             ClickRead = new AsyncCommand( Read );
         }
@@ -65,7 +63,7 @@ namespace ViewModel
 
         #endregion
 
-        #region DataContext
+        #region MEF Context
 
         [ImportMany( typeof( ITrace ) )] public IEnumerable<Lazy<ITrace, IDictionary<string, object>>> Loggers;
 
@@ -75,14 +73,6 @@ namespace ViewModel
         public IEnumerable<Lazy<IRepository, IDictionary<string, object>>> Repositories;
 
         public IRepository Repository;
-
-        public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
-
-        #endregion
-
-        #region Private
-
-        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
 
         private void Compose()
         {
@@ -116,33 +106,42 @@ namespace ViewModel
             }
         }
 
+        #endregion
+
+        public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
+
+        #region Commands
+
         public ICommand ClickSave { get; }
         public ICommand ClickOpen { get; }
         public ICommand ClickRead { get; }
 
+        #endregion
+
+        #region Private
+
         internal AssemblyMetadata AssemblyMetadata;
-        private AssemblyMetadataSurrogate _assemblyMetadataSurrogate;
+        private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
 
-        #region Methods
+        #region Command Methods
 
-        public async Task Save()
+        private async void Save()
         {
             Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
 //            string fileName = _pathResolver.SaveFilePath();
 //            await Repository.Write<AssemblyMetadata>( AssemblyMetadata, fileName );
-            await Repository.Write( _assemblyMetadataSurrogate, "Test.xml" );
+            await Repository.Write( AssemblyMetadata, "Test.xml" );
             Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
         }
 
-        public async Task Open()
+        private async Task Open()
         {
             string fileName = _pathResolver.OpenFilePath();
             Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
             await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
-            await Task.Run( () => _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( AssemblyMetadata ) );
         }
 
-        public async Task Read()
+        private async Task Read()
         {
             string fileName = _pathResolver.ReadFilePath();
             await ReadFromFile( fileName );
@@ -156,9 +155,7 @@ namespace ViewModel
         {
             Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
 
-            _assemblyMetadataSurrogate = await Repository.Read<AssemblyMetadataSurrogate>( filename );
-            AssemblyMetadata = _assemblyMetadataSurrogate.GetOriginalAssemblyMetadata();
-
+            AssemblyMetadata = ( AssemblyMetadata ) await Repository.Read( filename );
             AddClassesToDirectory( AssemblyMetadata );
             InitTreeView( AssemblyMetadata );
 
