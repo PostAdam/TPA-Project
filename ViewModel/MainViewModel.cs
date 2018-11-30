@@ -76,7 +76,7 @@ namespace ViewModel
             List<DirectoryCatalog> directoryCatalogs = new List<DirectoryCatalog>()
             {
                 new DirectoryCatalog("../../../Repository/bin/Debug", "*.dll"),
-                new DirectoryCatalog("../../../Trace/bin/Debug", "*.dll")
+                new DirectoryCatalog("../../../Trace", "*.dll")
             };
             AggregateCatalog catalog = new AggregateCatalog( directoryCatalogs );
             CompositionContainer container = new CompositionContainer( catalog );
