@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
@@ -15,7 +15,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( parameterMetadata.TypeMetadata );
             Position = parameterMetadata.Position;
             Kind = parameterMetadata.Kind;
-            ParameterAttributes = CollectionTypeAccessor.GetTypesMetadata( parameterMetadata.ParameterAttributes );
+            ParameterAttributes = GetTypesMetadata( parameterMetadata.ParameterAttributes ) as ICollection<TypeMetadataSurrogate>;
             DefaultValue = parameterMetadata.DefaultValue;
         }
 
@@ -23,18 +23,20 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Properties
 
-        [Key]
+        public int ParameterId { get; set; }
         public string Name { get; set; }
-        
+        public int TypeMetadataId { get; set; }
         public TypeMetadataSurrogate TypeMetadata { get; set; }
-
         public int Position { get; set; }
-
         public ParameterKindEnum Kind { get; set; }
-
-        public IEnumerable<TypeMetadataSurrogate> ParameterAttributes { get; set; }
-
+        public ICollection<TypeMetadataSurrogate> ParameterAttributes { get; set; }
         public string DefaultValue { get; set; }
+
+        #endregion
+
+        #region Navigation Properties
+
+        public ICollection<MethodMetadataSurrogate> MethodParametersSurrogates { get; set; }
 
         #endregion
 

@@ -125,12 +125,13 @@ namespace ViewModel
 
         #region Command Methods
 
-        private async void Save()
+        private void Save()
         {
             Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
 //            string fileName = _pathResolver.SaveFilePath();
 //            await Repository.Write<AssemblyMetadata>( AssemblyMetadata, fileName );
-            await Repository.Write( AssemblyMetadata, "Test.xml" );
+//            await Repository.Write( AssemblyMetadata, "Test.xml" );
+            Repository.Write( AssemblyMetadata, "Test.xml" );
             Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
         }
 
@@ -143,8 +144,8 @@ namespace ViewModel
 
         private async Task Read()
         {
-            string fileName = _pathResolver.ReadFilePath();
-            await ReadFromFile( fileName );
+//            string fileName = _pathResolver.ReadFilePath();
+            await ReadFromFile( "ViewModel" );
         }
 
         #endregion
@@ -155,7 +156,7 @@ namespace ViewModel
         {
             Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
 
-            AssemblyMetadata = ( AssemblyMetadata ) await Repository.Read( filename );
+            AssemblyMetadata = (AssemblyMetadata) await Repository.Read( filename );
             AddClassesToDirectory( AssemblyMetadata );
             InitTreeView( AssemblyMetadata );
 

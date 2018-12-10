@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
@@ -11,17 +11,16 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public AssemblyMetadataSurrogate( AssemblyMetadata assemblyMetadata )
         {
             Name = assemblyMetadata.Name;
-            Namespaces = CollectionTypeAccessor.GetNamespacesMetadata( assemblyMetadata.Namespaces );
+            Namespaces = GetNamespacesMetadata( assemblyMetadata.Namespaces ) as ICollection<NamespaceMetadataSurrogate>;
         }
 
         #endregion
 
         #region Properties
 
-        [Key]
+        public int AssemblyId { get; set; }
         public string Name { get; set; }
-
-        public virtual IEnumerable<NamespaceMetadataSurrogate> Namespaces { get; set; }
+        public ICollection<NamespaceMetadataSurrogate> Namespaces { get; set; }
 
         #endregion
 

@@ -1,5 +1,5 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using DataBaseSerializationSurrogates.MetadataSurrogates;
@@ -29,23 +29,74 @@ namespace DataBaseRepository
         {
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
-                AssemblyMetadataSurrogate assemblyMetadataSurrogate =
-                    new AssemblyMetadataSurrogate( (AssemblyMetadata) metadata );
-                dbContext.Assemblies.Add( assemblyMetadataSurrogate );
-                dbContext.Namespaces.AddRange( assemblyMetadataSurrogate.Namespaces );
-                //                dbContext.Types.AddRange( metadata.Namespaces.Select( n => n.Types ) );
-
+                dbContext.AssemblyModels.Add( new AssemblyMetadataSurrogate( metadata as AssemblyMetadata ) );
                 dbContext.SaveChanges();
-
-                IQueryable<AssemblyMetadataSurrogate> query = from b in dbContext.Assemblies
-                    select b;
-                Console.WriteLine( query );
             }
         }
 
         private object ReadData( string fileName )
         {
-            return null;
+            using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
+            {
+                dbContext.TypeModels
+                    .Include( t => t.BaseType )
+                    .Include( t => t.DeclaringType )
+                    .Include( t => t.Fields )
+                    .Include( t => t.GenericArguments )
+                    .Include( t => t.Attributes )
+                    .Include( t => t.ImplementedInterfaces )
+                    .Include( t => t.NestedTypes )
+                    .Include( t => t.Properties )
+                    .Include( t => t.Methods )
+                    .Include( t => t.Constructors )
+                    .Include( t => t.Events )
+                    .Load();
+
+                dbContext.NamespaceModels
+                    .Include( n => n.Types )
+                    .Load();
+
+                dbContext.ParameterModels
+                    .Include( p => p.TypeMetadata )
+                    .Include( p => p.ParameterAttributes )
+                    .Load();
+
+                dbContext.PropertiesModels
+                    .Include( p => p.PropertyAttributes )
+                    .Include( p => p.TypeMetadata )
+                    //.Include( p => p.PropertyInfo ) //maybe it should have DbSet?
+                    .Include( p => p.Getter )
+                    .Include( p => p.Setter )
+                    .Load();
+
+                dbContext.MethodModels
+                    .Include( m => m.ReturnType )
+                    .Include( m => m.MethodAttributes )
+                    .Include( m => m.Parameters )
+                    .Include( m => m.GenericArguments )
+                    .Load();
+
+                dbContext.FieldModels
+                    .Include( f => f.TypeMetadata )
+                    .Include( f => f.FieldAttributes )
+                    .Load();
+
+                dbContext.EventModels
+                    .Include( e => e.TypeMetadata )
+                    .Include( e => e.AddMethodMetadata )
+                    .Include( e => e.RaiseMethodMetadata )
+                    .Include( e => e.RemoveMethodMetadata )
+                    .Include( e => e.EventAttributes )
+                    .Load();
+
+                AssemblyMetadataSurrogate assemblyMetadataSurrogate = dbContext.AssemblyModels
+                    .Include( a => a.Namespaces )
+                    .FirstOrDefault( a => a.Name == fileName );
+
+                return assemblyMetadataSurrogate?.GetOriginalAssemblyMetadata();
+            }
+
+           
         }
 
         #endregion

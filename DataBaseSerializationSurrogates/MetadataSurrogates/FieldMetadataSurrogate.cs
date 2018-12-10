@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
 
@@ -15,7 +14,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             Name = fieldMetadata.Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( fieldMetadata.TypeMetadata );
             IsStatic = fieldMetadata.IsStatic;
-            FieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes );
+            FieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes ) as ICollection<TypeMetadataSurrogate>;
         }
 
         #endregion
@@ -33,16 +32,34 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Properties
 
-        [Key]
+        public int FieldId { get; set; }
         public string Name { get; set; }
-
         public TypeMetadataSurrogate TypeMetadata { get; set; }
-
-        public Tuple<AccessLevel, StaticEnum> Modifiers { get; set; }
-
+        public int TypeMetadataId { get; set; }
         public StaticEnum IsStatic { get; set; }
+        public ICollection<TypeMetadataSurrogate> FieldAttributes { get; set; }
+        private Tuple<AccessLevel, StaticEnum> _modifiers;
 
-        public IEnumerable<TypeMetadataSurrogate> FieldAttributes { get; set; }
+        #region Modifiers
+
+        public AccessLevel AccessLevel
+        {
+            get => _modifiers.Item1;
+            set => _modifiers = new Tuple<AccessLevel, StaticEnum>( value, _modifiers.Item2 );
+        }
+        public StaticEnum StaticEnum
+        {
+            get => _modifiers.Item2;
+            set => _modifiers = new Tuple<AccessLevel, StaticEnum>( _modifiers.Item1, value );
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Navigation Properties
+
+        public ICollection<TypeMetadataSurrogate> TypeFieldsSurrogates { get; set; }
 
         #endregion
 
@@ -52,7 +69,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             {
                 Name = Name,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
-                Modifiers = Modifiers,
+                Modifiers = _modifiers,
                 IsStatic = IsStatic,
                 FieldAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( FieldAttributes )
             };

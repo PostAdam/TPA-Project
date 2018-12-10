@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
@@ -22,27 +22,31 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 ? null
                 : new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
             Multicast = eventMetadata.Multicast;
-            EventAttributes = CollectionTypeAccessor.GetTypesMetadata( eventMetadata.EventAttributes );
+            EventAttributes = GetTypesMetadata( eventMetadata.EventAttributes ) as ICollection<TypeMetadataSurrogate>;
         }
 
         #endregion
 
         #region Properties
 
-        [Key]
+        public int EventId { get; set; }
         public string Name { get; set; }
-
+        public int TypeMetadataId { get; set; }
         public TypeMetadataSurrogate TypeMetadata { get; set; }
-
+        public int AddMethodMetadataId { get; set; }
         public MethodMetadataSurrogate AddMethodMetadata { get; set; }
-
+        public int RaiseMethodMetadataId { get; set; }
         public MethodMetadataSurrogate RaiseMethodMetadata { get; set; }
-
+        public int RemoveMethodMetadataId { get; set; }
         public MethodMetadataSurrogate RemoveMethodMetadata { get; set; }
-
         public bool Multicast { get; set; }
+        public ICollection<TypeMetadataSurrogate> EventAttributes { get; set; }
 
-        public IEnumerable<TypeMetadataSurrogate> EventAttributes { get; set; }
+        #endregion
+
+        #region Navigation Properties
+
+        public ICollection<TypeMetadataSurrogate> TypeEventMetadataSurrogate { get; set; }
 
         #endregion
 

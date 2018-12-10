@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
@@ -14,8 +14,8 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public PropertyMetadataSurrogate( PropertyMetadata propertyMetadata )
         {
             Name = propertyMetadata.Name;
-            PropertyAttributes = CollectionTypeAccessor.GetTypesMetadata( propertyMetadata.PropertyAttributes );
-            Modifiers = Modifiers;
+            PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes ) as ICollection<TypeMetadataSurrogate>;
+            _modifiers = propertyMetadata.Modifiers;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
             PropertyInfo = propertyMetadata.PropertyInfo;
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Getter );
@@ -26,22 +26,53 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Properties
 
-        [Key]
+        public int PropertyId { get; set; }
         public string Name { get; set; }
-
-        public virtual IEnumerable<TypeMetadataSurrogate> PropertyAttributes { get; set; }
-
-        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
-
+        public ICollection<TypeMetadataSurrogate> PropertyAttributes { get; set; }
         public TypeMetadataSurrogate TypeMetadata { get; set; }
-
         public PropertyInfo PropertyInfo { get; set; }
-
         public MethodMetadataSurrogate Getter { get; set; }
-
         public MethodMetadataSurrogate Setter { get; set; }
+        private Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> _modifiers;
 
-        public virtual TypeMetadataSurrogate PropertyAttribute { get; set; }
+        #region Modifiers
+
+        public AccessLevel AccessLevel
+        {
+            get => _modifiers.Item1;
+            set => _modifiers =
+                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( value, _modifiers.Item2, _modifiers.Item3,
+                    _modifiers.Item4 );
+        }
+        public AbstractEnum AbstractEnum
+        {
+            get => _modifiers.Item2;
+            set => _modifiers =
+                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, value, _modifiers.Item3,
+                    _modifiers.Item4 );
+        }
+        public StaticEnum StaticEnum
+        {
+            get => _modifiers.Item3;
+            set => _modifiers =
+                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, _modifiers.Item2, value,
+                    _modifiers.Item4 );
+        }
+        public VirtualEnum VirtualEnum
+        {
+            get => _modifiers.Item4;
+            set => _modifiers =
+                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, _modifiers.Item2,
+                    _modifiers.Item3, value );
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Navigation Properties
+
+        public ICollection<TypeMetadataSurrogate> TypePropertiesSurrogates { get; set; }
 
         #endregion
 
@@ -51,7 +82,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             {
                 Name = Name,
                 PropertyAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( PropertyAttributes ),
-                Modifiers = Modifiers,
+                Modifiers = _modifiers,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 PropertyInfo = PropertyInfo,
                 Getter = Getter?.GetOriginalMethodMetadata(),

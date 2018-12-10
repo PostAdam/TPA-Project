@@ -13,13 +13,16 @@ namespace DataBaseLogger
     [ExportMetadata( "destination", "db" )]
     class DataBaseTraceListener : ITrace
     {
-        private readonly string _connectionString;
         public LogLevel Level { get; set; }
+
+        #region Constructor
 
         public DataBaseTraceListener()
         {
             _connectionString = GetConnectionString();
-        }
+        } 
+
+        #endregion
 
         public async Task Write( string message )
         {
@@ -34,6 +37,10 @@ namespace DataBaseLogger
                 await SaveLogEntry( message, category );
             }
         }
+
+        #region Privates
+
+        private readonly string _connectionString;
 
         private async Task SaveLogEntry( string message, string category )
         {
@@ -70,6 +77,8 @@ namespace DataBaseLogger
             string connectionString = appConfig.ConnectionStrings
                 .ConnectionStrings[ "DataBase.Properties.Settings.DataBaseConnectionString" ].ConnectionString;
             return connectionString;
-        }
+        } 
+
+        #endregion
     }
 }

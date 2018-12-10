@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
@@ -15,30 +15,74 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             Name = Name;
             Extension = methodMetadata.Extension;
             ReturnType = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( methodMetadata.ReturnType );
-            MethodAttributes = CollectionTypeAccessor.GetTypesMetadata( methodMetadata.MethodAttributes );
-            Parameters = CollectionTypeAccessor.GetParametersMetadata( methodMetadata.Parameters );
-            GenericArguments = CollectionTypeAccessor.GetTypesMetadata( methodMetadata.GenericArguments );
-            Modifiers = methodMetadata.Modifiers;
+            MethodAttributes = GetTypesMetadata( methodMetadata.MethodAttributes ) as ICollection<TypeMetadataSurrogate>;
+            Parameters = GetParametersMetadata( methodMetadata.Parameters ) as ICollection<ParameterMetadataSurrogate>;
+            GenericArguments = GetTypesMetadata( methodMetadata.GenericArguments ) as ICollection<TypeMetadataSurrogate>;
+            _modifiers = methodMetadata.Modifiers;
         }
 
         #endregion
 
         #region Properties
 
-        [Key]
+        public int MethodId { get; set; }
         public string Name { get; set; }
-
         public bool Extension { get; set; }
-
+        public int ReturnTypeId { get; set; }
         public TypeMetadataSurrogate ReturnType { get; set; }
+        public ICollection<TypeMetadataSurrogate> MethodAttributes { get; set; }
+        public ICollection<ParameterMetadataSurrogate> Parameters { get; set; }
+        public ICollection<TypeMetadataSurrogate> GenericArguments { get; set; }
+        private Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> _modifiers;
 
-        public IEnumerable<TypeMetadataSurrogate> MethodAttributes { get; set; }
+        #region Modifiers
 
-        public IEnumerable<ParameterMetadataSurrogate> Parameters { get; set; }
+        public AccessLevel AccessLevel
+        {
+            get => _modifiers.Item1;
+            set => _modifiers =
+                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( value, _modifiers.Item2, _modifiers.Item3,
+                    _modifiers.Item4 );
+        }
 
-        public IEnumerable<TypeMetadataSurrogate> GenericArguments { get; set; }
+        public AbstractEnum AbstractEnum
+        {
+            get => _modifiers.Item2;
+            set => _modifiers =
+                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, value, _modifiers.Item3,
+                    _modifiers.Item4 );
+        }
 
-        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
+        public StaticEnum StaticEnum
+        {
+            get => _modifiers.Item3;
+            set => _modifiers =
+                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, _modifiers.Item2, value,
+                    _modifiers.Item4 );
+        }
+
+        public VirtualEnum VirtualEnum
+        {
+            get => _modifiers.Item4;
+            set => _modifiers =
+                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, _modifiers.Item2,
+                    _modifiers.Item3, value );
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Navigation Properties
+
+        public ICollection<EventMetadataSurrogate> EventAddMethodMetadataSurrogates { get; set; }
+        public ICollection<EventMetadataSurrogate> EventRaiseMethodMetadataSurrogates { get; set; }
+        public ICollection<EventMetadataSurrogate> EventRemoveMethodMetadataSurrogates { get; set; }
+        public ICollection<TypeMetadataSurrogate> TypeMethodMetadataSurrogates { get; set; }
+        public ICollection<TypeMetadataSurrogate> TypeConstructorMetadataSurrogates { get; set; }
+
+        public ICollection<PropertyMetadataSurrogate> PropertyGettersSurrogates { get; set; }
+        public ICollection<PropertyMetadataSurrogate> PropertySettersSurrogates { get; set; }
 
         #endregion
 
@@ -52,7 +96,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 MethodAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( MethodAttributes ),
                 Parameters = CollectionOriginalTypeAccessor.GetOriginalParametersMetadata( Parameters ),
                 GenericArguments = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( GenericArguments ),
-                Modifiers = Modifiers
+                Modifiers = _modifiers
             };
         }
     }
