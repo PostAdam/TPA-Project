@@ -30,7 +30,6 @@ namespace Model.Reflection.MetadataModels
         public IEnumerable<TypeMetadata> PropertyAttributes { get; set; }
         public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
         public TypeMetadata TypeMetadata { get; set; }
-        public PropertyInfo PropertyInfo { get; set; }
         public MethodMetadata Getter { get; set; }
         public MethodMetadata Setter { get; set; }
 

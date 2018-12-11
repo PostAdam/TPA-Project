@@ -6,7 +6,11 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
     public class EventMetadataSurrogate
     {
-        #region Constructor
+        #region Constructors
+
+        public EventMetadataSurrogate()
+        {
+        }
 
         public EventMetadataSurrogate( EventMetadata eventMetadata )
         {
@@ -22,8 +26,11 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 ? null
                 : new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
             Multicast = eventMetadata.Multicast;
-            EventAttributes = GetTypesMetadata( eventMetadata.EventAttributes ) as ICollection<TypeMetadataSurrogate>;
+
+            IEnumerable<TypeMetadataSurrogate> eventAttributes = GetTypesMetadata( eventMetadata.EventAttributes );
+            EventAttributes = eventAttributes == null ? null : new List<TypeMetadataSurrogate>( eventAttributes );
         }
+        
 
         #endregion
 
@@ -45,6 +52,11 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         #endregion
 
         #region Navigation Properties
+
+        public int TypeForeignId { get; set; }
+        public int AddMethodId { get; set; }
+        public int RaiseMethodId { get; set; }
+        public int RemoveMethodId { get; set; }
 
         public ICollection<TypeMetadataSurrogate> TypeEventMetadataSurrogate { get; set; }
 

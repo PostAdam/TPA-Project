@@ -32,7 +32,7 @@ namespace ViewModel
             Items = new AsyncObservableCollection<MetadataBaseViewModel>();
             ClickSave = new DelegateCommand( Save );
             ClickOpen = new AsyncCommand( Open );
-            ClickRead = new AsyncCommand( Read );
+            ClickRead = new DelegateCommand( Read );
         }
 
         private void LoadLogger()
@@ -142,21 +142,21 @@ namespace ViewModel
             await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
         }
 
-        private async Task Read()
+        private void Read()
         {
 //            string fileName = _pathResolver.ReadFilePath();
-            await ReadFromFile( "ViewModel" );
+            ReadFromFile( "ViewModel" );
         }
 
         #endregion
 
         #region Help Methods
 
-        private async Task ReadFromFile( string filename )
+        private void ReadFromFile( string filename )
         {
             Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
 
-            AssemblyMetadata = (AssemblyMetadata) await Repository.Read( filename );
+            AssemblyMetadata = (AssemblyMetadata) Repository.Read( filename ).Result;
             AddClassesToDirectory( AssemblyMetadata );
             InitTreeView( AssemblyMetadata );
 

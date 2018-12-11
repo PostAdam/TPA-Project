@@ -7,14 +7,20 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
     public class FieldMetadataSurrogate
     {
-        #region Constructor
+        #region Constructors
+
+        public FieldMetadataSurrogate()
+        {
+        }
 
         public FieldMetadataSurrogate( FieldMetadata fieldMetadata )
         {
             Name = fieldMetadata.Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( fieldMetadata.TypeMetadata );
             IsStatic = fieldMetadata.IsStatic;
-            FieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes ) as ICollection<TypeMetadataSurrogate>;
+
+            IEnumerable<TypeMetadataSurrogate> fieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes );
+            FieldAttributes = fieldAttributes == null ? null : new List<TypeMetadataSurrogate>( fieldAttributes );
         }
 
         #endregion
@@ -35,7 +41,6 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public int FieldId { get; set; }
         public string Name { get; set; }
         public TypeMetadataSurrogate TypeMetadata { get; set; }
-        public int TypeMetadataId { get; set; }
         public StaticEnum IsStatic { get; set; }
         public ICollection<TypeMetadataSurrogate> FieldAttributes { get; set; }
         private Tuple<AccessLevel, StaticEnum> _modifiers;
@@ -59,6 +64,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
+        public int TypeForeignId { get; set; }
         public ICollection<TypeMetadataSurrogate> TypeFieldsSurrogates { get; set; }
 
         #endregion

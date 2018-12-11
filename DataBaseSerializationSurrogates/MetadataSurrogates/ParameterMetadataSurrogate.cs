@@ -7,7 +7,11 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
     public class ParameterMetadataSurrogate
     {
-        #region Constructor
+        #region Constructors
+
+        public ParameterMetadataSurrogate()
+        {
+        }
 
         public ParameterMetadataSurrogate( ParameterMetadata parameterMetadata )
         {
@@ -15,7 +19,10 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( parameterMetadata.TypeMetadata );
             Position = parameterMetadata.Position;
             Kind = parameterMetadata.Kind;
-            ParameterAttributes = GetTypesMetadata( parameterMetadata.ParameterAttributes ) as ICollection<TypeMetadataSurrogate>;
+
+            IEnumerable<TypeMetadataSurrogate> parameterAttributes = GetTypesMetadata( parameterMetadata.ParameterAttributes );
+            ParameterAttributes = parameterAttributes == null ? null : new List<TypeMetadataSurrogate>( parameterAttributes );
+
             DefaultValue = parameterMetadata.DefaultValue;
         }
 
@@ -36,6 +43,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
+        public int TypeForeignId { get; set; }
         public ICollection<MethodMetadataSurrogate> MethodParametersSurrogates { get; set; }
 
         #endregion

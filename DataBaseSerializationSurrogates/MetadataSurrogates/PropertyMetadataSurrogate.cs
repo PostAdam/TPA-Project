@@ -9,15 +9,21 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
     public class PropertyMetadataSurrogate
     {
-        #region Constructor
+        #region Constructors
+
+        public PropertyMetadataSurrogate()
+        {
+        }
 
         public PropertyMetadataSurrogate( PropertyMetadata propertyMetadata )
         {
             Name = propertyMetadata.Name;
-            PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes ) as ICollection<TypeMetadataSurrogate>;
+
+            IEnumerable<TypeMetadataSurrogate> propertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
+            PropertyAttributes = propertyAttributes == null ? null : new List<TypeMetadataSurrogate>( propertyAttributes );
+
             _modifiers = propertyMetadata.Modifiers;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
-            PropertyInfo = propertyMetadata.PropertyInfo;
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Getter );
             Setter = propertyMetadata.Setter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Setter );
         }
@@ -30,7 +36,6 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public string Name { get; set; }
         public ICollection<TypeMetadataSurrogate> PropertyAttributes { get; set; }
         public TypeMetadataSurrogate TypeMetadata { get; set; }
-        public PropertyInfo PropertyInfo { get; set; }
         public MethodMetadataSurrogate Getter { get; set; }
         public MethodMetadataSurrogate Setter { get; set; }
         private Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> _modifiers;
@@ -72,6 +77,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
+        public int TypeForeignId { get; set; }
+        public int GetterId { get; set; }
+        public int SetterId { get; set; }
         public ICollection<TypeMetadataSurrogate> TypePropertiesSurrogates { get; set; }
 
         #endregion
@@ -84,7 +92,6 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 PropertyAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( PropertyAttributes ),
                 Modifiers = _modifiers,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
-                PropertyInfo = PropertyInfo,
                 Getter = Getter?.GetOriginalMethodMetadata(),
                 Setter = Setter?.GetOriginalMethodMetadata()
             };

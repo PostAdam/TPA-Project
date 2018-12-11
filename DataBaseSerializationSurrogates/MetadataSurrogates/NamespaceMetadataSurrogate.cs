@@ -6,12 +6,18 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
     public class NamespaceMetadataSurrogate
     {
-        #region Constructor
+        #region Constructors
+
+        public NamespaceMetadataSurrogate()
+        {
+        }
 
         public NamespaceMetadataSurrogate( NamespaceMetadata namespaceMetadata )
         {
             NamespaceName = namespaceMetadata.NamespaceName;
-            Types = GetTypesMetadata( namespaceMetadata.Types ) as ICollection<TypeMetadataSurrogate>;
+
+            IEnumerable<TypeMetadataSurrogate> types = GetTypesMetadata( namespaceMetadata.Types );
+            Types = types == null ? null : new List<TypeMetadataSurrogate>( types );
         }
 
         #endregion
@@ -26,6 +32,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
+        public int AssemblyForeignId { get; set; } 
         public AssemblyMetadataSurrogate AssemblyMetadataSurrogate { get; set; } 
 
         #endregion

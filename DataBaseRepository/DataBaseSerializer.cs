@@ -29,7 +29,9 @@ namespace DataBaseRepository
         {
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
-                dbContext.AssemblyModels.Add( new AssemblyMetadataSurrogate( metadata as AssemblyMetadata ) );
+                AssemblyMetadataSurrogate assemblyMetadataSurrogate =
+                    new AssemblyMetadataSurrogate( metadata as AssemblyMetadata );
+                dbContext.AssemblyModels.Add( assemblyMetadataSurrogate );
                 dbContext.SaveChanges();
             }
         }
@@ -64,7 +66,6 @@ namespace DataBaseRepository
                 dbContext.PropertiesModels
                     .Include( p => p.PropertyAttributes )
                     .Include( p => p.TypeMetadata )
-                    //.Include( p => p.PropertyInfo ) //maybe it should have DbSet?
                     .Include( p => p.Getter )
                     .Include( p => p.Setter )
                     .Load();
@@ -90,8 +91,8 @@ namespace DataBaseRepository
                     .Load();
 
                 AssemblyMetadataSurrogate assemblyMetadataSurrogate = dbContext.AssemblyModels
-                    .Include( a => a.Namespaces )
-                    .FirstOrDefault( a => a.Name == fileName );
+                    .Include( a => a.Namespaces ).FirstOrDefault();
+//                    .FirstOrDefault( a => a.Name == fileName );
 
                 return assemblyMetadataSurrogate?.GetOriginalAssemblyMetadata();
             }

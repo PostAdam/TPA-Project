@@ -10,6 +10,13 @@ namespace DataBaseSerializationSurrogates
         public static IEnumerable<NamespaceMetadataSurrogate> GetNamespacesMetadata(
             IEnumerable<NamespaceMetadata> namespaces )
         {
+//            List< NamespaceMetadataSurrogate > surrogates = new List<NamespaceMetadataSurrogate>();
+//            foreach ( NamespaceMetadata namespaceMetadata in namespaces )
+//            {
+//                surrogates.Add( new NamespaceMetadataSurrogate( namespaceMetadata ) );
+//            }
+//
+//            return surrogates;
             return namespaces?.Select( n => new NamespaceMetadataSurrogate( n ) );
         }
 

@@ -18,7 +18,6 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             PropertyAttributes = CollectionTypeAccessor.GetTypesMetadata( propertyMetadata.PropertyAttributes );
             Modifiers = Modifiers;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
-            PropertyInfo = propertyMetadata.PropertyInfo;
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Getter );
             Setter = propertyMetadata.Setter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Setter );
         }
@@ -40,9 +39,6 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
         public TypeMetadataSurrogate TypeMetadata { get; set; }
 
         [DataMember]
-        public PropertyInfo PropertyInfo { get; set; }
-
-        [DataMember]
         public MethodMetadataSurrogate Getter { get; set; }
 
         [DataMember]
@@ -58,7 +54,6 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
                 PropertyAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( PropertyAttributes ),
                 Modifiers = Modifiers,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
-                PropertyInfo = PropertyInfo,
                 Getter = Getter?.GetOriginalMethodMetadata(),
                 Setter = Setter?.GetOriginalMethodMetadata()
             };

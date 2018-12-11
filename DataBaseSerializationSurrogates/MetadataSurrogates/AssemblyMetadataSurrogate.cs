@@ -6,12 +6,18 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
     public class AssemblyMetadataSurrogate
     {
-        #region Constructor
+        #region Constructors
+
+        public AssemblyMetadataSurrogate()
+        {
+        }
 
         public AssemblyMetadataSurrogate( AssemblyMetadata assemblyMetadata )
         {
             Name = assemblyMetadata.Name;
-            Namespaces = GetNamespacesMetadata( assemblyMetadata.Namespaces ) as ICollection<NamespaceMetadataSurrogate>;
+
+            IEnumerable<NamespaceMetadataSurrogate> namespaces = GetNamespacesMetadata( assemblyMetadata.Namespaces );
+            Namespaces = namespaces == null ? null : new List<NamespaceMetadataSurrogate>( namespaces );
         }
 
         #endregion

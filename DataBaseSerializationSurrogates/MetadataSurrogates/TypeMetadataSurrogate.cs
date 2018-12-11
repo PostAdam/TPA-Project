@@ -8,7 +8,11 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
     public class TypeMetadataSurrogate
     {
-        #region Constructors
+        #region Constructorss
+
+        public TypeMetadataSurrogate()
+        {
+        }
 
         public TypeMetadataSurrogate( TypeMetadata typeMetadata )
         {
@@ -34,15 +38,33 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
             TypeKind = typeMetadata.TypeKind;
             _modifiers = typeMetadata.Modifiers;
-            Fields = GetFieldsMetadata( typeMetadata.Fields ) as ICollection<FieldMetadataSurrogate>;
-            GenericArguments = GetTypesMetadata( typeMetadata.GenericArguments ) as ICollection<TypeMetadataSurrogate>;
-            Attributes = GetTypesMetadata( typeMetadata.Attributes ) as ICollection<TypeMetadataSurrogate>;
-            ImplementedInterfaces = GetTypesMetadata( typeMetadata.ImplementedInterfaces ) as ICollection<TypeMetadataSurrogate>;
-            NestedTypes = GetTypesMetadata( typeMetadata.NestedTypes ) as ICollection<TypeMetadataSurrogate>;
-            Properties = GetPropertiesMetadata( typeMetadata.Properties ) as ICollection<PropertyMetadataSurrogate>;
-            Methods = GetMethodsMetadata( typeMetadata.Methods ) as ICollection<MethodMetadataSurrogate>;
-            Constructors = GetMethodsMetadata( typeMetadata.Constructors ) as ICollection<MethodMetadataSurrogate>;
-            Events = GetEventsMetadata( typeMetadata.Events ) as ICollection<EventMetadataSurrogate>;
+
+            IEnumerable<FieldMetadataSurrogate> fields = GetFieldsMetadata( typeMetadata.Fields );
+            Fields = fields == null ? null : new List<FieldMetadataSurrogate>( fields );
+
+            IEnumerable<TypeMetadataSurrogate> genericArguments = GetTypesMetadata( typeMetadata.GenericArguments );
+            GenericArguments = genericArguments == null ? null : new List<TypeMetadataSurrogate>( genericArguments );
+
+            IEnumerable<TypeMetadataSurrogate> attributes = GetTypesMetadata( typeMetadata.Attributes );
+            Attributes = attributes == null ? null : new List<TypeMetadataSurrogate>( attributes );
+
+            IEnumerable<TypeMetadataSurrogate> implementedInterfaces = GetTypesMetadata( typeMetadata.ImplementedInterfaces );
+            ImplementedInterfaces = implementedInterfaces == null ? null : new List<TypeMetadataSurrogate>( implementedInterfaces );
+
+            IEnumerable<TypeMetadataSurrogate> nestedTypes = GetTypesMetadata( typeMetadata.NestedTypes );
+            NestedTypes = nestedTypes == null ? null : new List<TypeMetadataSurrogate>( nestedTypes );
+
+            IEnumerable<PropertyMetadataSurrogate> properties = GetPropertiesMetadata( typeMetadata.Properties );
+            Properties = properties == null ? null : new List<PropertyMetadataSurrogate>( properties );
+
+            IEnumerable<MethodMetadataSurrogate> methods = GetMethodsMetadata( typeMetadata.Methods );
+            Methods = methods == null ? null : new List<MethodMetadataSurrogate>( methods );
+
+            IEnumerable<MethodMetadataSurrogate> constructors = GetMethodsMetadata( typeMetadata.Constructors );
+            Constructors = constructors == null ? null : new List<MethodMetadataSurrogate>( constructors );
+
+            IEnumerable<EventMetadataSurrogate> events = GetEventsMetadata( typeMetadata.Events );
+            Events = events == null ? null : new List<EventMetadataSurrogate>( events );
         }
 
         private TypeMetadataSurrogate( string typeName, string namespaceName )
@@ -97,6 +119,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
+        public int NamespaceForeignId { get; set; }
         public NamespaceMetadataSurrogate NamespaceMetadataSurrogate { get; set; }
 
         public ICollection<FieldMetadataSurrogate> FieldTypeSurrogates { get; set; }
