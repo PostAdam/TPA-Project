@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
@@ -15,7 +15,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
         public PropertyMetadataSurrogate( PropertyMetadata propertyMetadata )
         {
             Name = propertyMetadata.Name;
-            PropertyAttributes = CollectionTypeAccessor.GetTypesMetadata( propertyMetadata.PropertyAttributes );
+            PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
             Modifiers = Modifiers;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Getter );

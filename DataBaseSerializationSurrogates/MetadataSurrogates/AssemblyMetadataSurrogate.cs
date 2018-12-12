@@ -16,15 +16,14 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
             Name = assemblyMetadata.Name;
 
-            IEnumerable<NamespaceMetadataSurrogate> namespaces = GetNamespacesMetadata( assemblyMetadata.Namespaces );
-            Namespaces = namespaces == null ? null : new List<NamespaceMetadataSurrogate>( namespaces );
+            Namespaces = GetNamespacesMetadata( assemblyMetadata.Namespaces );
         }
 
         #endregion
 
         #region Properties
 
-        public int AssemblyId { get; set; }
+        public int? AssemblyId { get; set; }
         public string Name { get; set; }
         public ICollection<NamespaceMetadataSurrogate> Namespaces { get; set; }
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
+using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
@@ -35,16 +37,16 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
             TypeKind = typeMetadata.TypeKind;
             Modifiers = typeMetadata.Modifiers;
-            Fields = CollectionTypeAccessor.GetFieldsMetadata( typeMetadata.Fields );
+            Fields = GetFieldsMetadata( typeMetadata.Fields );
 
-            GenericArguments = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.GenericArguments );
-            Attributes = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.Attributes );
-            ImplementedInterfaces = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.ImplementedInterfaces );
-            NestedTypes = CollectionTypeAccessor.GetTypesMetadata( typeMetadata.NestedTypes );
-            Properties = CollectionTypeAccessor.GetPropertiesMetadata( typeMetadata.Properties );
-            Methods = CollectionTypeAccessor.GetMethodsMetadata( typeMetadata.Methods );
-            Constructors = CollectionTypeAccessor.GetMethodsMetadata( typeMetadata.Constructors );
-            Events = CollectionTypeAccessor.GetEventsMetadata( typeMetadata.Events );
+            GenericArguments = GetTypesMetadata( typeMetadata.GenericArguments );
+            Attributes = GetTypesMetadata( typeMetadata.Attributes );
+            ImplementedInterfaces = GetTypesMetadata( typeMetadata.ImplementedInterfaces );
+            NestedTypes = GetTypesMetadata( typeMetadata.NestedTypes );
+            Properties = GetPropertiesMetadata( typeMetadata.Properties );
+            Methods = GetMethodsMetadata( typeMetadata.Methods );
+            Constructors = GetMethodsMetadata( typeMetadata.Constructors );
+            Events = GetEventsMetadata( typeMetadata.Events );
         }
 
         private TypeMetadataSurrogate( string typeName, string namespaceName )
@@ -158,15 +160,15 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             typeMetadata.DeclaringType = DeclaringType?.EmitOriginalTypeMetadata();
             typeMetadata.TypeKind = TypeKind;
             typeMetadata.Modifiers = Modifiers;
-            typeMetadata.Fields = CollectionOriginalTypeAccessor.GetOriginalFieldsMetadata( Fields );
-            typeMetadata.GenericArguments = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( GenericArguments );
-            typeMetadata.Attributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( Attributes );
-            typeMetadata.ImplementedInterfaces = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( ImplementedInterfaces );
-            typeMetadata.NestedTypes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( NestedTypes );
-            typeMetadata.Properties = CollectionOriginalTypeAccessor.GetOriginalPropertiesMetadata( Properties );
-            typeMetadata.Methods = CollectionOriginalTypeAccessor.GetOriginalMethodsMetadata( Methods );
-            typeMetadata.Constructors = CollectionOriginalTypeAccessor.GetOriginalMethodsMetadata( Constructors );
-            typeMetadata.Events = CollectionOriginalTypeAccessor.GetOriginalEventsMetadata( Events );
+            typeMetadata.Fields = GetOriginalFieldsMetadata( Fields );
+            typeMetadata.GenericArguments = GetOriginalTypesMetadata( GenericArguments );
+            typeMetadata.Attributes = GetOriginalTypesMetadata( Attributes );
+            typeMetadata.ImplementedInterfaces = GetOriginalTypesMetadata( ImplementedInterfaces );
+            typeMetadata.NestedTypes = GetOriginalTypesMetadata( NestedTypes );
+            typeMetadata.Properties = GetOriginalPropertiesMetadata( Properties );
+            typeMetadata.Methods = GetOriginalMethodsMetadata( Methods );
+            typeMetadata.Constructors = GetOriginalMethodsMetadata( Constructors );
+            typeMetadata.Events = GetOriginalEventsMetadata( Events );
             typeMetadata.FullName = FullName;
         }
 

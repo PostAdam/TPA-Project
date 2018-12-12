@@ -30,7 +30,7 @@ namespace ViewModel
             LoadLogger();
             LoadRepository();
             Items = new AsyncObservableCollection<MetadataBaseViewModel>();
-            ClickSave = new DelegateCommand( Save );
+            ClickSave = new AsyncCommand( Save );
             ClickOpen = new AsyncCommand( Open );
             ClickRead = new DelegateCommand( Read );
         }
@@ -125,21 +125,24 @@ namespace ViewModel
 
         #region Command Methods
 
-        private void Save()
+        private async Task Save()
         {
             Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
 //            string fileName = _pathResolver.SaveFilePath();
 //            await Repository.Write<AssemblyMetadata>( AssemblyMetadata, fileName );
 //            await Repository.Write( AssemblyMetadata, "Test.xml" );
-            Repository.Write( AssemblyMetadata, "Test.xml" );
+            await Repository.Write( AssemblyMetadata, "Test.xml" );
             Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
         }
 
         private async Task Open()
         {
             string fileName = _pathResolver.OpenFilePath();
-            Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
-            await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
+            if ( fileName != null )
+            {
+                Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
+                await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
+            }  
         }
 
         private void Read()
@@ -156,7 +159,7 @@ namespace ViewModel
         {
             Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
 
-            AssemblyMetadata = (AssemblyMetadata) Repository.Read( filename ).Result;
+            AssemblyMetadata = Repository.Read( filename ).Result as AssemblyMetadata;
             AddClassesToDirectory( AssemblyMetadata );
             InitTreeView( AssemblyMetadata );
 

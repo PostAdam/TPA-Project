@@ -18,14 +18,13 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             Name = fieldMetadata.Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( fieldMetadata.TypeMetadata );
             IsStatic = fieldMetadata.IsStatic;
-
-            IEnumerable<TypeMetadataSurrogate> fieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes );
-            FieldAttributes = fieldAttributes == null ? null : new List<TypeMetadataSurrogate>( fieldAttributes );
+            FieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes );
+            _modifiers = fieldMetadata.Modifiers;
         }
 
         #endregion
 
-        private IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        private ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
         {
             List<TypeMetadataSurrogate> typeMetadatasSurrogate = new List<TypeMetadataSurrogate>();
             foreach ( TypeMetadata typeMetadata in types )
@@ -38,7 +37,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Properties
 
-        public int FieldId { get; set; }
+        public int? FieldId { get; set; }
         public string Name { get; set; }
         public TypeMetadataSurrogate TypeMetadata { get; set; }
         public StaticEnum IsStatic { get; set; }
@@ -47,15 +46,26 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Modifiers
 
-        public AccessLevel AccessLevel
+        public AccessLevel? AccessLevel
         {
-            get => _modifiers.Item1;
-            set => _modifiers = new Tuple<AccessLevel, StaticEnum>( value, _modifiers.Item2 );
+            get => _modifiers?.Item1;
+            set
+            {
+                if ( value != null ) _modifiers = new Tuple<AccessLevel, StaticEnum>( 
+                    value.Value,
+                    _modifiers?.Item2 ?? Model.Reflection.Enums.StaticEnum.NotStatic );
+            }
         }
-        public StaticEnum StaticEnum
+
+        public StaticEnum? StaticEnum
         {
-            get => _modifiers.Item2;
-            set => _modifiers = new Tuple<AccessLevel, StaticEnum>( _modifiers.Item1, value );
+            get => _modifiers?.Item2;
+            set
+            {
+                if ( value != null ) _modifiers = new Tuple<AccessLevel, StaticEnum>(
+                    _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                    value.Value );
+            }
         }
 
         #endregion
@@ -64,7 +74,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
-        public int TypeForeignId { get; set; }
+        public int? TypeForeignId { get; set; }
         public ICollection<TypeMetadataSurrogate> TypeFieldsSurrogates { get; set; }
 
         #endregion

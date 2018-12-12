@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
@@ -52,7 +53,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Position = Position,
                 Kind = Kind,
-                ParameterAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( ParameterAttributes ),
+                ParameterAttributes = GetOriginalTypesMetadata( ParameterAttributes ),
                 DefaultValue = DefaultValue
             };
         }

@@ -14,13 +14,14 @@ namespace DataBaseRepository
     {
         public async Task Write( object metadata, string fileName )
         {
-//            await Task.Run( () => WriteData( metadata, fileName ) );
-            WriteData( metadata, fileName );
+            await Task.Run( () => WriteData( metadata, fileName ) );
+//            WriteData( metadata, fileName );
         }
 
         public async Task<object> Read( string fileName )
         {
             return await Task.Run( () => ReadData( fileName ) );
+//            return ReadData( fileName );
         }
 
         #region Privates
@@ -31,7 +32,9 @@ namespace DataBaseRepository
             {
                 AssemblyMetadataSurrogate assemblyMetadataSurrogate =
                     new AssemblyMetadataSurrogate( metadata as AssemblyMetadata );
+
                 dbContext.AssemblyModels.Add( assemblyMetadataSurrogate );
+
                 dbContext.SaveChanges();
             }
         }
@@ -51,7 +54,7 @@ namespace DataBaseRepository
                     .Include( t => t.Properties )
                     .Include( t => t.Methods )
                     .Include( t => t.Constructors )
-                    .Include( t => t.Events )
+                    .Include( t => t.EventSurrogates )
                     .Load();
 
                 dbContext.NamespaceModels
@@ -96,8 +99,6 @@ namespace DataBaseRepository
 
                 return assemblyMetadataSurrogate?.GetOriginalAssemblyMetadata();
             }
-
-           
         }
 
         #endregion

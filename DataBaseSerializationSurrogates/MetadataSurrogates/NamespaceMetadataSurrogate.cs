@@ -15,16 +15,14 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public NamespaceMetadataSurrogate( NamespaceMetadata namespaceMetadata )
         {
             NamespaceName = namespaceMetadata.NamespaceName;
-
-            IEnumerable<TypeMetadataSurrogate> types = GetTypesMetadata( namespaceMetadata.Types );
-            Types = types == null ? null : new List<TypeMetadataSurrogate>( types );
+            Types = GetTypesMetadata( namespaceMetadata.Types );
         }
 
         #endregion
 
         #region Properties
 
-        public int NamespaceId { get; set; }
+        public int? NamespaceId { get; set; }
         public string NamespaceName { get; set; }
         public ICollection<TypeMetadataSurrogate> Types { get; set; }
 
@@ -32,8 +30,8 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
-        public int AssemblyForeignId { get; set; } 
-        public AssemblyMetadataSurrogate AssemblyMetadataSurrogate { get; set; } 
+        public int? AssemblyForeignId { get; set; } 
+        public AssemblyMetadataSurrogate AssemblySurrogate { get; set; } 
 
         #endregion
 
@@ -46,9 +44,16 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             };
         }
 
-        private IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        private ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
         {
-            return types.Select( TypeMetadataSurrogate.EmitSurrogateTypeMetadata );
+            //            return types.Select( TypeMetadataSurrogate.EmitSurrogateTypeMetadata );
+            List<TypeMetadataSurrogate> surrogates = new List<TypeMetadataSurrogate>();
+            foreach ( TypeMetadata typeMetadata in types )
+            {
+                surrogates.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
+            }
+
+            return surrogates;
         }
     }
 }

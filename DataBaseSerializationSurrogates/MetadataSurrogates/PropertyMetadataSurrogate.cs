@@ -18,10 +18,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public PropertyMetadataSurrogate( PropertyMetadata propertyMetadata )
         {
             Name = propertyMetadata.Name;
-
-            IEnumerable<TypeMetadataSurrogate> propertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
-            PropertyAttributes = propertyAttributes == null ? null : new List<TypeMetadataSurrogate>( propertyAttributes );
-
+            PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
             _modifiers = propertyMetadata.Modifiers;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Getter );
@@ -32,7 +29,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Properties
 
-        public int PropertyId { get; set; }
+        public int? PropertyId { get; set; }
         public string Name { get; set; }
         public ICollection<TypeMetadataSurrogate> PropertyAttributes { get; set; }
         public TypeMetadataSurrogate TypeMetadata { get; set; }
@@ -42,33 +39,64 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Modifiers
 
-        public AccessLevel AccessLevel
+        public AccessLevel? AccessLevel
         {
-            get => _modifiers.Item1;
-            set => _modifiers =
-                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( value, _modifiers.Item2, _modifiers.Item3,
-                    _modifiers.Item4 );
+            get => _modifiers?.Item1;
+            set
+            {
+                if ( value != null )
+                    _modifiers =
+                        new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( 
+                            value.Value,
+                            _modifiers?.Item2 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract,
+                            _modifiers?.Item3 ?? Model.Reflection.Enums.StaticEnum.NotStatic,
+                            _modifiers?.Item4 ?? Model.Reflection.Enums.VirtualEnum.NotVirtual );
+            }
         }
-        public AbstractEnum AbstractEnum
+
+        public AbstractEnum? AbstractEnum
         {
-            get => _modifiers.Item2;
-            set => _modifiers =
-                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, value, _modifiers.Item3,
-                    _modifiers.Item4 );
+            get => _modifiers?.Item2;
+            set
+            {
+                if ( value != null )
+                    _modifiers =
+                        new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>(
+                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                            value.Value,
+                            _modifiers?.Item3 ?? Model.Reflection.Enums.StaticEnum.NotStatic,
+                            _modifiers?.Item4 ?? Model.Reflection.Enums.VirtualEnum.NotVirtual );
+            }
         }
-        public StaticEnum StaticEnum
+
+        public StaticEnum? StaticEnum
         {
-            get => _modifiers.Item3;
-            set => _modifiers =
-                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, _modifiers.Item2, value,
-                    _modifiers.Item4 );
+            get => _modifiers?.Item3;
+            set
+            {
+                if ( value != null )
+                    _modifiers =
+                        new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>(
+                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                            _modifiers?.Item2 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract,
+                            value.Value,
+                            _modifiers?.Item4 ?? Model.Reflection.Enums.VirtualEnum.NotVirtual );
+            }
         }
-        public VirtualEnum VirtualEnum
+
+        public VirtualEnum? VirtualEnum
         {
-            get => _modifiers.Item4;
-            set => _modifiers =
-                new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( _modifiers.Item1, _modifiers.Item2,
-                    _modifiers.Item3, value );
+            get => _modifiers?.Item4;
+            set
+            {
+                if ( value != null )
+                    _modifiers =
+                        new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>(
+                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                            _modifiers?.Item2 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract,
+                            _modifiers?.Item3 ?? Model.Reflection.Enums.StaticEnum.NotStatic,
+                            value.Value );
+            }
         }
 
         #endregion
@@ -77,9 +105,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
-        public int TypeForeignId { get; set; }
-        public int GetterId { get; set; }
-        public int SetterId { get; set; }
+        public int? TypeForeignId { get; set; }
+        public int? GetterId { get; set; }
+        public int? SetterId { get; set; }
         public ICollection<TypeMetadataSurrogate> TypePropertiesSurrogates { get; set; }
 
         #endregion

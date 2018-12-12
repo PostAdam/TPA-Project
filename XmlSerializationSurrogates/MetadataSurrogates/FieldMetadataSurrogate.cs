@@ -17,6 +17,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( fieldMetadata.TypeMetadata );
             IsStatic = fieldMetadata.IsStatic;
             FieldAttributes = GetTypesMetadata( fieldMetadata.FieldAttributes );
+            Modifiers = fieldMetadata.Modifiers;
         }
 
         #endregion

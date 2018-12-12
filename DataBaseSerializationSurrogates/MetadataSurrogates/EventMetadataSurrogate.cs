@@ -27,8 +27,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 : new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
             Multicast = eventMetadata.Multicast;
 
-            IEnumerable<TypeMetadataSurrogate> eventAttributes = GetTypesMetadata( eventMetadata.EventAttributes );
-            EventAttributes = eventAttributes == null ? null : new List<TypeMetadataSurrogate>( eventAttributes );
+            EventAttributes = GetTypesMetadata( eventMetadata.EventAttributes );
         }
         
 
@@ -36,15 +35,11 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Properties
 
-        public int EventId { get; set; }
+        public int? EventId { get; set; }
         public string Name { get; set; }
-        public int TypeMetadataId { get; set; }
         public TypeMetadataSurrogate TypeMetadata { get; set; }
-        public int AddMethodMetadataId { get; set; }
         public MethodMetadataSurrogate AddMethodMetadata { get; set; }
-        public int RaiseMethodMetadataId { get; set; }
         public MethodMetadataSurrogate RaiseMethodMetadata { get; set; }
-        public int RemoveMethodMetadataId { get; set; }
         public MethodMetadataSurrogate RemoveMethodMetadata { get; set; }
         public bool Multicast { get; set; }
         public ICollection<TypeMetadataSurrogate> EventAttributes { get; set; }
@@ -53,11 +48,10 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
-        public int TypeForeignId { get; set; }
-        public int AddMethodId { get; set; }
-        public int RaiseMethodId { get; set; }
-        public int RemoveMethodId { get; set; }
-
+        public int? TypeForeignId { get; set; }
+        public int? AddMethodId { get; set; }
+        public int? RaiseMethodId { get; set; }
+        public int? RemoveMethodId { get; set; }
         public ICollection<TypeMetadataSurrogate> TypeEventMetadataSurrogate { get; set; }
 
         #endregion

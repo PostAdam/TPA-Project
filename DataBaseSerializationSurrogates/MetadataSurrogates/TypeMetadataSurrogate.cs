@@ -38,33 +38,15 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
             TypeKind = typeMetadata.TypeKind;
             _modifiers = typeMetadata.Modifiers;
-
-            IEnumerable<FieldMetadataSurrogate> fields = GetFieldsMetadata( typeMetadata.Fields );
-            Fields = fields == null ? null : new List<FieldMetadataSurrogate>( fields );
-
-            IEnumerable<TypeMetadataSurrogate> genericArguments = GetTypesMetadata( typeMetadata.GenericArguments );
-            GenericArguments = genericArguments == null ? null : new List<TypeMetadataSurrogate>( genericArguments );
-
-            IEnumerable<TypeMetadataSurrogate> attributes = GetTypesMetadata( typeMetadata.Attributes );
-            Attributes = attributes == null ? null : new List<TypeMetadataSurrogate>( attributes );
-
-            IEnumerable<TypeMetadataSurrogate> implementedInterfaces = GetTypesMetadata( typeMetadata.ImplementedInterfaces );
-            ImplementedInterfaces = implementedInterfaces == null ? null : new List<TypeMetadataSurrogate>( implementedInterfaces );
-
-            IEnumerable<TypeMetadataSurrogate> nestedTypes = GetTypesMetadata( typeMetadata.NestedTypes );
-            NestedTypes = nestedTypes == null ? null : new List<TypeMetadataSurrogate>( nestedTypes );
-
-            IEnumerable<PropertyMetadataSurrogate> properties = GetPropertiesMetadata( typeMetadata.Properties );
-            Properties = properties == null ? null : new List<PropertyMetadataSurrogate>( properties );
-
-            IEnumerable<MethodMetadataSurrogate> methods = GetMethodsMetadata( typeMetadata.Methods );
-            Methods = methods == null ? null : new List<MethodMetadataSurrogate>( methods );
-
-            IEnumerable<MethodMetadataSurrogate> constructors = GetMethodsMetadata( typeMetadata.Constructors );
-            Constructors = constructors == null ? null : new List<MethodMetadataSurrogate>( constructors );
-
-            IEnumerable<EventMetadataSurrogate> events = GetEventsMetadata( typeMetadata.Events );
-            Events = events == null ? null : new List<EventMetadataSurrogate>( events );
+            Fields = GetFieldsMetadata( typeMetadata.Fields );
+            GenericArguments = GetTypesMetadata( typeMetadata.GenericArguments );
+            Attributes = GetTypesMetadata( typeMetadata.Attributes );
+            ImplementedInterfaces = GetTypesMetadata( typeMetadata.ImplementedInterfaces );
+            NestedTypes = GetTypesMetadata( typeMetadata.NestedTypes );
+            Properties = GetPropertiesMetadata( typeMetadata.Properties );
+            Methods = GetMethodsMetadata( typeMetadata.Methods );
+            Constructors = GetMethodsMetadata( typeMetadata.Constructors );
+            EventSurrogates = GetEventsMetadata( typeMetadata.Events );
         }
 
         private TypeMetadataSurrogate( string typeName, string namespaceName )
@@ -77,7 +59,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Properties
 
-        public int TypeId { get; set; }
+        public int? TypeId { get; set; }
         public string TypeName { get; set; }
         public string NamespaceName { get; set; }
         public TypeMetadataSurrogate BaseType { get; set; }
@@ -91,26 +73,52 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public ICollection<PropertyMetadataSurrogate> Properties { get; set; }
         public ICollection<MethodMetadataSurrogate> Methods { get; set; }
         public ICollection<MethodMetadataSurrogate> Constructors { get; set; }
-        public ICollection<EventMetadataSurrogate> Events { get; set; }
+        public ICollection<EventMetadataSurrogate> EventSurrogates { get; set; }
         public string FullName { get; set; }
         private Tuple<AccessLevel, SealedEnum, AbstractEnum> _modifiers;
 
         #region Modifiers
 
-        public AccessLevel AccessLevel
+        public AccessLevel? AccessLevel
         {
-            get => _modifiers.Item1;
-            set => _modifiers = new Tuple<AccessLevel, SealedEnum, AbstractEnum>( value, _modifiers.Item2, _modifiers.Item3 );
+            get => _modifiers?.Item1;
+            set
+            {
+                if ( value != null )
+                    _modifiers =
+                        new Tuple<AccessLevel, SealedEnum, AbstractEnum>( 
+                            value.Value,
+                            _modifiers?.Item2 ?? Model.Reflection.Enums.SealedEnum.NotSealed,
+                            _modifiers?.Item3 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract );
+            }
         }
-        public SealedEnum SealedEnum
+
+        public SealedEnum? SealedEnum
         {
-            get => _modifiers.Item2;
-            set => _modifiers = new Tuple<AccessLevel, SealedEnum, AbstractEnum>( _modifiers.Item1, value, _modifiers.Item3 );
+            get => _modifiers?.Item2;
+            set
+            {
+                if ( value != null )
+                    _modifiers =
+                        new Tuple<AccessLevel, SealedEnum, AbstractEnum>( 
+                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                            value.Value,
+                            _modifiers?.Item3 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract );
+            }
         }
-        public AbstractEnum AbstractEnum
+
+        public AbstractEnum? AbstractEnum
         {
-            get => _modifiers.Item3;
-            set => _modifiers = new Tuple<AccessLevel, SealedEnum, AbstractEnum>( _modifiers.Item1, _modifiers.Item2, value );
+            get => _modifiers?.Item3;
+            set
+            {
+                if ( value != null )
+                    _modifiers =
+                        new Tuple<AccessLevel, SealedEnum, AbstractEnum>(
+                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                            _modifiers?.Item2 ?? Model.Reflection.Enums.SealedEnum.NotSealed,
+                            value.Value );
+            }
         }
 
         #endregion
@@ -119,8 +127,8 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Navigation Properties
 
-        public int NamespaceForeignId { get; set; }
-        public NamespaceMetadataSurrogate NamespaceMetadataSurrogate { get; set; }
+        public int? NamespaceForeignId { get; set; }
+        public NamespaceMetadataSurrogate NamespaceSurrogate { get; set; }
 
         public ICollection<FieldMetadataSurrogate> FieldTypeSurrogates { get; set; }
         public ICollection<FieldMetadataSurrogate> FieldAttributesType { get; set; }
@@ -133,10 +141,23 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public ICollection<EventMetadataSurrogate> EventAttributesSurrogates { get; set; }
 
         public ICollection<ParameterMetadataSurrogate> ParameterAttributeSurrogates { get; set; }
-        public ICollection<ParameterMetadataSurrogate> ParameterMetadataSurrogates { get; set; } 
+        public ICollection<ParameterMetadataSurrogate> ParameterSurrogates { get; set; } 
 
         public ICollection<PropertyMetadataSurrogate> PropertyAttributesTypes { get; set; } 
-        public ICollection<PropertyMetadataSurrogate> PropertyTypeMetadatas { get; set; } 
+        public ICollection<PropertyMetadataSurrogate> PropertyTypeMetadatas { get; set; }
+
+
+        public int? BaseTypeId { get; set; }
+        public ICollection<TypeMetadataSurrogate> BaseTypes { get; set; }
+        public int? DeclaringTypeId { get; set; }
+        public ICollection<TypeMetadataSurrogate> DeclaringTypes { get; set; }
+
+        public ICollection<TypeMetadataSurrogate> TypeGenericArguments { get; set; }
+        public ICollection<TypeMetadataSurrogate> TypeAttributes { get; set; }
+        public ICollection<TypeMetadataSurrogate> TypeImplementedInterfaces { get; set; }
+        public ICollection<TypeMetadataSurrogate> TypeNestedTypes { get; set; }
+
+
 
         #endregion
 
@@ -200,7 +221,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             typeMetadata.Properties = CollectionOriginalTypeAccessor.GetOriginalPropertiesMetadata( Properties );
             typeMetadata.Methods = CollectionOriginalTypeAccessor.GetOriginalMethodsMetadata( Methods );
             typeMetadata.Constructors = CollectionOriginalTypeAccessor.GetOriginalMethodsMetadata( Constructors );
-            typeMetadata.Events = CollectionOriginalTypeAccessor.GetOriginalEventsMetadata( Events );
+            typeMetadata.Events = CollectionOriginalTypeAccessor.GetOriginalEventsMetadata( EventSurrogates );
             typeMetadata.FullName = FullName;
         }
 

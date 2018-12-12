@@ -7,52 +7,136 @@ namespace DataBaseSerializationSurrogates
 {
     public static class CollectionTypeAccessor
     {
-        public static IEnumerable<NamespaceMetadataSurrogate> GetNamespacesMetadata(
+        public static ICollection<NamespaceMetadataSurrogate> GetNamespacesMetadata(
             IEnumerable<NamespaceMetadata> namespaces )
         {
-//            List< NamespaceMetadataSurrogate > surrogates = new List<NamespaceMetadataSurrogate>();
-//            foreach ( NamespaceMetadata namespaceMetadata in namespaces )
-//            {
-//                surrogates.Add( new NamespaceMetadataSurrogate( namespaceMetadata ) );
-//            }
-//
-//            return surrogates;
-            return namespaces?.Select( n => new NamespaceMetadataSurrogate( n ) );
+            if ( namespaces == null )
+            {
+                return null;
+            }
+            ICollection< NamespaceMetadataSurrogate > surrogates = new List<NamespaceMetadataSurrogate>();
+            IEnumerable<NamespaceMetadata> original = namespaces.ToList();
+
+            foreach ( NamespaceMetadata namespaceMetadata in original )
+            {
+                surrogates.Add( new NamespaceMetadataSurrogate( namespaceMetadata ) );
+            }
+
+            return surrogates;
+//            return namespaces?.Select( n => new NamespaceMetadataSurrogate( n ) );
         }
 
-        public static IEnumerable<FieldMetadataSurrogate> GetFieldsMetadata(
+        public static ICollection<FieldMetadataSurrogate> GetFieldsMetadata(
             IEnumerable<FieldMetadata> fields )
         {
-            return fields?.Select( f => new FieldMetadataSurrogate( f ) );
+            if ( fields == null )
+            {
+                return null;
+            }
+            ICollection<FieldMetadataSurrogate> surrogates = new List<FieldMetadataSurrogate>();
+            IEnumerable<FieldMetadata> original = fields.ToList();
+
+            foreach ( FieldMetadata fieldMetadata in original )
+            {
+                surrogates.Add( new FieldMetadataSurrogate( fieldMetadata ) );
+            }
+
+            return surrogates;
+            //return fields?.Select( f => new FieldMetadataSurrogate( f ) );
         }
 
-        public static IEnumerable<EventMetadataSurrogate> GetEventsMetadata(
+        public static ICollection<EventMetadataSurrogate> GetEventsMetadata(
             IEnumerable<EventMetadata> events )
         {
-            return events?.Select( e => new EventMetadataSurrogate( e ) );
+            if ( events == null )
+            {
+                return null;
+            }
+            ICollection<EventMetadataSurrogate> surrogates = new List<EventMetadataSurrogate>();
+            IEnumerable<EventMetadata> original = events.ToList();
+
+            foreach ( EventMetadata eventMetadata in original )
+            {
+                surrogates.Add( new EventMetadataSurrogate( eventMetadata ) );
+            }
+
+            return surrogates;
+//            return events?.Select( e => new EventMetadataSurrogate( e ) );
         }
 
-        public static IEnumerable<MethodMetadataSurrogate> GetMethodsMetadata(
+        public static ICollection<MethodMetadataSurrogate> GetMethodsMetadata(
             IEnumerable<MethodMetadata> methods )
         {
-            return methods?.Select( m => new MethodMetadataSurrogate( m ) );
+            if ( methods == null )
+            {
+                return null;
+            }
+            ICollection<MethodMetadataSurrogate> surrogates = new List<MethodMetadataSurrogate>();
+            IEnumerable<MethodMetadata> original = methods.ToList();
+
+            foreach ( MethodMetadata methodMetadata in original )
+            {
+                surrogates.Add( new MethodMetadataSurrogate( methodMetadata ) );
+            }
+
+            return surrogates;
+            //            return methods?.Select( m => new MethodMetadataSurrogate( m ) );
         }
 
-        public static IEnumerable<PropertyMetadataSurrogate> GetPropertiesMetadata(
+        public static ICollection<PropertyMetadataSurrogate> GetPropertiesMetadata(
             IEnumerable<PropertyMetadata> properties )
         {
-            return properties?.Select( p => new PropertyMetadataSurrogate( p ) );
+            if ( properties == null )
+            {
+                return null;
+            }
+            ICollection<PropertyMetadataSurrogate> surrogates = new List<PropertyMetadataSurrogate>();
+            IEnumerable<PropertyMetadata> original = properties.ToList();
+
+            foreach ( PropertyMetadata propertyMetadata in original )
+            {
+                surrogates.Add( new PropertyMetadataSurrogate( propertyMetadata ) );
+            }
+
+            return surrogates;
+            //            return properties?.Select( p => new PropertyMetadataSurrogate( p ) );
         }
 
-        public static IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        public static ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
         {
-            return types?.Select( TypeMetadataSurrogate.EmitSurrogateTypeMetadata );
+            if ( types == null )
+            {
+                return null;
+            }
+            ICollection<TypeMetadataSurrogate> surrogates = new List<TypeMetadataSurrogate>();
+            IEnumerable<TypeMetadata> original = types.ToList();
+
+            foreach ( TypeMetadata typeMetadata in original )
+            {
+                surrogates.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
+            }
+
+            return surrogates;
+            //            return types?.Select( TypeMetadataSurrogate.EmitSurrogateTypeMetadata );
         }
 
-        public static IEnumerable<ParameterMetadataSurrogate> GetParametersMetadata(
-            IEnumerable<ParameterMetadata> parameter )
+        public static ICollection<ParameterMetadataSurrogate> GetParametersMetadata(
+            IEnumerable<ParameterMetadata> parameters )
         {
-            return parameter?.Select( p => new ParameterMetadataSurrogate( p ) );
+            if ( parameters == null )
+            {
+                return null;
+            }
+            ICollection<ParameterMetadataSurrogate> surrogates = new List<ParameterMetadataSurrogate>();
+            IEnumerable<ParameterMetadata> original = parameters.ToList();
+
+            foreach ( ParameterMetadata parameterMetadata in original )
+            {
+                surrogates.Add( new ParameterMetadataSurrogate( parameterMetadata ) );
+            }
+
+            return surrogates;
+            //            return parameter?.Select( p => new ParameterMetadataSurrogate( p ) );
         }
     }
 }
