@@ -43,6 +43,10 @@ namespace DataBaseRepository
         {
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
+                dbContext.NamespaceModels
+                    .Include( n => n.Types )
+                    .Load();
+
                 dbContext.TypeModels
                     .Include( t => t.BaseType )
                     .Include( t => t.DeclaringType )
@@ -55,10 +59,6 @@ namespace DataBaseRepository
                     .Include( t => t.Methods )
                     .Include( t => t.Constructors )
                     .Include( t => t.EventSurrogates )
-                    .Load();
-
-                dbContext.NamespaceModels
-                    .Include( n => n.Types )
                     .Load();
 
                 dbContext.ParameterModels
