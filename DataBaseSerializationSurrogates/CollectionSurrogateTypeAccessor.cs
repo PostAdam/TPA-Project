@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using DataBaseSerializationSurrogates.MetadataSurrogates;
 using Model.Reflection.MetadataModels;
 
@@ -14,16 +13,14 @@ namespace DataBaseSerializationSurrogates
             {
                 return null;
             }
-            ICollection< NamespaceMetadataSurrogate > surrogates = new List<NamespaceMetadataSurrogate>();
-            IEnumerable<NamespaceMetadata> original = namespaces.ToList();
 
-            foreach ( NamespaceMetadata namespaceMetadata in original )
+            ICollection<NamespaceMetadataSurrogate> surrogates = new List<NamespaceMetadataSurrogate>();
+            foreach ( NamespaceMetadata namespaceMetadata in namespaces )
             {
                 surrogates.Add( new NamespaceMetadataSurrogate( namespaceMetadata ) );
             }
 
             return surrogates;
-//            return namespaces?.Select( n => new NamespaceMetadataSurrogate( n ) );
         }
 
         public static ICollection<FieldMetadataSurrogate> GetFieldsMetadata(
@@ -33,16 +30,14 @@ namespace DataBaseSerializationSurrogates
             {
                 return null;
             }
-            ICollection<FieldMetadataSurrogate> surrogates = new List<FieldMetadataSurrogate>();
-            IEnumerable<FieldMetadata> original = fields.ToList();
 
-            foreach ( FieldMetadata fieldMetadata in original )
+            ICollection<FieldMetadataSurrogate> surrogates = new List<FieldMetadataSurrogate>();
+            foreach ( FieldMetadata fieldMetadata in fields )
             {
                 surrogates.Add( new FieldMetadataSurrogate( fieldMetadata ) );
             }
 
             return surrogates;
-            //return fields?.Select( f => new FieldMetadataSurrogate( f ) );
         }
 
         public static ICollection<EventMetadataSurrogate> GetEventsMetadata(
@@ -52,16 +47,14 @@ namespace DataBaseSerializationSurrogates
             {
                 return null;
             }
-            ICollection<EventMetadataSurrogate> surrogates = new List<EventMetadataSurrogate>();
-            IEnumerable<EventMetadata> original = events.ToList();
 
-            foreach ( EventMetadata eventMetadata in original )
+            ICollection<EventMetadataSurrogate> surrogates = new List<EventMetadataSurrogate>();
+            foreach ( EventMetadata eventMetadata in events )
             {
                 surrogates.Add( new EventMetadataSurrogate( eventMetadata ) );
             }
 
             return surrogates;
-//            return events?.Select( e => new EventMetadataSurrogate( e ) );
         }
 
         public static ICollection<MethodMetadataSurrogate> GetMethodsMetadata(
@@ -71,16 +64,14 @@ namespace DataBaseSerializationSurrogates
             {
                 return null;
             }
-            ICollection<MethodMetadataSurrogate> surrogates = new List<MethodMetadataSurrogate>();
-            IEnumerable<MethodMetadata> original = methods.ToList();
 
-            foreach ( MethodMetadata methodMetadata in original )
+            ICollection<MethodMetadataSurrogate> surrogates = new List<MethodMetadataSurrogate>();
+            foreach ( MethodMetadata methodMetadata in methods )
             {
                 surrogates.Add( new MethodMetadataSurrogate( methodMetadata ) );
             }
 
             return surrogates;
-            //            return methods?.Select( m => new MethodMetadataSurrogate( m ) );
         }
 
         public static ICollection<PropertyMetadataSurrogate> GetPropertiesMetadata(
@@ -90,16 +81,14 @@ namespace DataBaseSerializationSurrogates
             {
                 return null;
             }
-            ICollection<PropertyMetadataSurrogate> surrogates = new List<PropertyMetadataSurrogate>();
-            IEnumerable<PropertyMetadata> original = properties.ToList();
 
-            foreach ( PropertyMetadata propertyMetadata in original )
+            ICollection<PropertyMetadataSurrogate> surrogates = new List<PropertyMetadataSurrogate>();
+            foreach ( PropertyMetadata propertyMetadata in properties )
             {
                 surrogates.Add( new PropertyMetadataSurrogate( propertyMetadata ) );
             }
 
             return surrogates;
-            //            return properties?.Select( p => new PropertyMetadataSurrogate( p ) );
         }
 
         public static ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
@@ -108,16 +97,14 @@ namespace DataBaseSerializationSurrogates
             {
                 return null;
             }
-            ICollection<TypeMetadataSurrogate> surrogates = new List<TypeMetadataSurrogate>();
-            IEnumerable<TypeMetadata> original = types.ToList();
 
-            foreach ( TypeMetadata typeMetadata in original )
+            ICollection<TypeMetadataSurrogate> surrogates = new List<TypeMetadataSurrogate>();
+            foreach ( TypeMetadata typeMetadata in types )
             {
                 surrogates.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
             }
 
             return surrogates;
-            //            return types?.Select( TypeMetadataSurrogate.EmitSurrogateTypeMetadata );
         }
 
         public static ICollection<ParameterMetadataSurrogate> GetParametersMetadata(
@@ -127,16 +114,14 @@ namespace DataBaseSerializationSurrogates
             {
                 return null;
             }
-            ICollection<ParameterMetadataSurrogate> surrogates = new List<ParameterMetadataSurrogate>();
-            IEnumerable<ParameterMetadata> original = parameters.ToList();
 
-            foreach ( ParameterMetadata parameterMetadata in original )
+            ICollection<ParameterMetadataSurrogate> surrogates = new List<ParameterMetadataSurrogate>();
+            foreach ( ParameterMetadata parameterMetadata in parameters )
             {
                 surrogates.Add( new ParameterMetadataSurrogate( parameterMetadata ) );
             }
 
             return surrogates;
-            //            return parameter?.Select( p => new ParameterMetadataSurrogate( p ) );
         }
     }
 }

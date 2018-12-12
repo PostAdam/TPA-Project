@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
@@ -26,7 +27,6 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 ? null
                 : new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
             Multicast = eventMetadata.Multicast;
-
             EventAttributes = GetTypesMetadata( eventMetadata.EventAttributes );
         }
         
@@ -66,7 +66,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 RaiseMethodMetadata = RaiseMethodMetadata?.GetOriginalMethodMetadata(),
                 RemoveMethodMetadata = RemoveMethodMetadata?.GetOriginalMethodMetadata(),
                 Multicast = Multicast,
-                EventAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( EventAttributes )
+                EventAttributes = GetOriginalTypesMetadata( EventAttributes )
             };
         }
     }

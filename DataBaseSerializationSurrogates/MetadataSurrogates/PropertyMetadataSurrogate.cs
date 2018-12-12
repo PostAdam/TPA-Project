@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
@@ -117,7 +117,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             return new PropertyMetadata()
             {
                 Name = Name,
-                PropertyAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( PropertyAttributes ),
+                PropertyAttributes = GetOriginalTypesMetadata( PropertyAttributes ),
                 Modifiers = _modifiers,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Getter = Getter?.GetOriginalMethodMetadata(),

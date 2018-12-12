@@ -11,7 +11,6 @@ using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
-using ViewModel.Commands;
 using ViewModel.Commands.AsyncCommand;
 using ViewModel.MetadataViewModels;
 
@@ -76,6 +75,7 @@ namespace ViewModel
 
         private void Compose()
         {
+            // TODO: move to App.config
             List<DirectoryCatalog> directoryCatalogs = new List<DirectoryCatalog>()
             {
                 new DirectoryCatalog( "../../../XmlRepository/bin/Debug", "*.dll" ),
@@ -129,8 +129,6 @@ namespace ViewModel
         {
             Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
 //            string fileName = _pathResolver.SaveFilePath();
-//            await Repository.Write<AssemblyMetadata>( AssemblyMetadata, fileName );
-//            await Repository.Write( AssemblyMetadata, "Test.xml" );
             await Repository.Write( AssemblyMetadata, "Test.xml" );
             Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
         }
@@ -147,6 +145,7 @@ namespace ViewModel
 
         private async Task Read()
         {
+            // TODO: find solution
 //            string fileName = _pathResolver.ReadFilePath();
             await ReadFromFile( "ViewModel" );
         }
@@ -160,7 +159,6 @@ namespace ViewModel
             Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
 
             AssemblyMetadata = await Repository.Read( filename ) as AssemblyMetadata;
-//            AssemblyMetadata = ( Repository.Read( filename ).Result) as AssemblyMetadata;
             AddClassesToDirectory( AssemblyMetadata );
             InitTreeView( AssemblyMetadata );
 
@@ -170,6 +168,7 @@ namespace ViewModel
         internal void AddClassesToDirectory( AssemblyMetadata assemblyMetadata )
         {
             Logger?.WriteLine( "Adding classes to directory.", LogLevel.Information.ToString() );
+
             foreach ( NamespaceMetadata dataNamespace in assemblyMetadata.Namespaces )
             {
                 foreach ( TypeMetadata type in dataNamespace.Types )
@@ -187,8 +186,10 @@ namespace ViewModel
         internal void InitTreeView( AssemblyMetadata assemblyMetadata )
         {
             Logger?.WriteLine( "Initializing treeView.", LogLevel.Information.ToString() );
+
             MetadataBaseViewModel metadataViewModel = new AssemblyMetadataViewModel( assemblyMetadata );
             Items.Add( metadataViewModel );
+
             Logger?.WriteLine( "TreeView initialized!", LogLevel.Information.ToString() );
         }
 
@@ -196,9 +197,11 @@ namespace ViewModel
         internal async Task LoadDll( string path )
         {
             Logger?.WriteLine( "Loading DLL." + path, LogLevel.Trace.ToString() );
+
             Reflector reflector = new Reflector();
             await reflector.Reflect( path );
             AssemblyMetadata = reflector.AssemblyModel;
+
             Logger?.WriteLine( "DLL loaded!", LogLevel.Information.ToString() );
         }
 

@@ -15,7 +15,6 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public AssemblyMetadataSurrogate( AssemblyMetadata assemblyMetadata )
         {
             Name = assemblyMetadata.Name;
-
             Namespaces = GetNamespacesMetadata( assemblyMetadata.Namespaces );
         }
 

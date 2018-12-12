@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
@@ -52,7 +53,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Position = Position,
                 Kind = Kind,
-                ParameterAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( ParameterAttributes ),
+                ParameterAttributes = GetOriginalTypesMetadata( ParameterAttributes ),
                 DefaultValue = DefaultValue
             };
         }

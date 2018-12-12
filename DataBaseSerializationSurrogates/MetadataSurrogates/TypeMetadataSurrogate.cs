@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
     public class TypeMetadataSurrogate
     {
-        #region Constructorss
+        #region Constructors
 
         public TypeMetadataSurrogate()
         {
@@ -18,11 +19,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
             TypeName = typeMetadata.TypeName;
             NamespaceName = typeMetadata.NamespaceName;
-            FullName = typeMetadata.FullName;
+            FullName = typeMetadata.FullName ?? typeMetadata.NamespaceName + "." + typeMetadata.TypeName;
 
-            ReproducedSurrogateTypes.Add(
-                typeMetadata.FullName ?? typeMetadata.NamespaceName + " . " + typeMetadata.TypeName,
-                this );
+            ReproducedSurrogateTypes.Add( FullName, this );
 
             if ( typeMetadata.BaseType != null )
             {
@@ -53,6 +52,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
             TypeName = typeName;
             NamespaceName = namespaceName;
+            FullName = namespaceName + " . " + typeName;
         }
 
         #endregion
@@ -86,7 +86,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             {
                 if ( value != null )
                     _modifiers =
-                        new Tuple<AccessLevel, SealedEnum, AbstractEnum>( 
+                        new Tuple<AccessLevel, SealedEnum, AbstractEnum>(
                             value.Value,
                             _modifiers?.Item2 ?? Model.Reflection.Enums.SealedEnum.NotSealed,
                             _modifiers?.Item3 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract );
@@ -100,7 +100,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             {
                 if ( value != null )
                     _modifiers =
-                        new Tuple<AccessLevel, SealedEnum, AbstractEnum>( 
+                        new Tuple<AccessLevel, SealedEnum, AbstractEnum>(
                             _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
                             value.Value,
                             _modifiers?.Item3 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract );
@@ -141,9 +141,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public ICollection<EventMetadataSurrogate> EventAttributesSurrogates { get; set; }
 
         public ICollection<ParameterMetadataSurrogate> ParameterAttributeSurrogates { get; set; }
-        public ICollection<ParameterMetadataSurrogate> ParameterSurrogates { get; set; } 
+        public ICollection<ParameterMetadataSurrogate> ParameterSurrogates { get; set; }
 
-        public ICollection<PropertyMetadataSurrogate> PropertyAttributesTypes { get; set; } 
+        public ICollection<PropertyMetadataSurrogate> PropertyAttributesTypes { get; set; }
         public ICollection<PropertyMetadataSurrogate> PropertyTypeMetadatas { get; set; }
 
 
@@ -157,8 +157,6 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         public ICollection<TypeMetadataSurrogate> TypeImplementedInterfaces { get; set; }
         public ICollection<TypeMetadataSurrogate> TypeNestedTypes { get; set; }
 
-
-
         #endregion
 
         #region Emiters
@@ -170,7 +168,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 return null;
             }
 
-            string typeId = typeMetadata.FullName ?? typeMetadata.NamespaceName + " . " + typeMetadata.TypeName;
+            string typeId = typeMetadata.FullName ?? typeMetadata.NamespaceName + "." + typeMetadata.TypeName;
             if ( !ReproducedSurrogateTypes.ContainsKey( typeId ) )
             {
                 new TypeMetadataSurrogate( typeMetadata );
@@ -181,7 +179,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         public TypeMetadata EmitOriginalTypeMetadata()
         {
-            string typeId = FullName ?? NamespaceName + " . " + TypeName;
+            string typeId = FullName;
             if ( !ReproducedOriginalTypes.ContainsKey( typeId ) )
             {
                 GetOriginalTypeMetadata();
@@ -200,7 +198,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         private void GetOriginalTypeMetadata()
         {
             TypeMetadata typeMetadata = new TypeMetadata();
-            ReproducedOriginalTypes.Add( FullName ?? NamespaceName + " . " + TypeName, typeMetadata );
+            ReproducedOriginalTypes.Add( FullName, typeMetadata );
             PopulateTypeMetadataWithData( typeMetadata );
         }
 
@@ -212,16 +210,15 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             typeMetadata.DeclaringType = DeclaringType?.EmitOriginalTypeMetadata();
             typeMetadata.TypeKind = TypeKind;
             typeMetadata.Modifiers = _modifiers;
-            typeMetadata.Fields = CollectionOriginalTypeAccessor.GetOriginalFieldsMetadata( Fields );
-            typeMetadata.GenericArguments = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( GenericArguments );
-            typeMetadata.Attributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( Attributes );
-            typeMetadata.ImplementedInterfaces =
-                CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( ImplementedInterfaces );
-            typeMetadata.NestedTypes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( NestedTypes );
-            typeMetadata.Properties = CollectionOriginalTypeAccessor.GetOriginalPropertiesMetadata( Properties );
-            typeMetadata.Methods = CollectionOriginalTypeAccessor.GetOriginalMethodsMetadata( Methods );
-            typeMetadata.Constructors = CollectionOriginalTypeAccessor.GetOriginalMethodsMetadata( Constructors );
-            typeMetadata.Events = CollectionOriginalTypeAccessor.GetOriginalEventsMetadata( EventSurrogates );
+            typeMetadata.Fields = GetOriginalFieldsMetadata( Fields );
+            typeMetadata.GenericArguments = GetOriginalTypesMetadata( GenericArguments );
+            typeMetadata.Attributes = GetOriginalTypesMetadata( Attributes );
+            typeMetadata.ImplementedInterfaces = GetOriginalTypesMetadata( ImplementedInterfaces );
+            typeMetadata.NestedTypes = GetOriginalTypesMetadata( NestedTypes );
+            typeMetadata.Properties = GetOriginalPropertiesMetadata( Properties );
+            typeMetadata.Methods = GetOriginalMethodsMetadata( Methods );
+            typeMetadata.Constructors = GetOriginalMethodsMetadata( Constructors );
+            typeMetadata.Events = GetOriginalEventsMetadata( EventSurrogates );
             typeMetadata.FullName = FullName;
         }
 

@@ -17,11 +17,9 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
         {
             TypeName = typeMetadata.TypeName;
             NamespaceName = typeMetadata.NamespaceName;
-            FullName = typeMetadata.FullName;
+            FullName = typeMetadata.FullName ?? typeMetadata.NamespaceName + "." + typeMetadata.TypeName;
 
-            ReproducedSurrogateTypes.Add(
-                typeMetadata.FullName ?? typeMetadata.NamespaceName + " . " + typeMetadata.TypeName,
-                this );
+            ReproducedSurrogateTypes.Add( FullName, this );
 
             if ( typeMetadata.BaseType != null )
             {
@@ -118,7 +116,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
                 return null;
             }
 
-            string typeId = typeMetadata.FullName ?? typeMetadata.NamespaceName + " . " + typeMetadata.TypeName;
+            string typeId = typeMetadata.FullName ?? typeMetadata.NamespaceName + "." + typeMetadata.TypeName;
             if ( !ReproducedSurrogateTypes.ContainsKey( typeId ) )
             {
                 new TypeMetadataSurrogate( typeMetadata );
@@ -129,7 +127,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         public TypeMetadata EmitOriginalTypeMetadata()
         {
-            string typeId = FullName ?? NamespaceName + " . " + TypeName;
+            string typeId = FullName;
             if ( !ReproducedOriginalTypes.ContainsKey( typeId ) )
             {
                 GetOriginalTypeMetadata();
@@ -148,7 +146,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
         private void GetOriginalTypeMetadata()
         {
             TypeMetadata typeMetadata = new TypeMetadata();
-            ReproducedOriginalTypes.Add( FullName ?? NamespaceName + " . " + TypeName, typeMetadata );
+            ReproducedOriginalTypes.Add( FullName, typeMetadata );
             PopulateTypeMetadataWithData( typeMetadata );
         }
 

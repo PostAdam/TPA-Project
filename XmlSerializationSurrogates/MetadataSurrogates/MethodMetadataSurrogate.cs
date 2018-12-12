@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
+using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
@@ -16,9 +18,9 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             Name = Name;
             Extension = methodMetadata.Extension;
             ReturnType = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( methodMetadata.ReturnType );
-            MethodAttributes = CollectionTypeAccessor.GetTypesMetadata( methodMetadata.MethodAttributes );
-            Parameters = CollectionTypeAccessor.GetParametersMetadata( methodMetadata.Parameters );
-            GenericArguments = CollectionTypeAccessor.GetTypesMetadata( methodMetadata.GenericArguments );
+            MethodAttributes = GetTypesMetadata( methodMetadata.MethodAttributes );
+            Parameters = GetParametersMetadata( methodMetadata.Parameters );
+            GenericArguments = GetTypesMetadata( methodMetadata.GenericArguments );
             Modifiers = methodMetadata.Modifiers;
         }
 
@@ -56,9 +58,9 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
                 Name = Name,
                 Extension = Extension,
                 ReturnType = ReturnType?.EmitOriginalTypeMetadata(),
-                MethodAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( MethodAttributes ),
-                Parameters = CollectionOriginalTypeAccessor.GetOriginalParametersMetadata( Parameters ),
-                GenericArguments = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( GenericArguments ),
+                MethodAttributes = GetOriginalTypesMetadata( MethodAttributes ),
+                Parameters = GetOriginalParametersMetadata( Parameters ),
+                GenericArguments = GetOriginalTypesMetadata( GenericArguments ),
                 Modifiers = Modifiers
             };
         }

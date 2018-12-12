@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Model.Reflection.MetadataModels;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
@@ -46,8 +45,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         private ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
         {
-            //            return types.Select( TypeMetadataSurrogate.EmitSurrogateTypeMetadata );
-            List<TypeMetadataSurrogate> surrogates = new List<TypeMetadataSurrogate>();
+            ICollection<TypeMetadataSurrogate> surrogates = new List<TypeMetadataSurrogate>();
             foreach ( TypeMetadata typeMetadata in types )
             {
                 surrogates.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );

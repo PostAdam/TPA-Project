@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
@@ -126,9 +127,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 Name = Name,
                 Extension = Extension,
                 ReturnType = ReturnType?.EmitOriginalTypeMetadata(),
-                MethodAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( MethodAttributes ),
-                Parameters = CollectionOriginalTypeAccessor.GetOriginalParametersMetadata( Parameters ),
-                GenericArguments = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( GenericArguments ),
+                MethodAttributes = GetOriginalTypesMetadata( MethodAttributes ),
+                Parameters = GetOriginalParametersMetadata( Parameters ),
+                GenericArguments = GetOriginalTypesMetadata( GenericArguments ),
                 Modifiers = _modifiers
             };
         }

@@ -13,16 +13,16 @@ namespace DataBaseLogger
     [ExportMetadata( "destination", "db" )]
     class DataBaseTraceListener : ITrace
     {
-        public LogLevel Level { get; set; }
-
         #region Constructor
 
         public DataBaseTraceListener()
         {
             _connectionString = GetConnectionString();
-        } 
+        }
 
         #endregion
+
+        public LogLevel Level { get; set; }
 
         public async Task Write( string message )
         {

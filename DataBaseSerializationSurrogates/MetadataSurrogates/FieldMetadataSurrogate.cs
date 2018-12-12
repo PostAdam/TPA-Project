@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
@@ -87,7 +88,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Modifiers = _modifiers,
                 IsStatic = IsStatic,
-                FieldAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( FieldAttributes )
+                FieldAttributes = GetOriginalTypesMetadata( FieldAttributes )
             };
         }
     }

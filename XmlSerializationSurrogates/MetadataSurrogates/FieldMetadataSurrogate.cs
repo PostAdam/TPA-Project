@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
@@ -60,7 +61,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Modifiers = Modifiers,
                 IsStatic = IsStatic,
-                FieldAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( FieldAttributes )
+                FieldAttributes = GetOriginalTypesMetadata( FieldAttributes )
             };
         }
     }

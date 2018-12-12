@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.MetadataModels;
+using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
@@ -32,7 +33,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             return new NamespaceMetadata
             {
                 NamespaceName = NamespaceName,
-                Types = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( Types )
+                Types = GetOriginalTypesMetadata( Types )
             };
         }
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.MetadataModels;
+using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
+using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
@@ -23,7 +25,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
                 ? null
                 : new MethodMetadataSurrogate( eventMetadata.RemoveMethodMetadata );
             Multicast = eventMetadata.Multicast;
-            EventAttributes = CollectionTypeAccessor.GetTypesMetadata( eventMetadata.EventAttributes );
+            EventAttributes = GetTypesMetadata( eventMetadata.EventAttributes );
         }
 
         #endregion
@@ -63,7 +65,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
                 RaiseMethodMetadata = RaiseMethodMetadata?.GetOriginalMethodMetadata(),
                 RemoveMethodMetadata = RemoveMethodMetadata?.GetOriginalMethodMetadata(),
                 Multicast = Multicast,
-                EventAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( EventAttributes )
+                EventAttributes = GetOriginalTypesMetadata( EventAttributes )
             };
         }
     }

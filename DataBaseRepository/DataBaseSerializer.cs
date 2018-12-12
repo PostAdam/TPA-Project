@@ -12,21 +12,20 @@ namespace DataBaseRepository
     [ExportMetadata( "destination", "db" )]
     public class DataBaseSerializer : IRepository
     {
+        // TODO: remove fileName argument and change way of choosing it
         public async Task Write( object metadata, string fileName )
         {
-            await Task.Run( () => WriteData( metadata, fileName ) );
-//            WriteData( metadata, fileName );
+            await WriteData( metadata, fileName );
         }
 
         public async Task<object> Read( string fileName )
         {
-            return await Task.Run( () => ReadData( fileName ) );
-//            return ReadData( fileName );
+            return await ReadData( fileName );
         }
 
         #region Privates
 
-        private void WriteData( object metadata, string fileName )
+        private async Task WriteData( object metadata, string fileName )
         {
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
@@ -34,12 +33,11 @@ namespace DataBaseRepository
                     new AssemblyMetadataSurrogate( metadata as AssemblyMetadata );
 
                 dbContext.AssemblyModels.Add( assemblyMetadataSurrogate );
-
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        private object ReadData( string fileName )
+        private async Task<object> ReadData( string fileName )
         {
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
@@ -93,9 +91,8 @@ namespace DataBaseRepository
                     .Include( e => e.EventAttributes )
                     .Load();
 
-                AssemblyMetadataSurrogate assemblyMetadataSurrogate = dbContext.AssemblyModels
-                    .Include( a => a.Namespaces ).FirstOrDefault();
-//                    .FirstOrDefault( a => a.Name == fileName );
+                AssemblyMetadataSurrogate assemblyMetadataSurrogate = await dbContext.AssemblyModels
+                    .Include( a => a.Namespaces ).FirstOrDefaultAsync();
 
                 return assemblyMetadataSurrogate?.GetOriginalAssemblyMetadata();
             }

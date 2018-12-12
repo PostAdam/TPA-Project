@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
@@ -51,7 +52,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             return new PropertyMetadata()
             {
                 Name = Name,
-                PropertyAttributes = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( PropertyAttributes ),
+                PropertyAttributes = GetOriginalTypesMetadata( PropertyAttributes ),
                 Modifiers = Modifiers,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Getter = Getter?.GetOriginalMethodMetadata(),
