@@ -127,10 +127,13 @@ namespace ViewModel
 
         private async Task Save()
         {
-            Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
-//            string fileName = _pathResolver.SaveFilePath();
-            await Repository.Write( AssemblyMetadata, "Test.xml" );
-            Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
+            if ( AssemblyMetadata != null )
+            {
+                Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
+                //            string fileName = _pathResolver.SaveFilePath();
+                await Repository.Write( AssemblyMetadata, "Test.xml" );
+                Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
+            }
         }
 
         private async Task Open()
@@ -140,7 +143,7 @@ namespace ViewModel
             {
                 Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
                 await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
-            }  
+            }
         }
 
         private async Task Read()

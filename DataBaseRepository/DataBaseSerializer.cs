@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.Composition;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using DataBaseSerializationSurrogates.MetadataSurrogates;
 using MEFDefinitions;
@@ -30,9 +29,8 @@ namespace DataBaseRepository
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
                 AssemblyMetadataSurrogate assemblyMetadataSurrogate =
-                    new AssemblyMetadataSurrogate( metadata as AssemblyMetadata );
-
-                dbContext.AssemblyModels.Add( assemblyMetadataSurrogate );
+                    await Task.Run( () => new AssemblyMetadataSurrogate( metadata as AssemblyMetadata ) );
+                await Task.Run( () => dbContext.AssemblyModels.Add( assemblyMetadataSurrogate ) );
                 await dbContext.SaveChangesAsync();
             }
         }
@@ -41,61 +39,65 @@ namespace DataBaseRepository
         {
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
-                dbContext.NamespaceModels
-                    .Include( n => n.Types )
-                    .Load();
-
-                dbContext.TypeModels
-                    .Include( t => t.BaseType )
-                    .Include( t => t.DeclaringType )
-                    .Include( t => t.Fields )
-                    .Include( t => t.GenericArguments )
-                    .Include( t => t.Attributes )
-                    .Include( t => t.ImplementedInterfaces )
-                    .Include( t => t.NestedTypes )
-                    .Include( t => t.Properties )
-                    .Include( t => t.Methods )
-                    .Include( t => t.Constructors )
-                    .Include( t => t.EventSurrogates )
-                    .Load();
-
-                dbContext.ParameterModels
-                    .Include( p => p.TypeMetadata )
-                    .Include( p => p.ParameterAttributes )
-                    .Load();
-
-                dbContext.PropertiesModels
-                    .Include( p => p.PropertyAttributes )
-                    .Include( p => p.TypeMetadata )
-                    .Include( p => p.Getter )
-                    .Include( p => p.Setter )
-                    .Load();
-
-                dbContext.MethodModels
-                    .Include( m => m.ReturnType )
-                    .Include( m => m.MethodAttributes )
-                    .Include( m => m.Parameters )
-                    .Include( m => m.GenericArguments )
-                    .Load();
-
-                dbContext.FieldModels
-                    .Include( f => f.TypeMetadata )
-                    .Include( f => f.FieldAttributes )
-                    .Load();
-
-                dbContext.EventModels
-                    .Include( e => e.TypeMetadata )
-                    .Include( e => e.AddMethodMetadata )
-                    .Include( e => e.RaiseMethodMetadata )
-                    .Include( e => e.RemoveMethodMetadata )
-                    .Include( e => e.EventAttributes )
-                    .Load();
-
+                await Task.Run( () => IncludeRelatedModelsObjects( dbContext ) );
                 AssemblyMetadataSurrogate assemblyMetadataSurrogate = await dbContext.AssemblyModels
                     .Include( a => a.Namespaces ).FirstOrDefaultAsync();
 
-                return assemblyMetadataSurrogate?.GetOriginalAssemblyMetadata();
+                return await Task.Run( () => assemblyMetadataSurrogate?.GetOriginalAssemblyMetadata() );
             }
+        }
+
+        private void IncludeRelatedModelsObjects( ReflectorDbContext dbContext )
+        {
+            dbContext.NamespaceModels
+                .Include( n => n.Types )
+                .Load();
+
+            dbContext.TypeModels
+                .Include( t => t.BaseType )
+                .Include( t => t.DeclaringType )
+                .Include( t => t.Fields )
+                .Include( t => t.GenericArguments )
+                .Include( t => t.Attributes )
+                .Include( t => t.ImplementedInterfaces )
+                .Include( t => t.NestedTypes )
+                .Include( t => t.Properties )
+                .Include( t => t.Methods )
+                .Include( t => t.Constructors )
+                .Include( t => t.EventSurrogates )
+                .Load();
+
+            dbContext.ParameterModels
+                .Include( p => p.TypeMetadata )
+                .Include( p => p.ParameterAttributes )
+                .Load();
+
+            dbContext.PropertiesModels
+                .Include( p => p.PropertyAttributes )
+                .Include( p => p.TypeMetadata )
+                .Include( p => p.Getter )
+                .Include( p => p.Setter )
+                .Load();
+
+            dbContext.MethodModels
+                .Include( m => m.ReturnType )
+                .Include( m => m.MethodAttributes )
+                .Include( m => m.Parameters )
+                .Include( m => m.GenericArguments )
+                .Load();
+
+            dbContext.FieldModels
+                .Include( f => f.TypeMetadata )
+                .Include( f => f.FieldAttributes )
+                .Load();
+
+            dbContext.EventModels
+                .Include( e => e.TypeMetadata )
+                .Include( e => e.AddMethodMetadata )
+                .Include( e => e.RaiseMethodMetadata )
+                .Include( e => e.RemoveMethodMetadata )
+                .Include( e => e.EventAttributes )
+                .Load();
         }
 
         #endregion
