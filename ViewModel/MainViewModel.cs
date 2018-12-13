@@ -7,15 +7,16 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
+using PropertyChanged;
 using ViewModel.Commands.AsyncCommand;
 using ViewModel.MetadataViewModels;
 
 namespace ViewModel
 {
+    [AddINotifyPropertyChangedInterface]
     public class MainViewModel : BaseViewModel
     {
         #region Constructor
@@ -110,11 +111,15 @@ namespace ViewModel
 
         public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
 
+        public bool IsOpening { get; set; }
+        public bool IsSaving { get; set; }
+        public bool IsReading { get; set; }
+
         #region Commands
 
-        public ICommand ClickSave { get; }
-        public ICommand ClickOpen { get; }
-        public ICommand ClickRead { get; }
+        public AsyncCommand ClickSave { get; }
+        public AsyncCommand ClickOpen { get; }
+        public AsyncCommand ClickRead { get; }
 
         #endregion
 
@@ -129,28 +134,40 @@ namespace ViewModel
         {
             if ( AssemblyMetadata != null )
             {
+                IsSaving = true;
+
                 Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
                 //            string fileName = _pathResolver.SaveFilePath();
                 await Repository.Write( AssemblyMetadata, "Test.xml" );
                 Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
+
+                IsSaving = false;
             }
         }
 
         private async Task Open()
         {
+            IsOpening = true;
+
             string fileName = _pathResolver.OpenFilePath();
             if ( fileName != null )
             {
                 Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
                 await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
             }
+
+            IsOpening = false;
         }
 
         private async Task Read()
         {
+            IsReading = true;
+
             // TODO: find solution
 //            string fileName = _pathResolver.ReadFilePath();
             await ReadFromFile( "ViewModel" );
+
+            IsReading = false;
         }
 
         #endregion

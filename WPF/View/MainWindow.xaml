@@ -4,6 +4,7 @@
         xmlns:view="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:assembly="clr-namespace:ViewModel.MetadataViewModels;assembly=ViewModel"
         Title="MainWindow" Height="450" Width="800">
+
     <Border>
         <Border.Background>
             <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1.5">
@@ -12,7 +13,7 @@
                 <GradientStop Color="#FF03011B" Offset="0.95" />
             </LinearGradientBrush>
         </Border.Background>
-        <Grid>
+        <Grid Name="MainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150px" />
                 <ColumnDefinition Width="*" />
@@ -113,6 +114,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Border Style="{StaticResource RoundCornerRectangle}"
                         Grid.Row="0">
@@ -132,6 +134,110 @@
                             Command="{Binding ClickRead}"
                             Style="{StaticResource ButtonStyle}" />
                 </Border>
+
+                <Grid Name="OpenPopup" Background="BlueViolet" Height="0" VerticalAlignment="Bottom" Grid.Row="3">
+                    <TextBlock Foreground="AliceBlue" Text="Opening in progress .." 
+                               FontSize="13" FontFamily="Arial" FontWeight="Bold"
+                               VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsOpening}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <RemoveStoryboard BeginStoryboardName="OpenOpeningPopup" />
+                                        <RemoveStoryboard BeginStoryboardName="CloseOpeningPopup" />
+                                        <BeginStoryboard Name="OpenOpeningPopup">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="50" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                                <DataTrigger  Binding="{Binding IsOpening}" Value="False">
+                                    <DataTrigger.EnterActions>
+                                        <RemoveStoryboard BeginStoryboardName="OpenOpeningPopup" />
+                                        <RemoveStoryboard BeginStoryboardName="CloseOpeningPopup" />
+                                        <BeginStoryboard Name="CloseOpeningPopup">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="0" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+
+
+                <Grid Name="SavePopup" Background="DarkGreen" Height="0" VerticalAlignment="Bottom" Grid.Row="3">
+                    <TextBlock Foreground="AliceBlue" Text="Saving in progress .." 
+                               FontSize="13" FontFamily="Arial" FontWeight="Bold"
+                               VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSaving}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <RemoveStoryboard BeginStoryboardName="OpenSavingPopup" />
+                                        <RemoveStoryboard BeginStoryboardName="CloseSavingPopup" />
+                                        <BeginStoryboard Name="OpenSavingPopup">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="50" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSaving}" Value="False">
+                                    <DataTrigger.EnterActions>
+                                        <RemoveStoryboard BeginStoryboardName="OpenSavingPopup" />
+                                        <RemoveStoryboard BeginStoryboardName="CloseSavingPopup" />
+                                        <BeginStoryboard Name="CloseSavingPopup">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="0" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+
+                <Grid Name="ReadPopup" Background="DodgerBlue" Height="0" VerticalAlignment="Bottom" Grid.Row="3">
+                    <TextBlock Foreground="AliceBlue" Text="Reading in progress .." 
+                               FontSize="13" FontFamily="Arial" FontWeight="Bold"
+                               VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsReading}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <RemoveStoryboard BeginStoryboardName="OpenReadingPopup" />
+                                        <RemoveStoryboard BeginStoryboardName="CloseReadingPopup" />
+                                        <BeginStoryboard Name="OpenReadingPopup">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="50" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                                <DataTrigger  Binding="{Binding IsReading}" Value="False">
+                                    <DataTrigger.EnterActions>
+                                        <RemoveStoryboard BeginStoryboardName="OpenReadingPopup" />
+                                        <RemoveStoryboard BeginStoryboardName="CloseReadingPopup" />
+                                        <BeginStoryboard Name="CloseReadingPopup">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="0" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+
             </Grid>
         </Grid>
     </Border>
