@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 
 namespace Model.Reflection.MetadataModels
 {
-    [DataContract(IsReference = true)]
     public class PropertyMetadata
     {
-        #region Constructor
+        #region Constructors
+
+        public PropertyMetadata()
+        {
+        }
 
         internal PropertyMetadata(PropertyInfo propertyInfo)
         {
@@ -22,15 +24,14 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
-        [DataMember] public string Name;
-        [DataMember] public IEnumerable<TypeMetadata> PropertyAttributes;
-        [DataMember] public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers;
-        [DataMember] public TypeMetadata TypeMetadata;
-        [DataMember] public PropertyInfo PropertyInfo;
-        [DataMember] public MethodMetadata Getter;
-        [DataMember] public MethodMetadata Setter;
+        public string Name { get; set; }
+        public IEnumerable<TypeMetadata> PropertyAttributes { get; set; }
+        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
+        public TypeMetadata TypeMetadata { get; set; }
+        public MethodMetadata Getter { get; set; }
+        public MethodMetadata Setter { get; set; }
 
         #endregion
 

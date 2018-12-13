@@ -10,13 +10,13 @@ namespace ViewModel.MetadataViewModels
         public override string ToString()
         {
             string fullname = "";
-            fullname += StringUtility.GetAttributes(_propertyMetadata.PropertyAttributes);
-            fullname += StringUtility.GetMethodModifiers(_propertyMetadata.Modifiers);
+            fullname += StringUtility.GetAttributes( _propertyMetadata.PropertyAttributes );
+            fullname += StringUtility.GetMethodModifiers( _propertyMetadata.Modifiers );
             fullname += _propertyMetadata.TypeMetadata.TypeName;
-            string getter = string.IsNullOrEmpty(_propertyMetadata.Getter?.Name)
+            string getter = string.IsNullOrEmpty( _propertyMetadata.Getter?.Name )
                 ? null
                 : _propertyMetadata.Getter.Name + "; ";
-            string setter = string.IsNullOrEmpty(_propertyMetadata.Getter?.Name)
+            string setter = string.IsNullOrEmpty( _propertyMetadata.Getter?.Name )
                 ? null
                 : _propertyMetadata.Getter.Name + "; ";
             fullname += _propertyMetadata.Name;
@@ -28,7 +28,7 @@ namespace ViewModel.MetadataViewModels
 
         #region Constructor
 
-        internal PropertyMetadataViewModel(PropertyMetadata propertyMetadata)
+        internal PropertyMetadataViewModel( PropertyMetadata propertyMetadata )
         {
             _propertyMetadata = propertyMetadata;
         }
@@ -47,37 +47,37 @@ namespace ViewModel.MetadataViewModels
         {
             Children.Clear();
 
-            if (_reflectedTypes.ContainsKey(_propertyMetadata.TypeMetadata.FullName))
+            if ( _reflectedTypes.ContainsKey( _propertyMetadata.TypeMetadata.FullName ) )
             {
-                Children.Add(new TypeMetadataViewModel(
-                    _reflectedTypes[_propertyMetadata.TypeMetadata.FullName]));
+                Children.Add( new TypeMetadataViewModel(
+                    _reflectedTypes[ _propertyMetadata.TypeMetadata.FullName ] ) );
             }
             else
             {
-                Children.Add(new TypeMetadataViewModel(_propertyMetadata.TypeMetadata));
+                Children.Add( new TypeMetadataViewModel( _propertyMetadata.TypeMetadata ) );
             }
 
-            foreach (TypeMetadata attribute in _propertyMetadata.PropertyAttributes)
+            foreach ( TypeMetadata attribute in _propertyMetadata.PropertyAttributes )
             {
-                if (_reflectedTypes.ContainsKey(attribute.FullName))
+                if ( _reflectedTypes.ContainsKey( attribute.FullName ) )
                 {
-                    Children.Add(new AttributeMetadataViewModel(
-                        _reflectedTypes[attribute.FullName]));
+                    Children.Add( new AttributeMetadataViewModel(
+                        _reflectedTypes[ attribute.FullName ] ) );
                 }
                 else
                 {
-                    Children.Add(new AttributeMetadataViewModel(attribute));
+                    Children.Add( new AttributeMetadataViewModel( attribute ) );
                 }
             }
 
-            if (_propertyMetadata.Getter != null)
+            if ( _propertyMetadata.Getter != null )
             {
-                Children.Add(new MethodMetadataViewModel(_propertyMetadata.Getter));
+                Children.Add( new MethodMetadataViewModel( _propertyMetadata.Getter ) );
             }
 
-            if (_propertyMetadata.Getter != null)
+            if ( _propertyMetadata.Getter != null )
             {
-                Children.Add(new MethodMetadataViewModel(_propertyMetadata.Setter));
+                Children.Add( new MethodMetadataViewModel( _propertyMetadata.Setter ) );
             }
 
 

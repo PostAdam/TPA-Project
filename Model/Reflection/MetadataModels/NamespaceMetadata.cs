@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace Model.Reflection.MetadataModels
 {
-    [DataContract( IsReference = true )]
     public class NamespaceMetadata
     {
-        #region Constructor
+        #region Constructors
+
+        public NamespaceMetadata()
+        {
+        }
 
         public NamespaceMetadata( string name, IEnumerable<Type> types )
         {
@@ -20,12 +22,9 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
-        [DataMember]
         public string NamespaceName { get; set; }
-
-        [DataMember]
         public IEnumerable<TypeMetadata> Types { get; set; }
 
         #endregion

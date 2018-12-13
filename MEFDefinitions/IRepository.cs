@@ -1,8 +1,13 @@
-﻿namespace MEFDefinitions
+﻿using System.Threading.Tasks;
+
+namespace MEFDefinitions
 {
     public interface IRepository
     {
-        void Write<T>( T type, string fileName );
-        T Read<T>( string filename );
+       /* Task Write<T>( T type, string fileName ) where T : class;
+        Task<T> Read<T>( string fileName ) where T : class;*/
+
+        Task Write( object type, string fileName );
+        Task<object> Read( string fileName );
     }
 }

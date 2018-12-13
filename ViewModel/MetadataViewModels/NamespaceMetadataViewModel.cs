@@ -15,7 +15,7 @@ namespace ViewModel.MetadataViewModels
 
         #region Constructor
 
-        public NamespaceMetadataViewModel(NamespaceMetadata namespaceMetadata)
+        public NamespaceMetadataViewModel( NamespaceMetadata namespaceMetadata )
         {
             _namespaceMetadata = namespaceMetadata;
         }
@@ -31,7 +31,7 @@ namespace ViewModel.MetadataViewModels
         protected override void BuildMyself()
         {
             Children.Clear();
-            foreach (TypeMetadata type in _namespaceMetadata.Types)
+            foreach ( TypeMetadata type in _namespaceMetadata.Types)
                 Children.Add(new TypeMetadataViewModel(type));
             WasBuilt = true;
         }

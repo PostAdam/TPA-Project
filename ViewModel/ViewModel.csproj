@@ -59,9 +59,19 @@
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+    <Reference Include="Nito.Disposables, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nito.Disposables.1.2.3\lib\netstandard2.0\Nito.Disposables.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.Mvvm.Core, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nito.Mvvm.Core.1.2.2\lib\netstandard2.0\Nito.Mvvm.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.4.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -78,6 +88,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncObservableCollection.cs" />
+    <Compile Include="Commands\AsyncCommand\AsyncCommand.cs" />
+    <Compile Include="Commands\AsyncCommand\AsyncCommandBase .cs" />
+    <Compile Include="Commands\AsyncCommand\CancelCommand.cs" />
+    <Compile Include="Commands\ExperimentalAsyncCommand\AsyncCommand.cs" />
+    <Compile Include="Commands\ExperimentalAsyncCommand\AsyncCommandBase.cs" />
+    <Compile Include="Commands\ExperimentalAsyncCommand\IAsyncCommand.cs" />
+    <Compile Include="Commands\ExperimentalAsyncCommand\NotifyTaskCompletion.cs" />
+    <Compile Include="Commands\AsyncCommand\IAsyncCommand.cs" />
+    <Compile Include="Commands\AsyncCommand\NotifyTask.cs" />
     <Compile Include="IPathResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseViewModel.cs" />

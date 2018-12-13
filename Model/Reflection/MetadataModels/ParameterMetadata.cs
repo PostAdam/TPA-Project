@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Model.Reflection.Enums;
 
 namespace Model.Reflection.MetadataModels
 {
-    [DataContract(IsReference = true)]
     public class ParameterMetadata
     {
-        #region Constructor
+        #region Constructors
+
+        public ParameterMetadata()
+        {
+        }
 
         internal ParameterMetadata(ParameterInfo parameterInfo)
         {
@@ -28,14 +30,14 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
-        [DataMember] public string Name;
-        [DataMember] public TypeMetadata TypeMetadata;
-        [DataMember] public int Position;
-        [DataMember] public ParameterKindEnum Kind;
-        [DataMember] public IEnumerable<TypeMetadata> ParameterAttributes;
-        [DataMember] public string DefaultValue;
+        public string Name { get; set; }
+        public TypeMetadata TypeMetadata { get; set; }
+        public int Position { get; set; }
+        public ParameterKindEnum Kind { get; set; }
+        public IEnumerable<TypeMetadata> ParameterAttributes { get; set; }
+        public string DefaultValue { get; set; }
 
         #endregion
 

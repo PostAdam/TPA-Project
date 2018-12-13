@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 
 namespace Model.Reflection.MetadataModels
 {
-    [DataContract]
     public class AssemblyMetadata
     {
         #region Constructor
+
+        public AssemblyMetadata()
+        {
+        }
 
         internal AssemblyMetadata(Assembly assembly)
         {
@@ -23,11 +25,10 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Internals
+        #region Properties
 
-        [DataMember] public string Name { get; set; }
-
-        [DataMember] public IEnumerable<NamespaceMetadata> Namespaces { get; set; }
+        public string Name { get; set; }
+        public IEnumerable<NamespaceMetadata> Namespaces { get; set; }
 
         #endregion
     }

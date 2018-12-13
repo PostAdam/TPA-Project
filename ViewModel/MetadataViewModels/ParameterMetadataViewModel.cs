@@ -12,13 +12,13 @@ namespace ViewModel.MetadataViewModels
         public override string ToString()
         {
             string fullname = "";
-            fullname += StringUtility.GetAttributes(_parameterMetadata.ParameterAttributes);
+            fullname += StringUtility.GetAttributes( _parameterMetadata.ParameterAttributes );
             fullname += _parameterMetadata.Kind != ParameterKindEnum.None
                 ? _parameterMetadata.Kind.ToString().ToLower() + " "
                 : String.Empty;
             fullname += _parameterMetadata.TypeMetadata.TypeName + " ";
             fullname += _parameterMetadata.Name;
-            fullname += !string.IsNullOrEmpty(_parameterMetadata?.DefaultValue)
+            fullname += !string.IsNullOrEmpty( _parameterMetadata?.DefaultValue )
                 ? " = " + _parameterMetadata.DefaultValue
                 : String.Empty;
             return fullname;
@@ -28,7 +28,7 @@ namespace ViewModel.MetadataViewModels
 
         #region Constructor
 
-        internal ParameterMetadataViewModel(ParameterMetadata parameterMetadata)
+        internal ParameterMetadataViewModel( ParameterMetadata parameterMetadata )
         {
             _parameterMetadata = parameterMetadata;
         }
@@ -46,26 +46,26 @@ namespace ViewModel.MetadataViewModels
         protected override void BuildMyself()
         {
             Children.Clear();
-            if (_reflectedTypes.ContainsKey(_parameterMetadata.TypeMetadata.FullName))
+            if ( _reflectedTypes.ContainsKey( _parameterMetadata.TypeMetadata.FullName ) )
             {
-                Children.Add(new TypeMetadataViewModel(
-                    _reflectedTypes[_parameterMetadata.TypeMetadata.FullName]));
+                Children.Add( new TypeMetadataViewModel(
+                    _reflectedTypes[ _parameterMetadata.TypeMetadata.FullName ] ) );
             }
             else
             {
-                Children.Add(new TypeMetadataViewModel(_parameterMetadata.TypeMetadata));
+                Children.Add( new TypeMetadataViewModel( _parameterMetadata.TypeMetadata ) );
             }
 
-            foreach (TypeMetadata attribute in _parameterMetadata.ParameterAttributes)
+            foreach ( TypeMetadata attribute in _parameterMetadata.ParameterAttributes )
             {
-                if (_reflectedTypes.ContainsKey(attribute.FullName))
+                if ( _reflectedTypes.ContainsKey( attribute.FullName ) )
                 {
-                    Children.Add(new AttributeMetadataViewModel(
-                        _reflectedTypes[attribute.FullName]));
+                    Children.Add( new AttributeMetadataViewModel(
+                        _reflectedTypes[ attribute.FullName ] ) );
                 }
                 else
                 {
-                    Children.Add(new AttributeMetadataViewModel(attribute));
+                    Children.Add( new AttributeMetadataViewModel( attribute ) );
                 }
             }
 
