@@ -93,11 +93,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StyleResources\PopupNotificationStyle.xaml">
+    <Page Include="UserControls\OpenPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StyleResources\RoundCornersRectangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ReadPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SavePopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -108,6 +116,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UserControls\OpenPopup.xaml.cs">
+      <DependentUpon>OpenPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ReadPopup.xaml.cs">
+      <DependentUpon>ReadPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SavePopup.xaml.cs">
+      <DependentUpon>SavePopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

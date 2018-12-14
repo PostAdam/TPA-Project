@@ -27,7 +27,7 @@ namespace CLI
                             Console.WriteLine();
                             Console.WriteLine( @"Provide filename:" );
                             Console.Write( ">" );
-                            Task.Run( () => viewModel.ClickOpen.ExecuteAsync( null ) );
+                            Task.Run( () => viewModel.ClickOpen.Execute() );
                             dllViewer.RootNodes = viewModel.Items;
                             dllViewer.DisplayTree();
                         }
@@ -38,14 +38,14 @@ namespace CLI
 
                         break;
                     case "save":
-                        Task.Run( () => viewModel.ClickSave.ExecuteAsync( null ) );
+                        Task.Run( () => viewModel.ClickSave.Execute() );
                         Console.WriteLine( "Serialized to Test.xml" );
                         break;
                     case "read":
                         Console.WriteLine();
                         Console.WriteLine( @"Read filename:" );
                         Console.Write( ">" );
-                        Task.Run( () => viewModel.ClickRead.ExecuteAsync( null ) );
+                        Task.Run( () => viewModel.ClickRead.Execute() );
                         dllViewer.RootNodes = viewModel.Items;
                         dllViewer.DisplayTree();
                         break;

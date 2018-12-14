@@ -91,6 +91,9 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="WpfAsyncPack, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAsyncPack.1.6.0\lib\net46\WpfAsyncPack.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncObservableCollection.cs" />
@@ -103,6 +106,8 @@
     <Compile Include="Commands\ExperimentalAsyncCommand\NotifyTaskCompletion.cs" />
     <Compile Include="Commands\AsyncCommand\IAsyncCommand.cs" />
     <Compile Include="Commands\AsyncCommand\NotifyTask.cs" />
+    <Compile Include="Commands\NewAsyncCommand\AsyncCommand.cs" />
+    <Compile Include="Commands\NewAsyncCommand\CommandBase.cs" />
     <Compile Include="IPathResolver.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

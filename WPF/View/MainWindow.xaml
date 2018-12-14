@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:view="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:assembly="clr-namespace:ViewModel.MetadataViewModels;assembly=ViewModel"
+        xmlns:userControls="clr-namespace:WPF.UserControls"
         Title="MainWindow" Height="450" Width="800">
 
     <Border>
@@ -135,108 +136,9 @@
                             Style="{StaticResource ButtonStyle}" />
                 </Border>
 
-                <Grid Name="OpenPopup" Background="BlueViolet" Height="0" VerticalAlignment="Bottom" Grid.Row="3">
-                    <TextBlock Foreground="AliceBlue" Text="Opening in progress .." 
-                               FontSize="13" FontFamily="Arial" FontWeight="Bold"
-                               VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsOpening}" Value="True">
-                                    <DataTrigger.EnterActions>
-                                        <RemoveStoryboard BeginStoryboardName="OpenOpeningPopup" />
-                                        <RemoveStoryboard BeginStoryboardName="CloseOpeningPopup" />
-                                        <BeginStoryboard Name="OpenOpeningPopup">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="50" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                </DataTrigger>
-                                <DataTrigger  Binding="{Binding IsOpening}" Value="False">
-                                    <DataTrigger.EnterActions>
-                                        <RemoveStoryboard BeginStoryboardName="OpenOpeningPopup" />
-                                        <RemoveStoryboard BeginStoryboardName="CloseOpeningPopup" />
-                                        <BeginStoryboard Name="CloseOpeningPopup">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="0" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                </Grid>
-
-
-                <Grid Name="SavePopup" Background="DarkGreen" Height="0" VerticalAlignment="Bottom" Grid.Row="3">
-                    <TextBlock Foreground="AliceBlue" Text="Saving in progress .." 
-                               FontSize="13" FontFamily="Arial" FontWeight="Bold"
-                               VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSaving}" Value="True">
-                                    <DataTrigger.EnterActions>
-                                        <RemoveStoryboard BeginStoryboardName="OpenSavingPopup" />
-                                        <RemoveStoryboard BeginStoryboardName="CloseSavingPopup" />
-                                        <BeginStoryboard Name="OpenSavingPopup">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="50" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsSaving}" Value="False">
-                                    <DataTrigger.EnterActions>
-                                        <RemoveStoryboard BeginStoryboardName="OpenSavingPopup" />
-                                        <RemoveStoryboard BeginStoryboardName="CloseSavingPopup" />
-                                        <BeginStoryboard Name="CloseSavingPopup">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="0" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                </Grid>
-
-                <Grid Name="ReadPopup" Background="DodgerBlue" Height="0" VerticalAlignment="Bottom" Grid.Row="3">
-                    <TextBlock Foreground="AliceBlue" Text="Reading in progress .." 
-                               FontSize="13" FontFamily="Arial" FontWeight="Bold"
-                               VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsReading}" Value="True">
-                                    <DataTrigger.EnterActions>
-                                        <RemoveStoryboard BeginStoryboardName="OpenReadingPopup" />
-                                        <RemoveStoryboard BeginStoryboardName="CloseReadingPopup" />
-                                        <BeginStoryboard Name="OpenReadingPopup">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="50" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                </DataTrigger>
-                                <DataTrigger  Binding="{Binding IsReading}" Value="False">
-                                    <DataTrigger.EnterActions>
-                                        <RemoveStoryboard BeginStoryboardName="OpenReadingPopup" />
-                                        <RemoveStoryboard BeginStoryboardName="CloseReadingPopup" />
-                                        <BeginStoryboard Name="CloseReadingPopup">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="Height" To="0" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                </Grid>
+                <userControls:OpenPopup Grid.Row="3" />
+                <userControls:SavePopup Grid.Row="3" />
+                <userControls:ReadPopup Grid.Row="3" />
 
             </Grid>
         </Grid>

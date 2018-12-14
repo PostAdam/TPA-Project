@@ -11,7 +11,7 @@ using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
 using PropertyChanged;
-using ViewModel.Commands.AsyncCommand;
+using ViewModel.Commands.NewAsyncCommand;
 using ViewModel.MetadataViewModels;
 
 namespace ViewModel
