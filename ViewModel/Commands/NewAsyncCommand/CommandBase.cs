@@ -5,7 +5,7 @@ namespace ViewModel.Commands.NewAsyncCommand
 {
     public abstract class CommandBase : ICommand
     {
-        private readonly Func<bool> _canExecute;
+        protected readonly Func<bool> _canExecute;
 
         protected CommandBase() { }
 
@@ -14,7 +14,7 @@ namespace ViewModel.Commands.NewAsyncCommand
             _canExecute = canExecute ?? throw new ArgumentNullException( nameof( canExecute ) );
         }
 
-        public bool CanExecute( object parameter )
+        public virtual bool CanExecute( object parameter )
         {
             return _canExecute == null || _canExecute();
         }

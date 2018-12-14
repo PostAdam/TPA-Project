@@ -26,6 +26,11 @@ namespace ViewModel.Commands.NewAsyncCommand
             }
         }
 
+        public override bool CanExecute( object parameter )
+        {
+            return ( _canExecute == null || _canExecute() ) && !IsRunning;
+        }
+
         private ICommand _cancelCommand;
         public ICommand CancelCommand => _cancelCommand ?? ( _cancelCommand = new DelegateCommand( Cancel ) );
 
