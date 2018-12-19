@@ -8,10 +8,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
 using PropertyChanged;
+using ViewModel.Commands;
 using ViewModel.Commands.NewAsyncCommand;
 using ViewModel.MetadataViewModels;
 
@@ -34,8 +36,8 @@ namespace ViewModel
             ClickSave = new AsyncCommand( Save );
             ClickOpen = new AsyncCommand( Open );
             ClickRead = new AsyncCommand( Read );
-            ClickCancelSave = new AsyncCommand( CancelSave );
-            ClickCancelRead = new AsyncCommand( CancelRead );
+            ClickCancelSave = new DelegateCommand( CancelSave );
+            ClickCancelRead = new DelegateCommand( CancelRead );
         }
 
         private void LoadLogger()
@@ -126,8 +128,8 @@ namespace ViewModel
         public AsyncCommand ClickSave { get; }
         public AsyncCommand ClickOpen { get; }
         public AsyncCommand ClickRead { get; }
-        public AsyncCommand ClickCancelSave { get; }
-        public AsyncCommand ClickCancelRead { get; }
+        public ICommand ClickCancelSave { get; }
+        public ICommand ClickCancelRead { get; }
 
         #endregion
 
@@ -149,9 +151,10 @@ namespace ViewModel
                 SavingNotificationText = "Saving in progress ..";
                 IsSaving = true;
                 Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
-                //            string fileName = _pathResolver.SaveFilePath();
 
                 _cancellationTokenSource = new CancellationTokenSource();
+                // TODO: find solution to pass filepath
+                // string fileName = _pathResolver.SaveFilePath();
                 await Repository.Write( AssemblyMetadata, "Test.xml", _cancellationTokenSource.Token );
 
                 Logger?.WriteLine( _isSavingCancelled ? "Serializaton cancelled!" : "Serializaton completed!",
@@ -180,12 +183,11 @@ namespace ViewModel
         {
             IsReading = true;
             ReadingNotificationText = "Reading in progress ..";
-
-            // TODO: find solution
-            //            string fileName = _pathResolver.ReadFilePath();
             Logger?.WriteLine( "Reading model", LogLevel.Information.ToString() );
 
             _cancellationTokenSource = new CancellationTokenSource();
+            // TODO: find solution to pass filepath
+            // string fileName = _pathResolver.ReadFilePath();
             await ReadFromFile( "ViewModel.xml", _cancellationTokenSource );
 
             Logger?.WriteLine( _isReadingCancelled ? "Cancelled reading model!" : "Finished reading model!",
@@ -195,40 +197,37 @@ namespace ViewModel
             _isReadingCancelled = false;
         }
 
-        private async Task CancelSave()
+        private void CancelSave()
         {
-            await Task.Run( () => ReadingNotificationText = "Cancelling saving .." );
+            if ( _isSavingCancelled ) return;
 
             try
             {
-                
-                await Task.Run( () => _cancellationTokenSource.Cancel() );
+                _isSavingCancelled = true;
+                SavingNotificationText = "Cancelling saving ..";
+                _cancellationTokenSource.Cancel();
             }
             catch ( AggregateException e )
             {
-                Console.WriteLine( e.Flatten() );
-            }
-            finally
-            {
-                await Task.Run( () => _isSavingCancelled = true );
+                Logger?.WriteLine( "Cancelling saving model, exception message: " + e.Flatten(),
+                    LogLevel.Information.ToString() );
             }
         }
 
-        private async Task CancelRead()
+        private void CancelRead()
         {
-            await Task.Run( () => SavingNotificationText = "Cancelling reading .." );
+            if ( _isReadingCancelled ) return;
 
             try
             {
-                await Task.Run( () => _cancellationTokenSource.Cancel() );
+                _isReadingCancelled = true;
+                ReadingNotificationText = "Cancelling reading ..";
+                _cancellationTokenSource.Cancel();
             }
             catch ( AggregateException e )
             {
-                Console.WriteLine( e.Flatten() );
-            }
-            finally
-            {
-                await Task.Run( () => _isReadingCancelled = true );
+                Logger?.WriteLine( "Cancelling reading model, exception message: " + e.Flatten(),
+                    LogLevel.Information.ToString() );
             }
         }
 
