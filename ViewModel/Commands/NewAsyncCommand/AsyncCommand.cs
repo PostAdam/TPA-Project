@@ -69,16 +69,6 @@ namespace ViewModel.Commands.NewAsyncCommand
             }
         }
 
-        private async Task ListenCancellation( CancellationToken tokenSourceToken )
-        {
-            while ( !tokenSourceToken.IsCancellationRequested )
-            {
-                await Task.Delay( TimeSpan.FromMilliseconds( 100 ), tokenSourceToken );
-            }
-
-            tokenSourceToken.ThrowIfCancellationRequested();
-        }
-
         public async Task Execute()
         {
             await Task.Run( () => Execute( new object() ) );

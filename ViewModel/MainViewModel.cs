@@ -8,12 +8,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
 using PropertyChanged;
-using ViewModel.Commands;
 using ViewModel.Commands.NewAsyncCommand;
 using ViewModel.MetadataViewModels;
 
@@ -36,8 +34,8 @@ namespace ViewModel
             ClickSave = new AsyncCommand( Save );
             ClickOpen = new AsyncCommand( Open );
             ClickRead = new AsyncCommand( Read );
-            ClickCancelSave = new DelegateCommand( CancelSave );
-            ClickCancelRead = new DelegateCommand( CancelRead );
+            ClickCancelSave = new AsyncCommand( CancelSave );
+            ClickCancelRead = new AsyncCommand( CancelRead );
         }
 
         private void LoadLogger()
@@ -120,13 +118,16 @@ namespace ViewModel
         public bool IsSaving { get; set; }
         public bool IsReading { get; set; }
 
+        public string SavingNotificationText { get; set; }
+        public string ReadingNotificationText { get; set; }
+
         #region Commands
 
         public AsyncCommand ClickSave { get; }
         public AsyncCommand ClickOpen { get; }
         public AsyncCommand ClickRead { get; }
-        public ICommand ClickCancelSave { get; }
-        public ICommand ClickCancelRead { get; }
+        public AsyncCommand ClickCancelSave { get; }
+        public AsyncCommand ClickCancelRead { get; }
 
         #endregion
 
@@ -145,6 +146,7 @@ namespace ViewModel
         {
             if ( AssemblyMetadata != null )
             {
+                SavingNotificationText = "Saving in progress ..";
                 IsSaving = true;
                 Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
                 //            string fileName = _pathResolver.SaveFilePath();
@@ -177,6 +179,7 @@ namespace ViewModel
         private async Task Read()
         {
             IsReading = true;
+            ReadingNotificationText = "Reading in progress ..";
 
             // TODO: find solution
             //            string fileName = _pathResolver.ReadFilePath();
@@ -192,11 +195,14 @@ namespace ViewModel
             _isReadingCancelled = false;
         }
 
-        private void CancelSave()
+        private async Task CancelSave()
         {
+            await Task.Run( () => ReadingNotificationText = "Cancelling saving .." );
+
             try
             {
-                _cancellationTokenSource.Cancel();
+                
+                await Task.Run( () => _cancellationTokenSource.Cancel() );
             }
             catch ( AggregateException e )
             {
@@ -204,15 +210,17 @@ namespace ViewModel
             }
             finally
             {
-                _isSavingCancelled = true;
+                await Task.Run( () => _isSavingCancelled = true );
             }
         }
 
-        private void CancelRead()
+        private async Task CancelRead()
         {
+            await Task.Run( () => SavingNotificationText = "Cancelling reading .." );
+
             try
             {
-                _cancellationTokenSource.Cancel();
+                await Task.Run( () => _cancellationTokenSource.Cancel() );
             }
             catch ( AggregateException e )
             {
@@ -220,7 +228,7 @@ namespace ViewModel
             }
             finally
             {
-                _isReadingCancelled = true;
+                await Task.Run( () => _isReadingCancelled = true );
             }
         }
 
@@ -265,7 +273,6 @@ namespace ViewModel
 
             Logger?.WriteLine( "TreeView initialized!", LogLevel.Information.ToString() );
         }
-
 
         internal async Task LoadDll( string path )
         {

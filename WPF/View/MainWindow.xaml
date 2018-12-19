@@ -136,11 +136,6 @@
                             Style="{StaticResource ButtonStyle}" />
                 </Border>
 
-                <Button Grid.Row="3" Height="50" VerticalAlignment="Top" 
-                        Background="MediumVioletRed" Foreground="AntiqueWhite" 
-                        Content="Cancel read" FontSize="20"
-                        Command="{Binding ClickCancelRead}"/>
-
                 <userControls:OpenPopup Grid.Row="3" />
                 <userControls:SavePopup Grid.Row="3" />
                 <userControls:ReadPopup Grid.Row="3" />
