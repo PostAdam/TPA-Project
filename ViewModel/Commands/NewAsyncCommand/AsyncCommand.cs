@@ -51,34 +51,6 @@ namespace ViewModel.Commands.NewAsyncCommand
 
         public override async void Execute( object parameter )
         {
-            #region comment
-
-            /*IsRunning = true;
-            _cancellationTokenSource = new CancellationTokenSource();
-            CancellationToken token = _cancellationTokenSource.Token;
-
-            try
-            {
-                using ( token.Register( token.ThrowIfCancellationRequested ) )
-                {
-                    await ExecuteAsync( token );
-//                    await Task.Run( () => ExecuteAsync( token ), token );
-                }
-            }
-            catch ( AggregateException )
-            {
-            }
-            catch ( TaskCanceledException )
-            {
-            }
-            catch ( OperationCanceledException )
-            {
-            }
-            finally
-            {
-                _cancellationTokenSource = null;
-                IsRunning = false;
-            }*/
 
             IsRunning = true;
             try
@@ -90,47 +62,11 @@ namespace ViewModel.Commands.NewAsyncCommand
                     await ExecuteAsync( tokenSource.Token );
                 }
             }
-            catch ( TaskCanceledException )
-            {
-            }
-            catch ( OperationCanceledException )
-            {
-            }
             finally
             {
                 _cancellationTokenSource = null;
                 IsRunning = false;
             }
-
-            #endregion
-
-            /*IsRunning = true;
-            try
-            {
-                using ( var tokenSource = new CancellationTokenSource() )
-                {
-                    _cancellationTokenSource = tokenSource;
-                    Task executeTask = ExecuteAsync( tokenSource.Token );
-                    Task cancellationTask = ListenCancellation( tokenSource.Token );
-                    await Task.Run( () => Task.WhenAny( executeTask, cancellationTask ), _cancellationTokenSource.Token );
-                    tokenSource.Cancel();
-
-                    if ( cancellationTask.Status == TaskStatus.Canceled )
-                    {
-                        throw new OperationCanceledException();
-                    }
-
-                    //                    await ExecuteAsync( tokenSource.Token );
-                }
-            }
-            catch ( OperationCanceledException )
-            {
-            }
-            finally
-            {
-                _cancellationTokenSource = null;
-                IsRunning = false;
-            }*/
         }
 
         private async Task ListenCancellation( CancellationToken tokenSourceToken )

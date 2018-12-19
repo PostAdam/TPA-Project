@@ -21,30 +21,25 @@ namespace DataBaseRepository
             await Task.Run( () => WriteData( metadata, fileName, cancellationToken ), cancellationToken );
         }
 
-        public async Task<object> Read( string fileName )
+        public async Task<object> Read( string fileName, CancellationToken cancellationToken )
         {
-            return await ReadData( fileName );
+            return await ReadData( fileName, cancellationToken );
         }
 
         #region Privates
 
+        private AssemblyMetadataSurrogate _assemblyMetadataSurrogate;
+        private AssemblyMetadata _assemblyMetadata;
+
         private async Task WriteData( object metadata, string fileName, CancellationToken cancellationToken )
         {
+            ClearAssemblyMetadatas();
+
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
                 try
                 {
-                    AssemblyMetadataSurrogate assemblyMetadataSurrogate = null;
-
-                    IEnumerable<Func<CancellationToken, Task>> tasks = new List<Func<CancellationToken, Task>>()
-                    {
-                        ct => Task.Run(
-                            () => assemblyMetadataSurrogate =
-                                new AssemblyMetadataSurrogate( metadata as AssemblyMetadata ), ct ),
-                        ct => Task.Run( () => dbContext.AssemblyModels.Add( assemblyMetadataSurrogate ), ct ),
-                        ct => dbContext.SaveChangesAsync( ct )
-                    };
-
+                    IEnumerable<Func<CancellationToken, Task>> tasks = PrepareTasksForSaving( dbContext, metadata );
                     foreach ( Func<CancellationToken, Task> task in tasks )
                     {
                         await task( cancellationToken );
@@ -63,16 +58,33 @@ namespace DataBaseRepository
             }
         }
 
-        private async Task<object> ReadData( string fileName )
+        private async Task<object> ReadData( string fileName, CancellationToken cancellationToken )
         {
+            ClearAssemblyMetadatas();
+
             using ( ReflectorDbContext dbContext = new ReflectorDbContext() )
             {
-                await Task.Run( () => IncludeRelatedModelsObjects( dbContext ) );
-                AssemblyMetadataSurrogate assemblyMetadataSurrogate =
-                    await dbContext.AssemblyModels.Include( a => a.Namespaces ).FirstOrDefaultAsync();
-
-                return await Task.Run( () => assemblyMetadataSurrogate?.GetOriginalAssemblyMetadata() );
+                try
+                {
+                    IEnumerable<Func<CancellationToken, Task>> tasks =
+                        PrepareTasksForReading( dbContext );
+                    foreach ( Func<CancellationToken, Task> task in tasks )
+                    {
+                        await task( cancellationToken );
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+                }
+                catch ( OperationCanceledException e )
+                {
+                    Console.WriteLine( e );
+                }
+                catch ( Exception e )
+                {
+                    Console.WriteLine( e );
+                }
             }
+
+            return _assemblyMetadata;
         }
 
         private void IncludeRelatedModelsObjects( ReflectorDbContext dbContext )
@@ -126,6 +138,37 @@ namespace DataBaseRepository
                 .Include( e => e.RemoveMethodMetadata )
                 .Include( e => e.EventAttributes )
                 .Load();
+        }
+
+        private IEnumerable<Func<CancellationToken, Task>> PrepareTasksForReading( ReflectorDbContext dbContext )
+        {
+            return new List<Func<CancellationToken, Task>>()
+            {
+                ct => Task.Run( () => IncludeRelatedModelsObjects( dbContext ), ct ),
+                async ct => _assemblyMetadataSurrogate = await dbContext.AssemblyModels
+                    .Include( a => a.Namespaces ).FirstOrDefaultAsync( ct ),
+                ct => Task.Run(
+                    () => _assemblyMetadata = _assemblyMetadataSurrogate?.GetOriginalAssemblyMetadata(), ct )
+            };
+        }
+
+        private IEnumerable<Func<CancellationToken, Task>> PrepareTasksForSaving( ReflectorDbContext dbContext,
+            object metadata )
+        {
+            return new List<Func<CancellationToken, Task>>()
+            {
+                ct => Task.Run(
+                    () => _assemblyMetadataSurrogate =
+                        new AssemblyMetadataSurrogate( metadata as AssemblyMetadata ), ct ),
+                ct => Task.Run( () => dbContext.AssemblyModels.Add( _assemblyMetadataSurrogate ), ct ),
+                dbContext.SaveChangesAsync
+            };
+        }
+
+        private void ClearAssemblyMetadatas()
+        {
+            _assemblyMetadata = null;
+            _assemblyMetadataSurrogate = null;
         }
 
         #endregion

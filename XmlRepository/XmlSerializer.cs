@@ -15,12 +15,12 @@ namespace XmlRepository
     {
         public async Task Write( object metadata, string fileName, CancellationToken cancellationToken )
         {
-            await Task.Run( () => WriteData( metadata, fileName ) );
+            await Task.Run( () => WriteData( metadata, fileName ), cancellationToken );
         }
 
-        public async Task<object> Read( string fileName )
+        public async Task<object> Read( string fileName, CancellationToken cancellationToken )
         {
-            return await Task.Run( () => ReadData( fileName ) );
+            return await Task.Run( () => ReadData( fileName ), cancellationToken );
         }
 
         #region Privates

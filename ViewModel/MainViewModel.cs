@@ -156,6 +156,7 @@ namespace ViewModel
                     LogLevel.Information.ToString() );
 
                 IsSaving = false;
+                _isSavingCancelled = false;
             }
         }
 
@@ -181,12 +182,14 @@ namespace ViewModel
             //            string fileName = _pathResolver.ReadFilePath();
             Logger?.WriteLine( "Reading model", LogLevel.Information.ToString() );
 
-            await ReadFromFile( "ViewModel" );
+            _cancellationTokenSource = new CancellationTokenSource();
+            await ReadFromFile( "ViewModel.xml", _cancellationTokenSource );
 
-            Logger?.WriteLine( _isSavingCancelled ? "Cancelled reading model!" : "Finished reading model!",
+            Logger?.WriteLine( _isReadingCancelled ? "Cancelled reading model!" : "Finished reading model!",
                 LogLevel.Information.ToString() );
 
             IsReading = false;
+            _isReadingCancelled = false;
         }
 
         private void CancelSave()
@@ -209,7 +212,7 @@ namespace ViewModel
         {
             try
             {
-                ClickRead.Cancel();
+                _cancellationTokenSource.Cancel();
             }
             catch ( AggregateException e )
             {
@@ -225,15 +228,14 @@ namespace ViewModel
 
         #region Help Methods
 
-        private async Task ReadFromFile( string filename )
+        private async Task ReadFromFile( string filename, CancellationTokenSource cancellationToken )
         {
-            Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
-
-            AssemblyMetadata = await Repository.Read( filename ) as AssemblyMetadata;
-            AddClassesToDirectory( AssemblyMetadata );
-            InitTreeView( AssemblyMetadata );
-
-            Logger?.WriteLine( "File " + filename + " deserialized successfully.", LogLevel.Trace.ToString() );
+            AssemblyMetadata = await Repository.Read( filename, cancellationToken.Token ) as AssemblyMetadata;
+            if ( AssemblyMetadata != null )
+            {
+                AddClassesToDirectory( AssemblyMetadata );
+                InitTreeView( AssemblyMetadata );
+            }
         }
 
         internal void AddClassesToDirectory( AssemblyMetadata assemblyMetadata )
