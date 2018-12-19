@@ -190,8 +190,12 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
+        #region Private Fields
+
         private static readonly ReproducedSurrogateTypes ReproducedSurrogateTypes = ReproducedSurrogateTypes.Instance;
-        private static readonly ReproducedOriginalTypes ReproducedOriginalTypes = ReproducedOriginalTypes.Instance;
+        private static readonly ReproducedOriginalTypes ReproducedOriginalTypes = ReproducedOriginalTypes.Instance; 
+
+        #endregion
 
         #region Help Methods
 

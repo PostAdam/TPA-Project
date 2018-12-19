@@ -6,11 +6,14 @@ using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
 using PropertyChanged;
+using ViewModel.Commands;
 using ViewModel.Commands.NewAsyncCommand;
 using ViewModel.MetadataViewModels;
 
@@ -33,6 +36,8 @@ namespace ViewModel
             ClickSave = new AsyncCommand( Save );
             ClickOpen = new AsyncCommand( Open );
             ClickRead = new AsyncCommand( Read );
+            ClickCancelSave = new DelegateCommand( CancelSave );
+            ClickCancelRead = new DelegateCommand( CancelRead );
         }
 
         private void LoadLogger()
@@ -120,6 +125,8 @@ namespace ViewModel
         public AsyncCommand ClickSave { get; }
         public AsyncCommand ClickOpen { get; }
         public AsyncCommand ClickRead { get; }
+        public ICommand ClickCancelSave { get; }
+        public ICommand ClickCancelRead { get; }
 
         #endregion
 
@@ -127,6 +134,10 @@ namespace ViewModel
 
         internal AssemblyMetadata AssemblyMetadata;
         private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
+        private CancellationTokenSource _cancellationTokenSource;
+
+        private bool _isSavingCancelled;
+        private bool _isReadingCancelled;
 
         #region Command Methods
 
@@ -135,11 +146,14 @@ namespace ViewModel
             if ( AssemblyMetadata != null )
             {
                 IsSaving = true;
-
                 Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
                 //            string fileName = _pathResolver.SaveFilePath();
-                await Repository.Write( AssemblyMetadata, "Test.xml" );
-                Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
+
+                _cancellationTokenSource = new CancellationTokenSource();
+                await Repository.Write( AssemblyMetadata, "Test.xml", _cancellationTokenSource.Token );
+
+                Logger?.WriteLine( _isSavingCancelled ? "Serializaton cancelled!" : "Serializaton completed!",
+                    LogLevel.Information.ToString() );
 
                 IsSaving = false;
             }
@@ -164,10 +178,47 @@ namespace ViewModel
             IsReading = true;
 
             // TODO: find solution
-//            string fileName = _pathResolver.ReadFilePath();
+            //            string fileName = _pathResolver.ReadFilePath();
+            Logger?.WriteLine( "Reading model", LogLevel.Information.ToString() );
+
             await ReadFromFile( "ViewModel" );
 
+            Logger?.WriteLine( _isSavingCancelled ? "Cancelled reading model!" : "Finished reading model!",
+                LogLevel.Information.ToString() );
+
             IsReading = false;
+        }
+
+        private void CancelSave()
+        {
+            try
+            {
+                _cancellationTokenSource.Cancel();
+            }
+            catch ( AggregateException e )
+            {
+                Console.WriteLine( e.Flatten() );
+            }
+            finally
+            {
+                _isSavingCancelled = true;
+            }
+        }
+
+        private void CancelRead()
+        {
+            try
+            {
+                ClickRead.Cancel();
+            }
+            catch ( AggregateException e )
+            {
+                Console.WriteLine( e.Flatten() );
+            }
+            finally
+            {
+                _isReadingCancelled = true;
+            }
         }
 
         #endregion

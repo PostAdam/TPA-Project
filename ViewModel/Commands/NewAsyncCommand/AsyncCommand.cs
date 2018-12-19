@@ -44,13 +44,42 @@ namespace ViewModel.Commands.NewAsyncCommand
             _action = action ?? throw new ArgumentNullException( nameof( action ) );
         }
 
-        private void Cancel()
+        public void Cancel()
         {
             _cancellationTokenSource?.Cancel();
         }
 
         public override async void Execute( object parameter )
         {
+            #region comment
+
+            /*IsRunning = true;
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken token = _cancellationTokenSource.Token;
+
+            try
+            {
+                using ( token.Register( token.ThrowIfCancellationRequested ) )
+                {
+                    await ExecuteAsync( token );
+//                    await Task.Run( () => ExecuteAsync( token ), token );
+                }
+            }
+            catch ( AggregateException )
+            {
+            }
+            catch ( TaskCanceledException )
+            {
+            }
+            catch ( OperationCanceledException )
+            {
+            }
+            finally
+            {
+                _cancellationTokenSource = null;
+                IsRunning = false;
+            }*/
+
             IsRunning = true;
             try
             {
@@ -61,21 +90,67 @@ namespace ViewModel.Commands.NewAsyncCommand
                     await ExecuteAsync( tokenSource.Token );
                 }
             }
+            catch ( TaskCanceledException )
+            {
+            }
+            catch ( OperationCanceledException )
+            {
+            }
             finally
             {
                 _cancellationTokenSource = null;
                 IsRunning = false;
             }
+
+            #endregion
+
+            /*IsRunning = true;
+            try
+            {
+                using ( var tokenSource = new CancellationTokenSource() )
+                {
+                    _cancellationTokenSource = tokenSource;
+                    Task executeTask = ExecuteAsync( tokenSource.Token );
+                    Task cancellationTask = ListenCancellation( tokenSource.Token );
+                    await Task.Run( () => Task.WhenAny( executeTask, cancellationTask ), _cancellationTokenSource.Token );
+                    tokenSource.Cancel();
+
+                    if ( cancellationTask.Status == TaskStatus.Canceled )
+                    {
+                        throw new OperationCanceledException();
+                    }
+
+                    //                    await ExecuteAsync( tokenSource.Token );
+                }
+            }
+            catch ( OperationCanceledException )
+            {
+            }
+            finally
+            {
+                _cancellationTokenSource = null;
+                IsRunning = false;
+            }*/
+        }
+
+        private async Task ListenCancellation( CancellationToken tokenSourceToken )
+        {
+            while ( !tokenSourceToken.IsCancellationRequested )
+            {
+                await Task.Delay( TimeSpan.FromMilliseconds( 100 ), tokenSourceToken );
+            }
+
+            tokenSourceToken.ThrowIfCancellationRequested();
         }
 
         public async Task Execute()
         {
-           await Task.Run( () => Execute( new object() ) );
+            await Task.Run( () => Execute( new object() ) );
         }
 
         private Task ExecuteAsync( CancellationToken cancellationToken )
         {
-            return _action();
+            return Task.Run( () => _action(), cancellationToken );
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
