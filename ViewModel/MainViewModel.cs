@@ -13,6 +13,7 @@ using MEFDefinitions;
 using Model.ModelDTG;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
+using ModelBase;
 using PropertyChanged;
 using ViewModel.Commands;
 using ViewModel.Commands.NewAsyncCommand;
@@ -189,8 +190,8 @@ namespace ViewModel
             Logger?.WriteLine( "Reading model.", LogLevel.Information.ToString() );
 
             // TODO: find solution to pass filepath
-            // string fileName = _pathResolver.ReadFilePath();
-            await ReadFromFile( "ViewModel.xml", _cancellationTokenSource );
+            string fileName = _pathResolver.ReadFilePath();
+            await ReadFromFile( fileName, _cancellationTokenSource );
 
             Logger?.WriteLine( _isReadingCancelled ? "Cancelled reading model!" : "Finished reading model!",
                 LogLevel.Information.ToString() );
@@ -239,7 +240,8 @@ namespace ViewModel
 
         private async Task ReadFromFile( string filename, CancellationTokenSource cancellationToken )
         {
-            AssemblyMetadata = await Repository.Read( filename, cancellationToken.Token ) as AssemblyMetadata;
+            var temp = await Repository.Read( filename, cancellationToken.Token ) as AssemblyMetadataBase;
+            AssemblyMetadata = new AssemblyMetadata( temp );
             if ( AssemblyMetadata != null )
             {
                 AddClassesToDirectory( AssemblyMetadata );
