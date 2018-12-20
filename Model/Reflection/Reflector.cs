@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using Model.Reflection.MetadataModels;
+using Model.ModelDTG;
 
 namespace Model.Reflection
 {

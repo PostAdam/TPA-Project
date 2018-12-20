@@ -92,6 +92,10 @@
       <Project>{130FE00A-39E7-4462-A52A-5614B4F5CF74}</Project>
       <Name>MEFDefinitions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ModelBase\ModelBase.csproj">
+      <Project>{ba4faea1-9076-460b-8795-dc60955042b0}</Project>
+      <Name>ModelBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{5959593d-9565-46cd-be35-983e93145117}</Project>
       <Name>Model</Name>

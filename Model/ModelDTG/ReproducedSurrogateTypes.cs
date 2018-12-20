@@ -2,7 +2,7 @@
 
 namespace Model.ModelDTG
 {
-    public class ReproducedSurrogateTypes : Dictionary<string, TypeMetadataSurrogate>
+    public class ReproducedSurrogateTypes : Dictionary<string, TypeMetadata>
     {
         private static ReproducedSurrogateTypes _reproducedSurrogateTypes = null;
 

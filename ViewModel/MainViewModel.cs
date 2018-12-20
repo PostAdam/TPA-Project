@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
+using Model.ModelDTG;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
 using PropertyChanged;

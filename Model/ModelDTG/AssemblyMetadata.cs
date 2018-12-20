@@ -1,17 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Model.Reflection;
 using ModelBase;
 using static Model.ModelDTG.Accessors.CollectionTypeAccessor;
 
 namespace Model.ModelDTG
 {
-    public class AssemblyMetadataSurrogate
+    public class AssemblyMetadata
     {
         #region Constructor
 
-        public AssemblyMetadataSurrogate( AssemblyMetadataBase assemblyMetadata )
+        public AssemblyMetadata( AssemblyMetadataBase assemblyMetadata )
         {
             Name = assemblyMetadata.Name;
             Namespaces = GetNamespacesMetadata( assemblyMetadata.Namespaces );
+        }
+
+        public AssemblyMetadata()
+        {
+        }
+
+        internal AssemblyMetadata( Assembly assembly )
+        {
+            Name = assembly.ManifestModule.Name;
+            Namespaces = from Type _type in assembly.GetTypes()
+                group _type by _type.GetNamespace()
+                into _group
+                orderby _group.Key
+                select new NamespaceMetadata( _group.Key, _group );
         }
 
         #endregion
@@ -20,7 +38,7 @@ namespace Model.ModelDTG
 
         public string Name { get; set; }
 
-        public IEnumerable<NamespaceMetadataSurrogate> Namespaces { get; set; }
+        public IEnumerable<NamespaceMetadata> Namespaces { get; set; }
 
         #endregion
 
@@ -36,7 +54,7 @@ namespace Model.ModelDTG
         private IEnumerable<NamespaceMetadataBase> GetNameSpaces()
         {
             List<NamespaceMetadataBase> namespaces = new List<NamespaceMetadataBase>();
-            foreach ( NamespaceMetadataSurrogate namespaceMetadata in Namespaces )
+            foreach ( NamespaceMetadata namespaceMetadata in Namespaces )
             {
                 namespaces.Add( namespaceMetadata.GetOriginalNamespaceMetadata() );
             }

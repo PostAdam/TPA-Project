@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Model.Reflection.MetadataModels;
+using Model.ModelDTG;
 
 namespace ViewModel.MetadataViewModels
 {

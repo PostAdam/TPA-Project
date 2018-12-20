@@ -62,18 +62,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModelDTG\AssemblyMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\AssemblyMetadata.cs" />
     <Compile Include="ModelDTG\Accessors\CollectionOriginalTypeAccessor.cs" />
     <Compile Include="ModelDTG\Accessors\CollectionSurrogateTypeAccessor.cs" />
-    <Compile Include="ModelDTG\EventMetadataSurrogate.cs" />
-    <Compile Include="ModelDTG\FieldMetadataSurrogate.cs" />
-    <Compile Include="ModelDTG\MethodMetadataSurrogate.cs" />
-    <Compile Include="ModelDTG\NamespaceMetadataSurrogate.cs" />
-    <Compile Include="ModelDTG\ParameterMetadataSurrogate.cs" />
-    <Compile Include="ModelDTG\PropertyMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\EventMetadata.cs" />
+    <Compile Include="ModelDTG\FieldMetadata.cs" />
+    <Compile Include="ModelDTG\MethodMetadata.cs" />
+    <Compile Include="ModelDTG\NamespaceMetadata.cs" />
+    <Compile Include="ModelDTG\ParameterMetadata.cs" />
+    <Compile Include="ModelDTG\PropertyMetadata.cs" />
     <Compile Include="ModelDTG\ReproducedOriginalTypes.cs" />
     <Compile Include="ModelDTG\ReproducedSurrogateTypes.cs" />
-    <Compile Include="ModelDTG\TypeMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\TypeMetadata.cs" />
     <Compile Include="Reflection\Enums\AbstractEnum.cs" />
     <Compile Include="Reflection\Enums\AccessLevel.cs" />
     <Compile Include="Reflection\Enums\ParameterKindEnum.cs" />
@@ -87,14 +87,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Reflection\ExtensionMethods.cs" />
-    <Compile Include="Reflection\MetadataModels\AssemblyMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\EventMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\FieldMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\MethodMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\NamespaceMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\ParameterMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\PropertyMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\TypeMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\FieldReflector.cs" />
+    <Compile Include="Reflection\MetadataModels\MethodReflector.cs" />
+    <Compile Include="Reflection\MetadataModels\ParameterReflector.cs" />
+    <Compile Include="Reflection\MetadataModels\PropertyReflector.cs" />
+    <Compile Include="Reflection\MetadataModels\TypeReflector.cs" />
     <Compile Include="Reflection\ReflectedTypes.cs" />
     <Compile Include="Reflection\Reflector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

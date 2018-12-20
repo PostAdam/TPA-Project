@@ -6,35 +6,35 @@ namespace Model.ModelDTG.Accessors
 {
     public static class CollectionOriginalTypeAccessor
     {
-        public static IEnumerable<FieldMetadataBase> GetOriginalFieldsMetadata( IEnumerable<FieldMetadataSurrogate> fields )
+        public static IEnumerable<FieldMetadataBase> GetOriginalFieldsMetadata( IEnumerable<FieldMetadata> fields )
         {
             return fields?.Select( f => f.GetOriginalFieldMetadata() );
         }
 
-        public static IEnumerable<TypeMetadataBase> GetOriginalTypesMetadata( IEnumerable<TypeMetadataSurrogate> types )
+        public static IEnumerable<TypeMetadataBase> GetOriginalTypesMetadata( IEnumerable<TypeMetadata> types )
         {
             return types?.Select( t => t.EmitOriginalTypeMetadata() );
         }
 
         public static IEnumerable<PropertyMetadataBase> GetOriginalPropertiesMetadata(
-            IEnumerable<PropertyMetadataSurrogate> properties )
+            IEnumerable<PropertyMetadata> properties )
         {
             return properties?.Select( p => p.GetOriginalPropertyMetadata() );
         }
 
         public static IEnumerable<MethodMetadataBase> GetOriginalMethodsMetadata(
-            IEnumerable<MethodMetadataSurrogate> methods )
+            IEnumerable<MethodMetadata> methods )
         {
             return methods?.Select( m => m.GetOriginalMethodMetadata() );
         }
 
-        public static IEnumerable<EventMetadataBase> GetOriginalEventsMetadata( IEnumerable<EventMetadataSurrogate> events )
+        public static IEnumerable<EventMetadataBase> GetOriginalEventsMetadata( IEnumerable<EventMetadata> events )
         {
             return events?.Select( e => e.GetOriginalEventMetadata() );
         }
 
         public static IEnumerable<ParameterMetadataBase> GetOriginalParametersMetadata(
-            IEnumerable<ParameterMetadataSurrogate> parameters )
+            IEnumerable<ParameterMetadata> parameters )
         {
             return parameters?.Select( p => p.GetOriginalParameterMetadata() );
         }

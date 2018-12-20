@@ -1,27 +1,42 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
+using Model.Reflection.MetadataModels;
 using ModelBase;
 using static Model.ModelDTG.Accessors.CollectionOriginalTypeAccessor;
 using static Model.ModelDTG.Accessors.CollectionTypeAccessor;
 
 namespace Model.ModelDTG
 {
-    public class EventMetadataSurrogate
+    public class EventMetadata
     {
         #region Constructor
+        public EventMetadata()
+        { }
 
-        public EventMetadataSurrogate(EventMetadataBase eventMetadata)
+        internal EventMetadata( EventInfo eventInfo )
+        {
+            Name = eventInfo.Name;
+            TypeMetadata = TypeReflector.EmitType( eventInfo.EventHandlerType );
+            EventAttributes = TypeReflector.EmitAttributes( eventInfo.GetCustomAttributes() );
+            AddMethodMetadata = MethodMetadata.EmitMethod( eventInfo.AddMethod );
+            RaiseMethodMetadata = MethodMetadata.EmitMethod( eventInfo.RaiseMethod );
+            RemoveMethodMetadata = MethodMetadata.EmitMethod( eventInfo.RemoveMethod );
+            Multicast = eventInfo.IsMulticast;
+        }
+
+        public EventMetadata(EventMetadataBase eventMetadata)
         {
             Name = Name;
-            TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata(eventMetadata.TypeMetadata);
+            TypeMetadata = ModelDTG.TypeMetadata.EmitSurrogateTypeMetadata(eventMetadata.TypeMetadata);
             AddMethodMetadata = eventMetadata.AddMethodMetadata == null
                 ? null
-                : new MethodMetadataSurrogate(eventMetadata.AddMethodMetadata);
+                : new MethodMetadata(eventMetadata.AddMethodMetadata);
             RaiseMethodMetadata = eventMetadata.RaiseMethodMetadata == null
                 ? null
-                : new MethodMetadataSurrogate(eventMetadata.RaiseMethodMetadata);
+                : new MethodMetadata(eventMetadata.RaiseMethodMetadata);
             RemoveMethodMetadata = eventMetadata.RemoveMethodMetadata == null
                 ? null
-                : new MethodMetadataSurrogate(eventMetadata.RemoveMethodMetadata);
+                : new MethodMetadata(eventMetadata.RemoveMethodMetadata);
             Multicast = eventMetadata.Multicast;
             EventAttributes = GetTypesMetadata(eventMetadata.EventAttributes);
         }
@@ -32,17 +47,17 @@ namespace Model.ModelDTG
 
         public string Name { get; set; }
 
-        public TypeMetadataSurrogate TypeMetadata { get; set; }
+        public TypeMetadata TypeMetadata { get; set; }
 
-        public MethodMetadataSurrogate AddMethodMetadata { get; set; }
+        public MethodMetadata AddMethodMetadata { get; set; }
 
-        public MethodMetadataSurrogate RaiseMethodMetadata { get; set; }
+        public MethodMetadata RaiseMethodMetadata { get; set; }
 
-        public MethodMetadataSurrogate RemoveMethodMetadata { get; set; }
+        public MethodMetadata RemoveMethodMetadata { get; set; }
 
         public bool Multicast { get; set; }
 
-        public IEnumerable<TypeMetadataSurrogate> EventAttributes { get; set; }
+        public IEnumerable<TypeMetadata> EventAttributes { get; set; }
 
         #endregion
 

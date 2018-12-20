@@ -1,17 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Model.Reflection.MetadataModels;
 using ModelBase;
-using ModelBase.Enums;
+using Model.Reflection.Enums;
 using static Model.ModelDTG.Accessors.CollectionOriginalTypeAccessor;
 using static Model.ModelDTG.Accessors.CollectionTypeAccessor;
 
 namespace Model.ModelDTG
 {
-    public class TypeMetadataSurrogate
+    public class TypeMetadata
     {
         #region Constructors
 
-        public TypeMetadataSurrogate(TypeMetadataBase typeMetadata)
+        public TypeMetadata()
+        {
+        }
+
+        internal TypeMetadata(Type type)
+        {
+            // Infos
+            TypeName = type.Name;
+            NamespaceName = type.Namespace;
+            FullName = type.FullName ?? type.Namespace + "." + type.Name;
+            Modifiers = TypeReflector.EmitModifiers(type);
+            TypeKind = TypeReflector.GetTypeKind(type);
+
+            // Types
+            BaseType = TypeReflector.EmitExtends(type.GetTypeInfo().BaseType);
+            ImplementedInterfaces = TypeReflector.EmitTypes(type.GetInterfaces());
+            DeclaringType = TypeReflector.EmitType(type.DeclaringType);
+            NestedTypes = TypeReflector.EmitTypes(type.GetNestedTypes(AllAccessLevels));
+            Attributes = TypeReflector.EmitAttributes(type.GetCustomAttributes(false).Cast<Attribute>());
+            Fields = TypeReflector.EmitFields(type.GetFields(AllAccessLevels));
+            Events = TypeReflector.EmitEvents(type.GetEvents(AllAccessLevels));
+            GenericArguments = type.IsGenericTypeDefinition
+                ? TypeReflector.EmitGenericArguments(type.GetGenericArguments())
+                : null;
+            Properties = TypeReflector.EmitProperties(type.GetProperties(AllAccessLevels));
+
+            // Methods
+            Constructors = MethodMetadata.EmitMethods(type.GetConstructors(AllAccessLevels));
+            Methods = MethodMetadata.EmitMethods(type.GetMethods(AllAccessLevels));
+        }
+
+        public TypeMetadata(TypeMetadataBase typeMetadata)
         {
             TypeName = typeMetadata.TypeName;
             NamespaceName = typeMetadata.NamespaceName;
@@ -21,18 +55,19 @@ namespace Model.ModelDTG
 
             if (typeMetadata.BaseType != null)
             {
-                BaseType = new TypeMetadataSurrogate(typeMetadata.BaseType.TypeName,
+                BaseType = new TypeMetadata(typeMetadata.BaseType.TypeName,
                     typeMetadata.BaseType.NamespaceName);
             }
 
             if (typeMetadata.DeclaringType != null)
             {
-                DeclaringType = new TypeMetadataSurrogate(typeMetadata.DeclaringType.TypeName,
+                DeclaringType = new TypeMetadata(typeMetadata.DeclaringType.TypeName,
                     typeMetadata.DeclaringType.NamespaceName);
             }
 
-            TypeKind = typeMetadata.TypeKind;
-            Modifiers = typeMetadata.Modifiers;
+            TypeKind = (TypeKind)typeMetadata.TypeKind;
+            Modifiers = Tuple.Create((AccessLevel)typeMetadata.Modifiers.Item1,
+                (SealedEnum) typeMetadata.Modifiers.Item2, (AbstractEnum)typeMetadata.Modifiers.Item3);
             Fields = GetFieldsMetadata(typeMetadata.Fields);
 
             GenericArguments = GetTypesMetadata(typeMetadata.GenericArguments);
@@ -45,38 +80,52 @@ namespace Model.ModelDTG
             Events = GetEventsMetadata(typeMetadata.Events);
         }
 
-        private TypeMetadataSurrogate(string typeName, string namespaceName)
+        public TypeMetadata(string typeName, string namespaceName)
         {
             TypeName = typeName;
             NamespaceName = namespaceName;
         }
 
+        public TypeMetadata(string typeName, string namespaceName,
+            IEnumerable<TypeMetadata> genericArguments) :
+            this(typeName, namespaceName)
+        {
+            GenericArguments = genericArguments;
+        }
+
         #endregion
+
 
         #region Properties
 
         public string TypeName { get; set; }
         public string NamespaceName { get; set; }
-        public TypeMetadataSurrogate BaseType { get; set; }
-        public TypeMetadataSurrogate DeclaringType { get; set; }
+        public TypeMetadata BaseType { get; set; }
+        public TypeMetadata DeclaringType { get; set; }
         public TypeKind TypeKind { get; set; }
         public Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers { get; set; }
-        public IEnumerable<FieldMetadataSurrogate> Fields { get; set; }
-        public IEnumerable<TypeMetadataSurrogate> GenericArguments { get; set; }
-        public IEnumerable<TypeMetadataSurrogate> Attributes { get; set; }
-        public IEnumerable<TypeMetadataSurrogate> ImplementedInterfaces { get; set; }
-        public IEnumerable<TypeMetadataSurrogate> NestedTypes { get; set; }
-        public IEnumerable<PropertyMetadataSurrogate> Properties { get; set; }
-        public IEnumerable<MethodMetadataSurrogate> Methods { get; set; }
-        public IEnumerable<MethodMetadataSurrogate> Constructors { get; set; }
-        public IEnumerable<EventMetadataSurrogate> Events { get; set; }
+        public IEnumerable<FieldMetadata> Fields { get; set; }
+        public IEnumerable<TypeMetadata> GenericArguments { get; set; }
+        public IEnumerable<TypeMetadata> Attributes { get; set; }
+        public IEnumerable<TypeMetadata> ImplementedInterfaces { get; set; }
+        public IEnumerable<TypeMetadata> NestedTypes { get; set; }
+        public IEnumerable<PropertyMetadata> Properties { get; set; }
+        public IEnumerable<MethodMetadata> Methods { get; set; }
+        public IEnumerable<MethodMetadata> Constructors { get; set; }
+        public IEnumerable<EventMetadata> Events { get; set; }
         public string FullName { get; set; }
+
+        const BindingFlags AllAccessLevels = BindingFlags.NonPublic
+                                             | BindingFlags.DeclaredOnly
+                                             | BindingFlags.Public
+                                             | BindingFlags.Static
+                                             | BindingFlags.Instance;
 
         #endregion
 
         #region Emiters
 
-        public static TypeMetadataSurrogate EmitSurrogateTypeMetadata(TypeMetadataBase typeMetadata)
+        public static TypeMetadata EmitSurrogateTypeMetadata(TypeMetadataBase typeMetadata)
         {
             if (typeMetadata == null)
             {
@@ -86,7 +135,7 @@ namespace Model.ModelDTG
             string typeId = typeMetadata.FullName ?? typeMetadata.NamespaceName + "." + typeMetadata.TypeName;
             if (!ReproducedSurrogateTypes.ContainsKey(typeId))
             {
-                new TypeMetadataSurrogate(typeMetadata);
+                new TypeMetadata(typeMetadata);
             }
 
             return ReproducedSurrogateTypes[typeId];
@@ -123,8 +172,9 @@ namespace Model.ModelDTG
             typeMetadata.NamespaceName = NamespaceName;
             typeMetadata.BaseType = BaseType?.EmitOriginalTypeMetadata();
             typeMetadata.DeclaringType = DeclaringType?.EmitOriginalTypeMetadata();
-            typeMetadata.TypeKind = TypeKind;
-            typeMetadata.Modifiers = Modifiers;
+            typeMetadata.TypeKind = (ModelBase.Enums.TypeKind) TypeKind;
+            typeMetadata.Modifiers = Tuple.Create( ( ModelBase.Enums.AccessLevel ) Modifiers.Item1,
+                ( ModelBase.Enums.SealedEnum ) Modifiers.Item2, ( ModelBase.Enums.AbstractEnum ) Modifiers.Item3 );
             typeMetadata.Fields = GetOriginalFieldsMetadata(Fields);
             typeMetadata.GenericArguments = GetOriginalTypesMetadata(GenericArguments);
             typeMetadata.Attributes = GetOriginalTypesMetadata(Attributes);

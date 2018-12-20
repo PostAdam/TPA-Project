@@ -7,7 +7,7 @@ using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
-    [DataContract( IsReference = true, Name = "ParameterMetadata" )]
+    [DataContract( IsReference = true, Name = "ParameterReflector" )]
     public class ParameterMetadataSurrogate
     {
         #region Constructor

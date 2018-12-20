@@ -8,7 +8,7 @@ using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
 {
-    [DataContract( IsReference = true, Name = "MethodMetadata" )]
+    [DataContract( IsReference = true, Name = "MethodReflector" )]
     public class MethodMetadataSurrogate
     {
         #region Constructor

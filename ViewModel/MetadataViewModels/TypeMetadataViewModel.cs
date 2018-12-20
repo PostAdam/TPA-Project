@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Model.Reflection.MetadataModels;
+using Model.ModelDTG;
 
 namespace ViewModel.MetadataViewModels
 {
@@ -58,7 +58,7 @@ namespace ViewModel.MetadataViewModels
             if (_typeMetadata.ImplementedInterfaces != null && _typeMetadata.ImplementedInterfaces.Any())
             {
                 interfaces += "";
-                foreach (TypeMetadata implementedInterface in _typeMetadata.ImplementedInterfaces)
+                foreach ( TypeMetadata implementedInterface in _typeMetadata.ImplementedInterfaces)
                 {
                     interfaces += implementedInterface.TypeName;
                     interfaces += StringUtility.GetGenerics(implementedInterface);
@@ -79,11 +79,11 @@ namespace ViewModel.MetadataViewModels
             Children.Clear();
 
             if (_typeMetadata.Attributes != null)
-                foreach (TypeMetadata attribute in _typeMetadata.Attributes)
+                foreach ( TypeMetadata attribute in _typeMetadata.Attributes)
                     Children.Add(new AttributeMetadataViewModel(attribute));
 
             if (_typeMetadata.ImplementedInterfaces != null)
-                foreach (TypeMetadata implementedInterface in _typeMetadata.ImplementedInterfaces)
+                foreach ( TypeMetadata implementedInterface in _typeMetadata.ImplementedInterfaces)
                     Children.Add(new TypeMetadataViewModel(implementedInterface));
 
             if (_typeMetadata.Constructors != null)
@@ -91,11 +91,11 @@ namespace ViewModel.MetadataViewModels
                     Children.Add(new MethodMetadataViewModel(constructors));
 
             if (_typeMetadata.NestedTypes != null)
-                foreach (TypeMetadata nestedType in _typeMetadata.NestedTypes)
+                foreach ( TypeMetadata nestedType in _typeMetadata.NestedTypes)
                     Children.Add(new TypeMetadataViewModel(nestedType));
 
             if (_typeMetadata.Methods != null)
-                foreach (MethodMetadata method in _typeMetadata.Methods)
+                foreach ( MethodMetadata method in _typeMetadata.Methods)
                     Children.Add(new MethodMetadataViewModel(method));
 
             if (_typeMetadata.Properties != null)
