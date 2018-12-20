@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Model.Reflection.Enums;
+using ModelBase.Enums;
 
 namespace ModelBase
 {

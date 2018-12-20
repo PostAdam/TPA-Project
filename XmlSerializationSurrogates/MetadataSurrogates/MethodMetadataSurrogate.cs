@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
+using ModelBase;
+using ModelBase.Enums;
 using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
@@ -13,7 +13,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
     {
         #region Constructor
 
-        public MethodMetadataSurrogate( MethodMetadata methodMetadata )
+        public MethodMetadataSurrogate( MethodMetadataBase methodMetadata )
         {
             Name = Name;
             Extension = methodMetadata.Extension;
@@ -51,9 +51,9 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public MethodMetadata GetOriginalMethodMetadata()
+        public MethodMetadataBase GetOriginalMethodMetadata()
         {
-            return new MethodMetadata()
+            return new MethodMetadataBase()
             {
                 Name = Name,
                 Extension = Extension,

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
+using ModelBase;
+using ModelBase.Enums;
 using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
-    public class PropertyMetadataSurrogate
+    public class PropertyMetadataSurrogate 
     {
         #region Constructors
 
@@ -15,7 +15,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
         }
 
-        public PropertyMetadataSurrogate( PropertyMetadata propertyMetadata )
+        public PropertyMetadataSurrogate( PropertyMetadataBase propertyMetadata )
         {
             Name = propertyMetadata.Name;
             PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
@@ -48,9 +48,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                     _modifiers =
                         new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>( 
                             value.Value,
-                            _modifiers?.Item2 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract,
-                            _modifiers?.Item3 ?? Model.Reflection.Enums.StaticEnum.NotStatic,
-                            _modifiers?.Item4 ?? Model.Reflection.Enums.VirtualEnum.NotVirtual );
+                            _modifiers?.Item2 ?? ModelBase.Enums.AbstractEnum.NotAbstract,
+                            _modifiers?.Item3 ?? ModelBase.Enums.StaticEnum.NotStatic,
+                            _modifiers?.Item4 ?? ModelBase.Enums.VirtualEnum.NotVirtual );
             }
         }
 
@@ -62,10 +62,10 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 if ( value != null )
                     _modifiers =
                         new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>(
-                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                            _modifiers?.Item1 ?? ModelBase.Enums.AccessLevel.Public,
                             value.Value,
-                            _modifiers?.Item3 ?? Model.Reflection.Enums.StaticEnum.NotStatic,
-                            _modifiers?.Item4 ?? Model.Reflection.Enums.VirtualEnum.NotVirtual );
+                            _modifiers?.Item3 ?? ModelBase.Enums.StaticEnum.NotStatic,
+                            _modifiers?.Item4 ?? ModelBase.Enums.VirtualEnum.NotVirtual );
             }
         }
 
@@ -77,10 +77,10 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 if ( value != null )
                     _modifiers =
                         new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>(
-                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
-                            _modifiers?.Item2 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract,
+                            _modifiers?.Item1 ?? ModelBase.Enums.AccessLevel.Public,
+                            _modifiers?.Item2 ?? ModelBase.Enums.AbstractEnum.NotAbstract,
                             value.Value,
-                            _modifiers?.Item4 ?? Model.Reflection.Enums.VirtualEnum.NotVirtual );
+                            _modifiers?.Item4 ?? ModelBase.Enums.VirtualEnum.NotVirtual );
             }
         }
 
@@ -92,9 +92,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 if ( value != null )
                     _modifiers =
                         new Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum>(
-                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
-                            _modifiers?.Item2 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract,
-                            _modifiers?.Item3 ?? Model.Reflection.Enums.StaticEnum.NotStatic,
+                            _modifiers?.Item1 ?? ModelBase.Enums.AccessLevel.Public,
+                            _modifiers?.Item2 ?? ModelBase.Enums.AbstractEnum.NotAbstract,
+                            _modifiers?.Item3 ?? ModelBase.Enums.StaticEnum.NotStatic,
                             value.Value );
             }
         }
@@ -112,9 +112,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public PropertyMetadata GetOriginalPropertyMetadata()
+        public PropertyMetadataBase GetOriginalPropertyMetadata()
         {
-            return new PropertyMetadata()
+            return new PropertyMetadataBase()
             {
                 Name = Name,
                 PropertyAttributes = GetOriginalTypesMetadata( PropertyAttributes ),

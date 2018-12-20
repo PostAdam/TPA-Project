@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
@@ -10,7 +10,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
     {
         #region Constructor
 
-        public NamespaceMetadataSurrogate( NamespaceMetadata namespaceMetadata )
+        public NamespaceMetadataSurrogate( NamespaceMetadataBase namespaceMetadata )
         {
             NamespaceName = namespaceMetadata.NamespaceName;
             Types = GetTypesMetadata( namespaceMetadata.Types );
@@ -28,19 +28,19 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public NamespaceMetadata GetOriginalNamespaceMetadata()
+        public NamespaceMetadataBase GetOriginalNamespaceMetadata()
         {
-            return new NamespaceMetadata
+            return new NamespaceMetadataBase
             {
                 NamespaceName = NamespaceName,
                 Types = GetOriginalTypesMetadata( Types )
             };
         }
 
-        private IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        private IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadataBase> types )
         {
             List<TypeMetadataSurrogate> typeMetadatas = new List<TypeMetadataSurrogate>();
-            foreach ( TypeMetadata typeMetadata in types )
+            foreach ( TypeMetadataBase typeMetadata in types )
             {
                 typeMetadatas.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
             }

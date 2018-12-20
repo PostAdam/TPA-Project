@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
+using ModelBase;
+using ModelBase.Enums;
 using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 
 namespace XmlSerializationSurrogates.MetadataSurrogates
@@ -12,7 +12,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
     {
         #region Constructor
 
-        public FieldMetadataSurrogate( FieldMetadata fieldMetadata )
+        public FieldMetadataSurrogate( FieldMetadataBase fieldMetadata )
         {
             Name = fieldMetadata.Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( fieldMetadata.TypeMetadata );
@@ -23,10 +23,10 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        private IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        private IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadataBase> types )
         {
             List<TypeMetadataSurrogate> typeMetadatasSurrogate = new List<TypeMetadataSurrogate>();
-            foreach ( TypeMetadata typeMetadata in types )
+            foreach ( TypeMetadataBase typeMetadata in types )
             {
                 typeMetadatasSurrogate.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
             }
@@ -53,9 +53,9 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public FieldMetadata GetOriginalFieldMetadata()
+        public FieldMetadataBase GetOriginalFieldMetadata()
         {
-            return new FieldMetadata()
+            return new FieldMetadataBase()
             {
                 Name = Name,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
@@ -11,7 +11,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
     {
         #region Constructor
 
-        public EventMetadataSurrogate( EventMetadata eventMetadata )
+        public EventMetadataSurrogate( EventMetadataBase eventMetadata )
         {
             Name = Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( eventMetadata.TypeMetadata );
@@ -55,9 +55,9 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public EventMetadata GetOriginalEventMetadata()
+        public EventMetadataBase GetOriginalEventMetadata()
         {
-            return new EventMetadata()
+            return new EventMetadataBase()
             {
                 Name = Name,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),

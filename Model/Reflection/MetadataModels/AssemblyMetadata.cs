@@ -6,7 +6,7 @@ using ModelBase;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class AssemblyMetadata : AssemblyMetadataBase
+    public class AssemblyMetadata
     {
         #region Constructor
 
@@ -22,7 +22,17 @@ namespace Model.Reflection.MetadataModels
                 into _group
                 orderby _group.Key
                 select new NamespaceMetadata(_group.Key, _group);
+
+
         }
+
+        #endregion
+
+        #region Properties
+
+        public string Name { get; set; }
+        public IEnumerable<NamespaceMetadata> Namespaces { get; set; }
+        public AssemblyMetadataBase AssemblyMetadataBase { get; set; }
 
         #endregion
 

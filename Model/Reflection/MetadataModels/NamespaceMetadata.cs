@@ -5,7 +5,7 @@ using ModelBase;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class NamespaceMetadata : NamespaceMetadataBase
+    public class NamespaceMetadata
     {
         #region Constructors
 
@@ -23,5 +23,12 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
+        #region Properties
+
+        public string NamespaceName { get; set; }
+        public IEnumerable<TypeMetadata> Types { get; set; }
+        public NamespaceMetadataBase NamespaceMetadataBase { get; set; }
+
+        #endregion
     }
 }

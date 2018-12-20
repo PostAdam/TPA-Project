@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using MEFDefinitions;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 using XmlSerializationSurrogates.MetadataSurrogates;
 
 namespace XmlRepository
@@ -29,7 +29,7 @@ namespace XmlRepository
         {
             //TODO: use DI to inject implementation through method based on config file??
             AssemblyMetadataSurrogate assemblyMetadataSurrogate =
-                new AssemblyMetadataSurrogate( (AssemblyMetadata) metadata );
+                new AssemblyMetadataSurrogate( (AssemblyMetadataBase) metadata );
             DataContractSerializer serializer = new DataContractSerializer( typeof( AssemblyMetadataSurrogate ) );
 
             using ( FileStream stream = File.Create( fileName ) )
@@ -49,7 +49,7 @@ namespace XmlRepository
                 assemblyMetadataSurrogate = (AssemblyMetadataSurrogate) serializer.ReadObject( stream );
             }
 
-            AssemblyMetadata assemblyMetadata = assemblyMetadataSurrogate.GetOriginalAssemblyMetadata();
+            AssemblyMetadataBase assemblyMetadata = assemblyMetadataSurrogate.GetOriginalAssemblyMetadata();
 
             return assemblyMetadata;
         }

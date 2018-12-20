@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
+using ModelBase;
+using ModelBase.Enums;
 using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
@@ -13,7 +13,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
     {
         #region Constructors
 
-        public TypeMetadataSurrogate( TypeMetadata typeMetadata )
+        public TypeMetadataSurrogate( TypeMetadataBase typeMetadata )
         {
             TypeName = typeMetadata.TypeName;
             NamespaceName = typeMetadata.NamespaceName;
@@ -109,7 +109,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         #region Emiters
 
-        public static TypeMetadataSurrogate EmitSurrogateTypeMetadata( TypeMetadata typeMetadata )
+        public static TypeMetadataSurrogate EmitSurrogateTypeMetadata( TypeMetadataBase typeMetadata )
         {
             if ( typeMetadata == null )
             {
@@ -125,7 +125,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             return ReproducedSurrogateTypes[typeId];
         }
 
-        public TypeMetadata EmitOriginalTypeMetadata()
+        public TypeMetadataBase EmitOriginalTypeMetadata()
         {
             string typeId = FullName;
             if ( !ReproducedOriginalTypes.ContainsKey( typeId ) )
@@ -145,12 +145,12 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         private void GetOriginalTypeMetadata()
         {
-            TypeMetadata typeMetadata = new TypeMetadata();
+            TypeMetadataBase typeMetadata = new TypeMetadataBase();
             ReproducedOriginalTypes.Add( FullName, typeMetadata );
             PopulateTypeMetadataWithData( typeMetadata );
         }
 
-        private void PopulateTypeMetadataWithData( TypeMetadata typeMetadata )
+        private void PopulateTypeMetadataWithData( TypeMetadataBase typeMetadata )
         {
             typeMetadata.TypeName = TypeName;
             typeMetadata.NamespaceName = NamespaceName;

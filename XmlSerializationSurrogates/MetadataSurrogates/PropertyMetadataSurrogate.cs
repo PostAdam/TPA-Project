@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
+using ModelBase;
+using ModelBase.Enums;
 using static XmlSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static XmlSerializationSurrogates.CollectionTypeAccessor;
 
@@ -13,7 +13,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
     {
         #region Constructor
 
-        public PropertyMetadataSurrogate( PropertyMetadata propertyMetadata )
+        public PropertyMetadataSurrogate( PropertyMetadataBase propertyMetadata )
         {
             Name = propertyMetadata.Name;
             PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
@@ -47,9 +47,9 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public PropertyMetadata GetOriginalPropertyMetadata()
+        public PropertyMetadataBase GetOriginalPropertyMetadata()
         {
-            return new PropertyMetadata()
+            return new PropertyMetadataBase()
             {
                 Name = Name,
                 PropertyAttributes = GetOriginalTypesMetadata( PropertyAttributes ),

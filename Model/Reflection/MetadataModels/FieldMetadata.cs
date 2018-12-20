@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Model.Reflection.Enums;
 using ModelBase;
+using ModelBase.Enums;
+using AccessLevel = Model.Reflection.Enums.AccessLevel;
+using StaticEnum = Model.Reflection.Enums.StaticEnum;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class FieldMetadata : FieldMetadataBase
+    public class FieldMetadata
     {
         #region Constructors
 

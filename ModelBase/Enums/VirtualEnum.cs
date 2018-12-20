@@ -1,4 +1,4 @@
-﻿namespace Model.Reflection.Enums
+﻿namespace ModelBase.Enums
 {
     public enum VirtualEnum
     {

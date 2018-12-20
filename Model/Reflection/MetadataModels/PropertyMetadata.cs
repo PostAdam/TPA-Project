@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Model.Reflection.Enums;
 using ModelBase;
+using ModelBase.Enums;
+using AbstractEnum = Model.Reflection.Enums.AbstractEnum;
+using AccessLevel = Model.Reflection.Enums.AccessLevel;
+using StaticEnum = Model.Reflection.Enums.StaticEnum;
+using VirtualEnum = Model.Reflection.Enums.VirtualEnum;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class PropertyMetadata : PropertyMetadataBase
+    public class PropertyMetadata
     {
         #region Constructors
 
@@ -22,6 +26,18 @@ namespace Model.Reflection.MetadataModels
             Getter = MethodMetadata.EmitMethod(propertyInfo.GetGetMethod(true));
             Setter = MethodMetadata.EmitMethod(propertyInfo.GetSetMethod(true));
         }
+
+        #endregion
+
+        #region Properties
+
+        public string Name { get; set; }
+        public IEnumerable<TypeMetadata> PropertyAttributes { get; set; }
+        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
+        public TypeMetadata TypeMetadata { get; set; }
+        public MethodMetadata Getter { get; set; }
+        public MethodMetadata Setter { get; set; }
+        public PropertyMetadataBase PropertyMetadataBase { get; set; }
 
         #endregion
 
@@ -42,9 +58,8 @@ namespace Model.Reflection.MetadataModels
             }
 
             return Getter.Modifiers.Item1 < Setter.Modifiers.Item1 ? Getter.Modifiers : Setter.Modifiers;
-
         }
-        
+
         #endregion
     }
 }

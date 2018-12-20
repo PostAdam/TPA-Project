@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DataBaseSerializationSurrogates.MetadataSurrogates;
 using MEFDefinitions;
 using Model.Reflection.MetadataModels;
+using ModelBase;
 
 namespace DataBaseRepository
 {
@@ -29,7 +30,7 @@ namespace DataBaseRepository
         #region Privates
 
         private AssemblyMetadataSurrogate _assemblyMetadataSurrogate;
-        private AssemblyMetadata _assemblyMetadata;
+        private AssemblyMetadataBase _assemblyMetadata;
 
         private async Task WriteData( object metadata, string fileName, CancellationToken cancellationToken )
         {
@@ -173,7 +174,7 @@ namespace DataBaseRepository
             {
                 ct => Task.Run(
                     () => _assemblyMetadataSurrogate =
-                        new AssemblyMetadataSurrogate( metadata as AssemblyMetadata ), ct ),
+                        new AssemblyMetadataSurrogate( metadata as AssemblyMetadataBase ), ct ),
                 ct => Task.Run( () => dbContext.AssemblyModels.Add( _assemblyMetadataSurrogate ), ct ),
                 dbContext.SaveChangesAsync
             };

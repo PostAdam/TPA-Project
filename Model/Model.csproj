@@ -62,6 +62,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModelDTG\AssemblyMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\Accessors\CollectionOriginalTypeAccessor.cs" />
+    <Compile Include="ModelDTG\Accessors\CollectionSurrogateTypeAccessor.cs" />
+    <Compile Include="ModelDTG\EventMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\FieldMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\MethodMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\NamespaceMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\ParameterMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\PropertyMetadataSurrogate.cs" />
+    <Compile Include="ModelDTG\ReproducedOriginalTypes.cs" />
+    <Compile Include="ModelDTG\ReproducedSurrogateTypes.cs" />
+    <Compile Include="ModelDTG\TypeMetadataSurrogate.cs" />
+    <Compile Include="Reflection\Enums\AbstractEnum.cs" />
+    <Compile Include="Reflection\Enums\AccessLevel.cs" />
+    <Compile Include="Reflection\Enums\ParameterKindEnum.cs" />
+    <Compile Include="Reflection\Enums\SealedEnum.cs" />
+    <Compile Include="Reflection\Enums\StaticEnum.cs" />
+    <Compile Include="Reflection\Enums\TypeKind.cs" />
+    <Compile Include="Reflection\Enums\VirtualEnum.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Model.Reflection.Enums;
 using ModelBase;
+using ModelBase.Enums;
+using AbstractEnum = Model.Reflection.Enums.AbstractEnum;
+using AccessLevel = Model.Reflection.Enums.AccessLevel;
+using StaticEnum = Model.Reflection.Enums.StaticEnum;
+using VirtualEnum = Model.Reflection.Enums.VirtualEnum;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class MethodMetadata : MethodMetadataBase
+    public class MethodMetadata
     {
         public MethodMetadata()
         {
@@ -45,6 +49,19 @@ namespace Model.Reflection.MetadataModels
             MethodAttributes = TypeMetadata.EmitAttributes(method.GetCustomAttributes());
             Extension = EmitExtension(method);
         }
+
+        #endregion
+
+        #region Properties
+
+        public string Name { get; set; }
+        public bool Extension { get; set; }
+        public TypeMetadata ReturnType { get; set; }
+        public IEnumerable<TypeMetadata> MethodAttributes { get; set; }
+        public IEnumerable<ParameterMetadata> Parameters { get; set; }
+        public IEnumerable<TypeMetadata> GenericArguments { get; set; }
+        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
+        public MethodMetadataBase MethodMetadataBase { get; set; }
 
         #endregion
 
