@@ -152,14 +152,14 @@ namespace ViewModel
                 _cancellationTokenSource = new CancellationTokenSource();
                 SavingNotificationText = "Saving in progress ..";
                 IsSaving = true;
-                Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
+                Logger?.WriteLine( "Starting serialization process.", LogLevel.Warning.ToString() );
 
                 
                 // TODO: find solution to pass filepath
                 // string fileName = _pathResolver.SaveFilePath();
-                await Repository.Write( AssemblyMetadata, "Test.xml", _cancellationTokenSource.Token );
+                await Repository.Write( AssemblyMetadata.GetOriginalAssemblyMetadata(), "Test.xml", _cancellationTokenSource.Token );
 
-                Logger?.WriteLine( _isSavingCancelled ? "Serializaton cancelled!" : "Serializaton completed!",
+                Logger?.WriteLine( _isSavingCancelled ? "Serialization cancelled!" : "Serialization completed!",
                     LogLevel.Information.ToString() );
 
                 IsSaving = false;

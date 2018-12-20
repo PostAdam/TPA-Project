@@ -50,10 +50,6 @@
       <Project>{BA4FAEA1-9076-460B-8795-DC60955042B0}</Project>
       <Name>ModelBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{5959593d-9565-46cd-be35-983e93145117}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XmlSerializationSurrogates\XmlSerializationSurrogates.csproj">
       <Project>{b32e9f62-6340-4f2f-bde2-126b8e1ba1c7}</Project>
       <Name>XmlSerializationSurrogates</Name>

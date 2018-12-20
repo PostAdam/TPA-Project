@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Model.Reflection.MetadataModels;
 using ModelBase;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates

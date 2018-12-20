@@ -144,6 +144,7 @@ namespace Model.ModelDTG
         public TypeMetadataBase EmitOriginalTypeMetadata()
         {
             string typeId = FullName;
+            if (typeId == null) return null;
             if (!ReproducedOriginalTypes.ContainsKey(typeId))
             {
                 GetOriginalTypeMetadata();
@@ -173,8 +174,8 @@ namespace Model.ModelDTG
             typeMetadata.BaseType = BaseType?.EmitOriginalTypeMetadata();
             typeMetadata.DeclaringType = DeclaringType?.EmitOriginalTypeMetadata();
             typeMetadata.TypeKind = (ModelBase.Enums.TypeKind) TypeKind;
-            typeMetadata.Modifiers = Tuple.Create( ( ModelBase.Enums.AccessLevel ) Modifiers.Item1,
-                ( ModelBase.Enums.SealedEnum ) Modifiers.Item2, ( ModelBase.Enums.AbstractEnum ) Modifiers.Item3 );
+            typeMetadata.Modifiers = Modifiers != null ? Tuple.Create( ( ModelBase.Enums.AccessLevel ) Modifiers.Item1,
+                ( ModelBase.Enums.SealedEnum ) Modifiers.Item2, ( ModelBase.Enums.AbstractEnum ) Modifiers.Item3 ) : null;
             typeMetadata.Fields = GetOriginalFieldsMetadata(Fields);
             typeMetadata.GenericArguments = GetOriginalTypesMetadata(GenericArguments);
             typeMetadata.Attributes = GetOriginalTypesMetadata(Attributes);

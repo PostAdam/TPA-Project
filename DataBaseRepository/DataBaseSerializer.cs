@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataBaseSerializationSurrogates.MetadataSurrogates;
 using MEFDefinitions;
-using Model.Reflection.MetadataModels;
 using ModelBase;
 
 namespace DataBaseRepository
