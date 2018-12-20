@@ -6,16 +6,20 @@ using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
 using Model.Reflection;
 using Model.Reflection.MetadataModels;
-using ViewModel.Commands.AsyncCommand;
+using PropertyChanged;
+using ViewModel.Commands;
+using ViewModel.Commands.NewAsyncCommand;
 using ViewModel.MetadataViewModels;
 
 namespace ViewModel
 {
+    [AddINotifyPropertyChangedInterface]
     public class MainViewModel : BaseViewModel
     {
         #region Constructor
@@ -32,6 +36,8 @@ namespace ViewModel
             ClickSave = new AsyncCommand( Save );
             ClickOpen = new AsyncCommand( Open );
             ClickRead = new AsyncCommand( Read );
+            ClickCancelSave = new DelegateCommand( CancelSave );
+            ClickCancelRead = new DelegateCommand( CancelRead );
         }
 
         private void LoadLogger()
@@ -110,11 +116,20 @@ namespace ViewModel
 
         public ObservableCollection<MetadataBaseViewModel> Items { get; set; }
 
+        public bool IsOpening { get; set; }
+        public bool IsSaving { get; set; }
+        public bool IsReading { get; set; }
+
+        public string SavingNotificationText { get; set; }
+        public string ReadingNotificationText { get; set; }
+
         #region Commands
 
-        public ICommand ClickSave { get; }
-        public ICommand ClickOpen { get; }
-        public ICommand ClickRead { get; }
+        public AsyncCommand ClickSave { get; }
+        public AsyncCommand ClickOpen { get; }
+        public AsyncCommand ClickRead { get; }
+        public ICommand ClickCancelSave { get; }
+        public ICommand ClickCancelRead { get; }
 
         #endregion
 
@@ -122,6 +137,10 @@ namespace ViewModel
 
         internal AssemblyMetadata AssemblyMetadata;
         private readonly ReflectedTypes _reflectedTypes = ReflectedTypes.Instance;
+        private CancellationTokenSource _cancellationTokenSource;
+
+        private bool _isSavingCancelled;
+        private bool _isReadingCancelled;
 
         #region Command Methods
 
@@ -129,43 +148,102 @@ namespace ViewModel
         {
             if ( AssemblyMetadata != null )
             {
+                _cancellationTokenSource = new CancellationTokenSource();
+                SavingNotificationText = "Saving in progress ..";
+                IsSaving = true;
                 Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
-                //            string fileName = _pathResolver.SaveFilePath();
-                await Repository.Write( AssemblyMetadata, "Test.xml" );
-                Logger?.WriteLine( "Serializaton completed!", LogLevel.Error.ToString() );
+
+                
+                // TODO: find solution to pass filepath
+                // string fileName = _pathResolver.SaveFilePath();
+                await Repository.Write( AssemblyMetadata, "Test.xml", _cancellationTokenSource.Token );
+
+                Logger?.WriteLine( _isSavingCancelled ? "Serializaton cancelled!" : "Serializaton completed!",
+                    LogLevel.Information.ToString() );
+
+                IsSaving = false;
+                _isSavingCancelled = false;
             }
         }
 
         private async Task Open()
         {
+            IsOpening = true;
+
             string fileName = _pathResolver.OpenFilePath();
             if ( fileName != null )
             {
                 Logger?.WriteLine( "Opening portable execution file: " + fileName, LogLevel.Debug.ToString() );
                 await Task.Run( () => LoadDll( fileName ) ).ContinueWith( _ => InitTreeView( AssemblyMetadata ) );
             }
+
+            IsOpening = false;
         }
 
         private async Task Read()
         {
-            // TODO: find solution
-//            string fileName = _pathResolver.ReadFilePath();
-            await ReadFromFile( "ViewModel" );
+            _cancellationTokenSource = new CancellationTokenSource();
+            ReadingNotificationText = "Reading in progress ..";
+            IsReading = true;
+            Logger?.WriteLine( "Reading model.", LogLevel.Information.ToString() );
+
+            // TODO: find solution to pass filepath
+            // string fileName = _pathResolver.ReadFilePath();
+            await ReadFromFile( "ViewModel.xml", _cancellationTokenSource );
+
+            Logger?.WriteLine( _isReadingCancelled ? "Cancelled reading model!" : "Finished reading model!",
+                LogLevel.Information.ToString() );
+
+            IsReading = false;
+            _isReadingCancelled = false;
+        }
+
+        private void CancelSave()
+        {
+            if ( _isSavingCancelled || _cancellationTokenSource == null ) return;
+
+            try
+            {
+                _isSavingCancelled = true;
+                SavingNotificationText = "Cancelling saving ..";
+                _cancellationTokenSource.Cancel();
+            }
+            catch ( AggregateException e )
+            {
+                Logger?.WriteLine( "Cancelling saving model, exception message: " + e.Flatten(),
+                    LogLevel.Information.ToString() );
+            }
+        }
+
+        private void CancelRead()
+        {
+            if ( _isReadingCancelled || _cancellationTokenSource == null ) return;
+
+            try
+            {
+                _isReadingCancelled = true;
+                ReadingNotificationText = "Cancelling reading ..";
+                _cancellationTokenSource.Cancel();
+            }
+            catch ( AggregateException e )
+            {
+                Logger?.WriteLine( "Cancelling reading model, exception message: " + e.Flatten(),
+                    LogLevel.Information.ToString() );
+            }
         }
 
         #endregion
 
         #region Help Methods
 
-        private async Task ReadFromFile( string filename )
+        private async Task ReadFromFile( string filename, CancellationTokenSource cancellationToken )
         {
-            Logger?.WriteLine( "Reading from file " + filename + ".", LogLevel.Information.ToString() );
-
-            AssemblyMetadata = await Repository.Read( filename ) as AssemblyMetadata;
-            AddClassesToDirectory( AssemblyMetadata );
-            InitTreeView( AssemblyMetadata );
-
-            Logger?.WriteLine( "File " + filename + " deserialized successfully.", LogLevel.Trace.ToString() );
+            AssemblyMetadata = await Repository.Read( filename, cancellationToken.Token ) as AssemblyMetadata;
+            if ( AssemblyMetadata != null )
+            {
+                AddClassesToDirectory( AssemblyMetadata );
+                InitTreeView( AssemblyMetadata );
+            }
         }
 
         internal void AddClassesToDirectory( AssemblyMetadata assemblyMetadata )
@@ -195,7 +273,6 @@ namespace ViewModel
 
             Logger?.WriteLine( "TreeView initialized!", LogLevel.Information.ToString() );
         }
-
 
         internal async Task LoadDll( string path )
         {

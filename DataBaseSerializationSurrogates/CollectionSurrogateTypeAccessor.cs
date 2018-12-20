@@ -6,6 +6,9 @@ namespace DataBaseSerializationSurrogates
 {
     public static class CollectionTypeAccessor
     {
+        private static readonly ReproducedSurrogateTypes ReproducedSurrogateTypes = ReproducedSurrogateTypes.Instance;
+        private static readonly ReproducedOriginalTypes ReproducedOriginalTypes = ReproducedOriginalTypes.Instance;
+
         public static ICollection<NamespaceMetadataSurrogate> GetNamespacesMetadata(
             IEnumerable<NamespaceMetadata> namespaces )
         {
@@ -13,6 +16,9 @@ namespace DataBaseSerializationSurrogates
             {
                 return null;
             }
+
+            ReproducedSurrogateTypes.Clear();
+            ReproducedOriginalTypes.Clear();
 
             ICollection<NamespaceMetadataSurrogate> surrogates = new List<NamespaceMetadataSurrogate>();
             foreach ( NamespaceMetadata namespaceMetadata in namespaces )
