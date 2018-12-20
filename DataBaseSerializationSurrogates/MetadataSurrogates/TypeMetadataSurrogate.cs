@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using Model.Reflection.Enums;
 using Model.Reflection.MetadataModels;
+using ModelBase;
 using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
-    public class TypeMetadataSurrogate
+    public class TypeMetadataSurrogate : TypeMetadataBase
     {
         #region Constructors
 

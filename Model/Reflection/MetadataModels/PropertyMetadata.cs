@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Model.Reflection.Enums;
+using ModelBase;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class PropertyMetadata
+    public class PropertyMetadata : PropertyMetadataBase
     {
         #region Constructors
 
@@ -16,22 +17,11 @@ namespace Model.Reflection.MetadataModels
         internal PropertyMetadata(PropertyInfo propertyInfo)
         {
             Modifiers = GetModifier();
-            TypeMetadata = TypeMetadata.EmitType(propertyInfo.PropertyType);
-            PropertyAttributes = TypeMetadata.EmitAttributes(propertyInfo.GetCustomAttributes());
+            TypeMetadata = MetadataModels.TypeMetadata.EmitType(propertyInfo.PropertyType);
+            PropertyAttributes = MetadataModels.TypeMetadata.EmitAttributes(propertyInfo.GetCustomAttributes());
             Getter = MethodMetadata.EmitMethod(propertyInfo.GetGetMethod(true));
             Setter = MethodMetadata.EmitMethod(propertyInfo.GetSetMethod(true));
         }
-
-        #endregion
-
-        #region Properties
-
-        public string Name { get; set; }
-        public IEnumerable<TypeMetadata> PropertyAttributes { get; set; }
-        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
-        public TypeMetadata TypeMetadata { get; set; }
-        public MethodMetadata Getter { get; set; }
-        public MethodMetadata Setter { get; set; }
 
         #endregion
 

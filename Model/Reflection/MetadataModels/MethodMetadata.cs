@@ -4,10 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Model.Reflection.Enums;
+using ModelBase;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class MethodMetadata
+    public class MethodMetadata : MethodMetadataBase
     {
         public MethodMetadata()
         {
@@ -27,18 +28,6 @@ namespace Model.Reflection.MetadataModels
 
             return new MethodMetadata(method);
         }
-
-        #endregion
-
-        #region Properties
-
-        public string Name { get; set; }
-        public bool Extension { get; set; }
-        public TypeMetadata ReturnType { get; set; }
-        public IEnumerable<TypeMetadata> MethodAttributes { get; set; }
-        public IEnumerable<ParameterMetadata> Parameters { get; set; }
-        public IEnumerable<TypeMetadata> GenericArguments { get; set; }
-        public Tuple<AccessLevel, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
 
         #endregion
 

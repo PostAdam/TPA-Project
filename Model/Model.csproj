@@ -67,13 +67,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Reflection\Enums\AbstractEnum.cs" />
-    <Compile Include="Reflection\Enums\AccessLevel.cs" />
-    <Compile Include="Reflection\Enums\ParameterKindEnum.cs" />
-    <Compile Include="Reflection\Enums\SealedEnum.cs" />
-    <Compile Include="Reflection\Enums\StaticEnum.cs" />
-    <Compile Include="Reflection\Enums\TypeKind.cs" />
-    <Compile Include="Reflection\Enums\VirtualEnum.cs" />
     <Compile Include="Reflection\ExtensionMethods.cs" />
     <Compile Include="Reflection\MetadataModels\AssemblyMetadata.cs" />
     <Compile Include="Reflection\MetadataModels\EventMetadata.cs" />
@@ -99,6 +92,10 @@
     <ProjectReference Include="..\MEFDefinitions\MEFDefinitions.csproj">
       <Project>{130fe00a-39e7-4462-a52a-5614b4f5cf74}</Project>
       <Name>MEFDefinitions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelBase\ModelBase.csproj">
+      <Project>{ba4faea1-9076-460b-8795-dc60955042b0}</Project>
+      <Name>ModelBase</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

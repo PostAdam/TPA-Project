@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Model.Reflection.Enums;
+using ModelBase;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class ParameterMetadata
+    public class ParameterMetadata : ParameterMetadataBase
     {
         #region Constructors
 
@@ -16,8 +17,8 @@ namespace Model.Reflection.MetadataModels
         internal ParameterMetadata(ParameterInfo parameterInfo)
         {
             Name = parameterInfo.Name;
-            TypeMetadata = TypeMetadata.EmitType(parameterInfo.ParameterType);
-            ParameterAttributes = TypeMetadata.EmitAttributes(parameterInfo.GetCustomAttributes());
+            TypeMetadata = MetadataModels.TypeMetadata.EmitType(parameterInfo.ParameterType);
+            ParameterAttributes = MetadataModels.TypeMetadata.EmitAttributes(parameterInfo.GetCustomAttributes());
             Kind = GetParameterKind(parameterInfo);
             Position = parameterInfo.Position;
             if (parameterInfo.HasDefaultValue)
@@ -27,17 +28,6 @@ namespace Model.Reflection.MetadataModels
                     : String.Empty;
             }
         }
-
-        #endregion
-
-        #region Properties
-
-        public string Name { get; set; }
-        public TypeMetadata TypeMetadata { get; set; }
-        public int Position { get; set; }
-        public ParameterKindEnum Kind { get; set; }
-        public IEnumerable<TypeMetadata> ParameterAttributes { get; set; }
-        public string DefaultValue { get; set; }
 
         #endregion
 

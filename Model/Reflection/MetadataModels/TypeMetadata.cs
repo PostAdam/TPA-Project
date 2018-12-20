@@ -3,37 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Model.Reflection.Enums;
+using ModelBase;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class TypeMetadata
+    public class TypeMetadata : TypeMetadataBase
     {
-        #region Properties
-
-        public string TypeName { get; set; }
-        public string NamespaceName { get; set; }
-        public TypeMetadata BaseType { get; set; }
-        public TypeMetadata DeclaringType { get; set; }
-        public TypeKind TypeKind { get; set; }
-        public Tuple<AccessLevel, SealedEnum, AbstractEnum> Modifiers { get; set; }
-        public IEnumerable<FieldMetadata> Fields { get; set; }
-        public IEnumerable<TypeMetadata> GenericArguments { get; set; }
-        public IEnumerable<TypeMetadata> Attributes { get; set; }
-        public IEnumerable<TypeMetadata> ImplementedInterfaces { get; set; }
-        public IEnumerable<TypeMetadata> NestedTypes { get; set; }
-        public IEnumerable<PropertyMetadata> Properties { get; set; }
-        public IEnumerable<MethodMetadata> Methods { get; set; }
-        public IEnumerable<MethodMetadata> Constructors { get; set; }
-        public IEnumerable<EventMetadata> Events { get; set; }
-        public string FullName { get; set; }
-
-        const BindingFlags AllAccessLevels = BindingFlags.NonPublic
-                                             | BindingFlags.DeclaredOnly
-                                             | BindingFlags.Public
-                                             | BindingFlags.Static
-                                             | BindingFlags.Instance;
-
-        #endregion
 
         #region Constructors
 

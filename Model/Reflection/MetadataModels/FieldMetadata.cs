@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Model.Reflection.Enums;
+using ModelBase;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class FieldMetadata
+    public class FieldMetadata : FieldMetadataBase
     {
         #region Constructors
 

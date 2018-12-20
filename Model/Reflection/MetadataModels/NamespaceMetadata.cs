@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ModelBase;
 
 namespace Model.Reflection.MetadataModels
 {
-    public class NamespaceMetadata
+    public class NamespaceMetadata : NamespaceMetadataBase
     {
         #region Constructors
 
@@ -22,11 +23,5 @@ namespace Model.Reflection.MetadataModels
 
         #endregion
 
-        #region Properties
-
-        public string NamespaceName { get; set; }
-        public IEnumerable<TypeMetadata> Types { get; set; }
-
-        #endregion
     }
 }
