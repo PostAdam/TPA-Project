@@ -39,22 +39,29 @@ namespace DataBaseRepository
             {
                 try
                 {
-                    IEnumerable<Func<CancellationToken, Task>> tasks = PrepareTasksForSaving( dbContext, metadata );
-                    foreach ( Func<CancellationToken, Task> task in tasks )
-                    {
-                        await task( cancellationToken );
-                        cancellationToken.ThrowIfCancellationRequested();
-                    }
+                    await SavingTasks( metadata, dbContext, cancellationToken );
                 }
                 catch ( OperationCanceledException e )
                 {
+                    // TODO: replace with logger
                     Console.WriteLine( e );
                 }
                 catch ( DbUpdateException e )
                 {
+                    // TODO: replace with logger
                     Console.WriteLine( e );
                     Console.WriteLine( e.InnerException );
                 }
+            }
+        }
+
+        private async Task SavingTasks( object metadata, ReflectorDbContext dbContext, CancellationToken cancellationToken )
+        {
+            IEnumerable<Func<CancellationToken, Task>> tasks = PrepareTasksForSaving( dbContext, metadata );
+            foreach ( Func<CancellationToken, Task> task in tasks )
+            {
+                await task( cancellationToken );
+                cancellationToken.ThrowIfCancellationRequested();
             }
         }
 
@@ -66,25 +73,32 @@ namespace DataBaseRepository
             {
                 try
                 {
-                    IEnumerable<Func<CancellationToken, Task>> tasks =
-                        PrepareTasksForReading( dbContext );
-                    foreach ( Func<CancellationToken, Task> task in tasks )
-                    {
-                        await task( cancellationToken );
-                        cancellationToken.ThrowIfCancellationRequested();
-                    }
+                    await ReadingTasks( dbContext, cancellationToken );
                 }
                 catch ( OperationCanceledException e )
                 {
+                    // TODO: replace with logger
                     Console.WriteLine( e );
                 }
                 catch ( Exception e )
                 {
+                    // TODO: replace with logger
                     Console.WriteLine( e );
                 }
             }
 
             return _assemblyMetadata;
+        }
+
+        private async Task ReadingTasks( ReflectorDbContext dbContext, CancellationToken cancellationToken )
+        {
+            IEnumerable<Func<CancellationToken, Task>> tasks =
+                                    PrepareTasksForReading( dbContext );
+            foreach ( Func<CancellationToken, Task> task in tasks )
+            {
+                await task( cancellationToken );
+                cancellationToken.ThrowIfCancellationRequested();
+            }
         }
 
         private void IncludeRelatedModelsObjects( ReflectorDbContext dbContext )

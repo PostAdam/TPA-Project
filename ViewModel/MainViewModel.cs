@@ -148,11 +148,12 @@ namespace ViewModel
         {
             if ( AssemblyMetadata != null )
             {
+                _cancellationTokenSource = new CancellationTokenSource();
                 SavingNotificationText = "Saving in progress ..";
                 IsSaving = true;
                 Logger?.WriteLine( "Starting serializaton process.", LogLevel.Warning.ToString() );
 
-                _cancellationTokenSource = new CancellationTokenSource();
+                
                 // TODO: find solution to pass filepath
                 // string fileName = _pathResolver.SaveFilePath();
                 await Repository.Write( AssemblyMetadata, "Test.xml", _cancellationTokenSource.Token );
@@ -181,11 +182,11 @@ namespace ViewModel
 
         private async Task Read()
         {
-            IsReading = true;
-            ReadingNotificationText = "Reading in progress ..";
-            Logger?.WriteLine( "Reading model", LogLevel.Information.ToString() );
-
             _cancellationTokenSource = new CancellationTokenSource();
+            ReadingNotificationText = "Reading in progress ..";
+            IsReading = true;
+            Logger?.WriteLine( "Reading model.", LogLevel.Information.ToString() );
+
             // TODO: find solution to pass filepath
             // string fileName = _pathResolver.ReadFilePath();
             await ReadFromFile( "ViewModel.xml", _cancellationTokenSource );
@@ -199,7 +200,7 @@ namespace ViewModel
 
         private void CancelSave()
         {
-            if ( _isSavingCancelled ) return;
+            if ( _isSavingCancelled || _cancellationTokenSource == null ) return;
 
             try
             {
@@ -216,7 +217,7 @@ namespace ViewModel
 
         private void CancelRead()
         {
-            if ( _isReadingCancelled ) return;
+            if ( _isReadingCancelled || _cancellationTokenSource == null ) return;
 
             try
             {
