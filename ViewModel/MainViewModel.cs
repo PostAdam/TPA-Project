@@ -10,10 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MEFDefinitions;
+using Model;
 using Model.ModelDTG;
 using Model.Reflection;
-using Model.Reflection.MetadataModels;
-using ModelBase;
 using PropertyChanged;
 using ViewModel.Commands;
 using ViewModel.Commands.NewAsyncCommand;
@@ -27,13 +26,14 @@ namespace ViewModel
         #region Constructor
 
         private readonly IPathResolver _pathResolver;
+        private readonly Composer composer = new Composer();
 
         public MainViewModel( IPathResolver pathResolver )
         {
             _pathResolver = pathResolver;
             Compose();
             LoadLogger();
-            LoadRepository();
+//            LoadRepository();
             Items = new AsyncObservableCollection<MetadataBaseViewModel>();
             ClickSave = new AsyncCommand( Save );
             ClickOpen = new AsyncCommand( Open );
@@ -158,7 +158,8 @@ namespace ViewModel
                 
                 // TODO: find solution to pass filepath
                 // string fileName = _pathResolver.SaveFilePath();
-                await Repository.Write( AssemblyMetadata.GetOriginalAssemblyMetadata(), "Test.xml", _cancellationTokenSource.Token );
+                await composer.Save( AssemblyMetadata , "Test.xml", _cancellationTokenSource.Token );
+
 
                 Logger?.WriteLine( _isSavingCancelled ? "Serialization cancelled!" : "Serialization completed!",
                     LogLevel.Information.ToString() );
@@ -191,8 +192,12 @@ namespace ViewModel
 
             // TODO: find solution to pass filepath
             string fileName = _pathResolver.ReadFilePath();
-            await ReadFromFile( fileName, _cancellationTokenSource );
-
+            AssemblyMetadata = await composer.ReadFromFile( fileName, _cancellationTokenSource );
+            if ( AssemblyMetadata != null )
+            {
+                AddClassesToDirectory( AssemblyMetadata );
+                InitTreeView( AssemblyMetadata );
+            }
             Logger?.WriteLine( _isReadingCancelled ? "Cancelled reading model!" : "Finished reading model!",
                 LogLevel.Information.ToString() );
 
@@ -237,17 +242,6 @@ namespace ViewModel
         #endregion
 
         #region Help Methods
-
-        private async Task ReadFromFile( string filename, CancellationTokenSource cancellationToken )
-        {
-            var temp = await Repository.Read( filename, cancellationToken.Token ) as AssemblyMetadataBase;
-            AssemblyMetadata = new AssemblyMetadata( temp );
-            if ( AssemblyMetadata != null )
-            {
-                AddClassesToDirectory( AssemblyMetadata );
-                InitTreeView( AssemblyMetadata );
-            }
-        }
 
         internal void AddClassesToDirectory( AssemblyMetadata assemblyMetadata )
         {
