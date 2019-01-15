@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
+using ModelBase;
+using ModelBase.Enums;
 using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
@@ -14,7 +14,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
         }
 
-        public FieldMetadataSurrogate( FieldMetadata fieldMetadata )
+        public FieldMetadataSurrogate( FieldMetadataBase fieldMetadata )
         {
             Name = fieldMetadata.Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( fieldMetadata.TypeMetadata );
@@ -25,10 +25,10 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        private ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        private ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadataBase> types )
         {
             List<TypeMetadataSurrogate> typeMetadatasSurrogate = new List<TypeMetadataSurrogate>();
-            foreach ( TypeMetadata typeMetadata in types )
+            foreach ( TypeMetadataBase typeMetadata in types )
             {
                 typeMetadatasSurrogate.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
             }
@@ -54,7 +54,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             {
                 if ( value != null ) _modifiers = new Tuple<AccessLevel, StaticEnum>( 
                     value.Value,
-                    _modifiers?.Item2 ?? Model.Reflection.Enums.StaticEnum.NotStatic );
+                    _modifiers?.Item2 ?? ModelBase.Enums.StaticEnum.NotStatic );
             }
         }
 
@@ -64,7 +64,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             set
             {
                 if ( value != null ) _modifiers = new Tuple<AccessLevel, StaticEnum>(
-                    _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                    _modifiers?.Item1 ?? ModelBase.Enums.AccessLevel.Public,
                     value.Value );
             }
         }
@@ -80,9 +80,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public FieldMetadata GetOriginalFieldMetadata()
+        public FieldMetadataBase GetOriginalFieldMetadata()
         {
-            return new FieldMetadata()
+            return new FieldMetadataBase()
             {
                 Name = Name,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),

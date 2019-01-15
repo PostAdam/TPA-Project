@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
+using ModelBase;
+using ModelBase.Enums;
 using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
@@ -14,7 +14,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
         }
 
-        public ParameterMetadataSurrogate( ParameterMetadata parameterMetadata )
+        public ParameterMetadataSurrogate( ParameterMetadataBase parameterMetadata )
         {
             Name = parameterMetadata.Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( parameterMetadata.TypeMetadata );
@@ -45,9 +45,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public ParameterMetadata GetOriginalParameterMetadata()
+        public ParameterMetadataBase GetOriginalParameterMetadata()
         {
-            return new ParameterMetadata()
+            return new ParameterMetadataBase()
             {
                 Name = Name,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),

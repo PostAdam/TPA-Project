@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlSerializationSurrogates"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseSerializationSurrogates", "DataBaseSerializationSurrogates\DataBaseSerializationSurrogates.csproj", "{C2BCDD8E-84D4-4AA2-A055-9F0FD32826EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelBase", "ModelBase\ModelBase.csproj", "{BA4FAEA1-9076-460B-8795-DC60955042B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,12 +89,16 @@ Global
 		{C2BCDD8E-84D4-4AA2-A055-9F0FD32826EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2BCDD8E-84D4-4AA2-A055-9F0FD32826EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2BCDD8E-84D4-4AA2-A055-9F0FD32826EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA4FAEA1-9076-460B-8795-DC60955042B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA4FAEA1-9076-460B-8795-DC60955042B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA4FAEA1-9076-460B-8795-DC60955042B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA4FAEA1-9076-460B-8795-DC60955042B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EF7208FB-6259-4E54-B98D-64AE25FD4966}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {EF7208FB-6259-4E54-B98D-64AE25FD4966}
 	EndGlobalSection
 EndGlobal

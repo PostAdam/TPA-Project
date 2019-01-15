@@ -1,5 +1,5 @@
-﻿using Model.Reflection;
-using Model.Reflection.MetadataModels;
+﻿using Model.ModelDTG;
+using Model.Reflection;
 
 namespace ViewModel.MetadataViewModels
 {

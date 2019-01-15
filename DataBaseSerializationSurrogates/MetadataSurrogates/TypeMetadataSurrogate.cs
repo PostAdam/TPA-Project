@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
+using ModelBase;
+using ModelBase.Enums;
 using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
-    public class TypeMetadataSurrogate
+    public class TypeMetadataSurrogate 
     {
         #region Constructors
 
@@ -15,7 +15,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
         }
 
-        public TypeMetadataSurrogate( TypeMetadata typeMetadata )
+        public TypeMetadataSurrogate( TypeMetadataBase typeMetadata )
         {
             TypeName = typeMetadata.TypeName;
             NamespaceName = typeMetadata.NamespaceName;
@@ -88,8 +88,8 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                     _modifiers =
                         new Tuple<AccessLevel, SealedEnum, AbstractEnum>(
                             value.Value,
-                            _modifiers?.Item2 ?? Model.Reflection.Enums.SealedEnum.NotSealed,
-                            _modifiers?.Item3 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract );
+                            _modifiers?.Item2 ?? ModelBase.Enums.SealedEnum.NotSealed,
+                            _modifiers?.Item3 ?? ModelBase.Enums.AbstractEnum.NotAbstract );
             }
         }
 
@@ -101,9 +101,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 if ( value != null )
                     _modifiers =
                         new Tuple<AccessLevel, SealedEnum, AbstractEnum>(
-                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
+                            _modifiers?.Item1 ?? ModelBase.Enums.AccessLevel.Public,
                             value.Value,
-                            _modifiers?.Item3 ?? Model.Reflection.Enums.AbstractEnum.NotAbstract );
+                            _modifiers?.Item3 ?? ModelBase.Enums.AbstractEnum.NotAbstract );
             }
         }
 
@@ -115,8 +115,8 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
                 if ( value != null )
                     _modifiers =
                         new Tuple<AccessLevel, SealedEnum, AbstractEnum>(
-                            _modifiers?.Item1 ?? Model.Reflection.Enums.AccessLevel.Public,
-                            _modifiers?.Item2 ?? Model.Reflection.Enums.SealedEnum.NotSealed,
+                            _modifiers?.Item1 ?? ModelBase.Enums.AccessLevel.Public,
+                            _modifiers?.Item2 ?? ModelBase.Enums.SealedEnum.NotSealed,
                             value.Value );
             }
         }
@@ -161,7 +161,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #region Emiters
 
-        public static TypeMetadataSurrogate EmitSurrogateTypeMetadata( TypeMetadata typeMetadata )
+        public static TypeMetadataSurrogate EmitSurrogateTypeMetadata( TypeMetadataBase typeMetadata )
         {
             if ( typeMetadata == null )
             {
@@ -177,7 +177,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
             return ReproducedSurrogateTypes[typeId];
         }
 
-        public TypeMetadata EmitOriginalTypeMetadata()
+        public TypeMetadataBase EmitOriginalTypeMetadata()
         {
             string typeId = FullName;
             if ( !ReproducedOriginalTypes.ContainsKey( typeId ) )
@@ -201,12 +201,12 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         private void GetOriginalTypeMetadata()
         {
-            TypeMetadata typeMetadata = new TypeMetadata();
+            TypeMetadataBase typeMetadata = new TypeMetadataBase();
             ReproducedOriginalTypes.Add( FullName, typeMetadata );
             PopulateTypeMetadataWithData( typeMetadata );
         }
 
-        private void PopulateTypeMetadataWithData( TypeMetadata typeMetadata )
+        private void PopulateTypeMetadataWithData( TypeMetadataBase typeMetadata )
         {
             typeMetadata.TypeName = TypeName;
             typeMetadata.NamespaceName = NamespaceName;

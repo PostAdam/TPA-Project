@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model.ModelDTG;
 using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
 using static System.String;
 
 namespace ViewModel
@@ -15,7 +15,7 @@ namespace ViewModel
 
             string attributes = Empty;
 
-            foreach (TypeMetadata attributeMetadata in attributesMetadata)
+            foreach ( TypeMetadata attributeMetadata in attributesMetadata)
             {
                 attributes += "[" + attributeMetadata.TypeName.Replace("Attribute", Empty) + "]";
             }
@@ -48,18 +48,18 @@ namespace ViewModel
             return mods.ToLower();
         }
 
-        public static string GetGenerics(TypeMetadata typeMetadata)
+        public static string GetGenerics( TypeMetadata typaMetadata )
         {
-            if (typeMetadata?.GenericArguments == null) return Empty;
+            if (typaMetadata?.GenericArguments == null) return Empty;
 
             string generics = Empty;
-            if (typeMetadata.GenericArguments.Any())
+            if (typaMetadata.GenericArguments.Any())
             {
                 generics += "<";
-                for (int i = 0; i < typeMetadata.GenericArguments.Count(); i++)
+                for (int i = 0; i < typaMetadata.GenericArguments.Count(); i++)
                 {
-                    generics += typeMetadata.GenericArguments.ElementAt(i).TypeName;
-                    if (i < typeMetadata.GenericArguments.Count() - 1)
+                    generics += typaMetadata.GenericArguments.ElementAt(i).TypeName;
+                    if (i < typaMetadata.GenericArguments.Count() - 1)
                     {
                         generics += ", ";
                     }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 
 namespace XmlSerializationSurrogates
 {
-    public class ReproducedOriginalTypes : Dictionary<string, TypeMetadata>
+    public class ReproducedOriginalTypes : Dictionary<string, TypeMetadataBase>
     {
         private static ReproducedOriginalTypes _reproducedOriginalTypes = null;
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.ModelDTG;
 using Model.Reflection.MetadataModels;
 using ViewModel;
 using ViewModel.MetadataViewModels;

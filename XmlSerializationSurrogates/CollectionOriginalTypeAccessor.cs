@@ -1,40 +1,40 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 using XmlSerializationSurrogates.MetadataSurrogates;
 
 namespace XmlSerializationSurrogates
 {
     public static class CollectionOriginalTypeAccessor
     {
-        public static IEnumerable<FieldMetadata> GetOriginalFieldsMetadata( IEnumerable<FieldMetadataSurrogate> fields )
+        public static IEnumerable<FieldMetadataBase> GetOriginalFieldsMetadata( IEnumerable<FieldMetadataSurrogate> fields )
         {
             return fields?.Select( f => f.GetOriginalFieldMetadata() );
         }
 
-        public static IEnumerable<TypeMetadata> GetOriginalTypesMetadata( IEnumerable<TypeMetadataSurrogate> types )
+        public static IEnumerable<TypeMetadataBase> GetOriginalTypesMetadata( IEnumerable<TypeMetadataSurrogate> types )
         {
             return types?.Select( t => t.EmitOriginalTypeMetadata() );
         }
 
-        public static IEnumerable<PropertyMetadata> GetOriginalPropertiesMetadata(
+        public static IEnumerable<PropertyMetadataBase> GetOriginalPropertiesMetadata(
             IEnumerable<PropertyMetadataSurrogate> properties )
         {
             return properties?.Select( p => p.GetOriginalPropertyMetadata() );
         }
 
-        public static IEnumerable<MethodMetadata> GetOriginalMethodsMetadata(
+        public static IEnumerable<MethodMetadataBase> GetOriginalMethodsMetadata(
             IEnumerable<MethodMetadataSurrogate> methods )
         {
             return methods?.Select( m => m.GetOriginalMethodMetadata() );
         }
 
-        public static IEnumerable<EventMetadata> GetOriginalEventsMetadata( IEnumerable<EventMetadataSurrogate> events )
+        public static IEnumerable<EventMetadataBase> GetOriginalEventsMetadata( IEnumerable<EventMetadataSurrogate> events )
         {
             return events?.Select( e => e.GetOriginalEventMetadata() );
         }
 
-        public static IEnumerable<ParameterMetadata> GetOriginalParametersMetadata(
+        public static IEnumerable<ParameterMetadataBase> GetOriginalParametersMetadata(
             IEnumerable<ParameterMetadataSurrogate> parameters )
         {
             return parameters?.Select( p => p.GetOriginalParameterMetadata() );

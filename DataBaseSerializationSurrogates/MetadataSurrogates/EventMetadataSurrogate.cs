@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 using static DataBaseSerializationSurrogates.CollectionOriginalTypeAccessor;
 using static DataBaseSerializationSurrogates.CollectionTypeAccessor;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
-    public class EventMetadataSurrogate
+    public class EventMetadataSurrogate 
     {
         #region Constructors
 
@@ -13,7 +13,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
         }
 
-        public EventMetadataSurrogate( EventMetadata eventMetadata )
+        public EventMetadataSurrogate( EventMetadataBase eventMetadata )
         {
             Name = Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( eventMetadata.TypeMetadata );
@@ -56,9 +56,9 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public EventMetadata GetOriginalEventMetadata()
+        public EventMetadataBase GetOriginalEventMetadata()
         {
-            return new EventMetadata()
+            return new EventMetadataBase()
             {
                 Name = Name,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
