@@ -30,7 +30,12 @@ namespace Model
         {
             Compose();
             SetUpDataDirectory();
-            Task.Run( CreateMdfDatabaseFile );
+            string mdfFilePath = ( string ) AppDomain.CurrentDomain.GetData("DataDirectory");
+            var filename = System.IO.Path.Combine(mdfFilePath, "DataBase.mdf");
+            if (!System.IO.File.Exists(filename))
+            {
+                Task.Run(CreateMdfDatabaseFile).Wait();
+            }
             LoadRepository();
             LoadLogger();
         }
@@ -45,16 +50,16 @@ namespace Model
 
         private async Task CreateMdfDatabaseFile()
         {
-            using ( SqlConnection connection = new SqlConnection( "Server=localhost;Integrated security=SSPI;database=master" ) )
+            using ( SqlConnection connection = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True") )
             {
                 using ( SqlCommand command = new SqlCommand() )
                 {
                     string path = (string) AppDomain.CurrentDomain.GetData( "DataDirectory" );
                     string stringCommand = "CREATE DATABASE MyDatabase ON PRIMARY " +
-                                 "(NAME = MyDatabase_Data, " +
-                                 $"FILENAME = '{path}\\MyDatabaseData.mdf') " +
+                                 "(NAME = Database_Data, " +
+                                 $"FILENAME = '{path}\\DataBase.mdf') " +
                                  "LOG ON (NAME = MyDatabase_Log, " +
-                                 $"FILENAME = '{path}\\MyDatabaseLog.ldf')";
+                                 $"FILENAME = '{path}\\DataBase.ldf')";
 
                     command.CommandText = stringCommand;
                     command.Connection = connection;

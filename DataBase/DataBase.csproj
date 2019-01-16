@@ -102,12 +102,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataBase.mdf">
+    <Content Include="DataBase.ldf">
+      <DependentUpon>DataBase.mdf</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="DataBase_log.ldf">
+    <Content Include="DataBase.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>DataBase.mdf</DependentUpon>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

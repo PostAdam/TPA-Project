@@ -1,15 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using ViewModel;
 
 namespace CLI
 {
     class Program
     {
+        public delegate void SimpleDelegate();
+
         //TODO: move to another class, refactor code
         static void Main()
         {
+            
             ConfigureConsoleWindow();
             string command;
             MainViewModel viewModel = InitViewModel();
@@ -27,9 +31,12 @@ namespace CLI
                             Console.WriteLine();
                             Console.WriteLine( @"Provide filename:" );
                             Console.Write( ">" );
-                            Task.Run( () => viewModel.ClickOpen.Execute() );
+                            SimpleDelegate openDelegate = () => Task.Run( ()=> viewModel.ClickOpen.Execute() );
+                            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.ContextIdle, openDelegate);
+                            Task.WaitAll();
                             dllViewer.RootNodes = viewModel.Items;
                             dllViewer.DisplayTree();
+                            
                         }
                         catch ( FileNotFoundException fnfe )
                         {
