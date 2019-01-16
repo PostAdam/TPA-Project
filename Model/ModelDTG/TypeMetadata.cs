@@ -66,7 +66,7 @@ namespace Model.ModelDTG
             }
 
             TypeKind = (TypeKind)typeMetadata.TypeKind;
-            Modifiers = Tuple.Create((AccessLevel)typeMetadata.Modifiers.Item1,
+            Modifiers = typeMetadata.Modifiers == null ? null : Tuple.Create((AccessLevel)typeMetadata.Modifiers.Item1,
                 (SealedEnum) typeMetadata.Modifiers.Item2, (AbstractEnum)typeMetadata.Modifiers.Item3);
             Fields = GetFieldsMetadata(typeMetadata.Fields);
 

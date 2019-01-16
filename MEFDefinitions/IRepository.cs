@@ -8,7 +8,7 @@ namespace MEFDefinitions
        /* Task Write<T>( T type, string fileName ) where T : class;
         Task<T> Read<T>( string fileName ) where T : class;*/
     
-        Task Write( object type, string fileName, CancellationToken cancellationToken );
-        Task<object> Read( string fileName, CancellationToken cancellationToken );
+        Task Write( object type, CancellationToken cancellationToken );
+        Task<object> Read( CancellationToken cancellationToken );
     }
 }

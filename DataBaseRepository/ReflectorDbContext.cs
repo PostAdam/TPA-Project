@@ -20,7 +20,7 @@ namespace DataBaseRepository
 
         #region Constructor
 
-        public ReflectorDbContext() : base( "ReflectorDb" )
+        public ReflectorDbContext() : base( "name = Database.Properties.Settings.DatabaseConnectionString" )
         {
         }
 
@@ -103,7 +103,6 @@ namespace DataBaseRepository
                 .WithMany( t => t.DeclaringTypes )
                 .HasForeignKey( t => t.DeclaringTypeId )
                 .WillCascadeOnDelete( false );
-            // TODO: all id to ?
 
             modelBuilder.Entity<TypeMetadataSurrogate>()
                 .HasMany( t => t.GenericArguments )

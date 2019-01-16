@@ -24,13 +24,13 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             if ( typeMetadata.BaseType != null )
             {
                 BaseType = new TypeMetadataSurrogate( typeMetadata.BaseType.TypeName,
-                    typeMetadata.BaseType.NamespaceName );
+                    typeMetadata.BaseType.NamespaceName, typeMetadata.BaseType.FullName );
             }
 
             if ( typeMetadata.DeclaringType != null )
             {
                 DeclaringType = new TypeMetadataSurrogate( typeMetadata.DeclaringType.TypeName,
-                    typeMetadata.DeclaringType.NamespaceName );
+                    typeMetadata.DeclaringType.NamespaceName, typeMetadata.DeclaringType.FullName );
             }
 
             TypeKind = typeMetadata.TypeKind;
@@ -47,10 +47,11 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             Events = GetEventsMetadata( typeMetadata.Events );
         }
 
-        private TypeMetadataSurrogate( string typeName, string namespaceName )
+        private TypeMetadataSurrogate( string typeName, string namespaceName, string fullName )
         {
             TypeName = typeName;
             NamespaceName = namespaceName;
+            FullName = fullName ?? namespaceName + "." + typeName;
         }
 
         #endregion
@@ -127,7 +128,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         public TypeMetadataBase EmitOriginalTypeMetadata()
         {
-            string typeId = FullName;
+            string typeId = FullName ?? NamespaceName + "." + TypeName;
             if ( !ReproducedOriginalTypes.ContainsKey( typeId ) )
             {
                 GetOriginalTypeMetadata();
@@ -146,7 +147,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
         private void GetOriginalTypeMetadata()
         {
             TypeMetadataBase typeMetadata = new TypeMetadataBase();
-            ReproducedOriginalTypes.Add( FullName, typeMetadata );
+            ReproducedOriginalTypes.Add( FullName ?? NamespaceName + "." + TypeName, typeMetadata );
             PopulateTypeMetadataWithData( typeMetadata );
         }
 
@@ -154,6 +155,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
         {
             typeMetadata.TypeName = TypeName;
             typeMetadata.NamespaceName = NamespaceName;
+            typeMetadata.FullName = FullName;
             typeMetadata.BaseType = BaseType?.EmitOriginalTypeMetadata();
             typeMetadata.DeclaringType = DeclaringType?.EmitOriginalTypeMetadata();
             typeMetadata.TypeKind = TypeKind;
@@ -167,7 +169,6 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
             typeMetadata.Methods = GetOriginalMethodsMetadata( Methods );
             typeMetadata.Constructors = GetOriginalMethodsMetadata( Constructors );
             typeMetadata.Events = GetOriginalEventsMetadata( Events );
-            typeMetadata.FullName = FullName;
         }
 
         #endregion

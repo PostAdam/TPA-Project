@@ -97,15 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncObservableCollection.cs" />
-    <Compile Include="Commands\AsyncCommand\AsyncCommand.cs" />
-    <Compile Include="Commands\AsyncCommand\AsyncCommandBase .cs" />
-    <Compile Include="Commands\AsyncCommand\CancelCommand.cs" />
-    <Compile Include="Commands\ExperimentalAsyncCommand\AsyncCommand.cs" />
-    <Compile Include="Commands\ExperimentalAsyncCommand\AsyncCommandBase.cs" />
-    <Compile Include="Commands\ExperimentalAsyncCommand\IAsyncCommand.cs" />
-    <Compile Include="Commands\ExperimentalAsyncCommand\NotifyTaskCompletion.cs" />
-    <Compile Include="Commands\AsyncCommand\IAsyncCommand.cs" />
-    <Compile Include="Commands\AsyncCommand\NotifyTask.cs" />
     <Compile Include="Commands\NewAsyncCommand\AsyncCommand.cs" />
     <Compile Include="Commands\NewAsyncCommand\CommandBase.cs" />
     <Compile Include="IPathResolver.cs" />

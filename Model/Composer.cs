@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
@@ -15,67 +16,103 @@ namespace Model
 {
     public class Composer
     {
-        [ImportMany(typeof(IRepository))]
+        [ImportMany( typeof( IRepository ) )]
         public IEnumerable<Lazy<IRepository, IDictionary<string, object>>> Repositories;
 
+        [ImportMany( typeof( ITrace ) )] public IEnumerable<Lazy<ITrace, IDictionary<string, object>>> Loggers;
+
+        public ITrace Logger;
         public IRepository Repository;
 
         public Composer()
         {
             Compose();
             LoadRepository();
+            LoadLogger();
+            SetUpDataDirectory();
+        }
+
+        private void SetUpDataDirectory()
+        {
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string dataDirectory = baseDirectory.Remove( baseDirectory.Length - ( "WPF\\bin\\Debug".Length + 1 ) );
+            dataDirectory += "DataBase";
+            AppDomain.CurrentDomain.SetData( "DataDirectory", dataDirectory );
         }
 
         public void Compose()
         {
-            // TODO: move to App.config
-            List<DirectoryCatalog> directoryCatalogs = new List<DirectoryCatalog>()
-            {
-                new DirectoryCatalog("../../../XmlRepository/bin/Debug", "*.dll"),
-                new DirectoryCatalog("../../../DataBaseRepository/bin/Debug", "*.dll"),
-                new DirectoryCatalog("../../../DataBaseLogger/bin/Debug", "*.dll"),
-                new DirectoryCatalog("../../../FileLogger/bin/Debug", "*.dll")
-            };
-            AggregateCatalog catalog = new AggregateCatalog(directoryCatalogs);
-            CompositionContainer container = new CompositionContainer(catalog);
+            List<DirectoryCatalog> directoryCatalogs = GetDirectoryCatalogs();
+            AggregateCatalog catalog = new AggregateCatalog( directoryCatalogs );
+            CompositionContainer container = new CompositionContainer( catalog );
 
             try
             {
-                container.ComposeParts(this);
+                container.ComposeParts( this );
             }
-            catch (CompositionException compositionException)
+            catch ( CompositionException compositionException )
             {
-                Console.WriteLine(compositionException.ToString());
+                Console.WriteLine( compositionException.ToString() );
 
                 throw;
             }
-            catch (Exception exception) when (exception is ReflectionTypeLoadException)
+            catch ( Exception exception ) when ( exception is ReflectionTypeLoadException )
             {
                 ReflectionTypeLoadException typeLoadException = (ReflectionTypeLoadException) exception;
                 Exception[] loaderExceptions = typeLoadException.LoaderExceptions;
-                loaderExceptions.ToList().ForEach(ex => Console.WriteLine(ex.StackTrace));
-
-                throw;
+                loaderExceptions.ToList().ForEach( ex => Console.WriteLine( ex.StackTrace ) );
             }
+        }
+
+        private List<DirectoryCatalog> GetDirectoryCatalogs()
+        {
+            NameValueCollection dllsPaths = ConfigurationManager.GetSection( "plugins" ) as NameValueCollection;
+
+            List<DirectoryCatalog> directoryCatalogs = new List<DirectoryCatalog>();
+            foreach ( string dllPath in dllsPaths.AllKeys )
+            {
+                directoryCatalogs.Add( new DirectoryCatalog( dllPath, "*.dll" ) );
+            }
+
+            return directoryCatalogs;
         }
 
         private void LoadRepository()
         {
             string repositoryType = ConfigurationManager.AppSettings["repositoryType"];
             Repository = Repositories
-                .FirstOrDefault(repository => (string) repository.Metadata["destination"] == repositoryType)?.Value;
+                .FirstOrDefault( repository => (string) repository.Metadata["destination"] == repositoryType )?.Value;
         }
 
-        public async Task<AssemblyMetadata> ReadFromFile( string filename, CancellationTokenSource cancellationToken )
+        private void LoadLogger()
         {
-            AssemblyMetadataBase assemblyMetadataBase = await Repository.Read( filename, cancellationToken.Token ) as AssemblyMetadataBase;
+            string loggerType = ConfigurationManager.AppSettings["loggerType"];
+            Logger = Loggers.FirstOrDefault( logger => (string) logger.Metadata["destination"] == loggerType )?.Value;
+            if ( Logger != null )
+            {
+                string logLevel = ConfigurationManager.AppSettings["logLevel"];
 
-            return new AssemblyMetadata( assemblyMetadataBase );
+                if ( int.TryParse( logLevel, out int level ) )
+                {
+                    Logger.Level = (LogLevel) level;
+                }
+                else
+                {
+                    Logger.Level = LogLevel.Warning;
+                }
+            }
         }
 
-        public async Task Save( AssemblyMetadata assemblyMetadata , string filename, CancellationToken _cancellationTokenSource )
+        public async Task<AssemblyMetadata> ReadFromFile( CancellationToken cancellationToken )
         {
-            await Repository.Write( assemblyMetadata.GetOriginalAssemblyMetadata(), filename, _cancellationTokenSource );
+            return await Repository.Read( cancellationToken ) is AssemblyMetadataBase assemblyMetadataBase
+                ? new AssemblyMetadata( assemblyMetadataBase )
+                : null;
+        }
+
+        public async Task Save( AssemblyMetadata assemblyMetadata, CancellationToken cancellationTokenSource )
+        {
+            await Repository.Write( assemblyMetadata.GetOriginalAssemblyMetadata(), cancellationTokenSource );
         }
     }
 }

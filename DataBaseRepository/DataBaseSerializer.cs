@@ -15,15 +15,14 @@ namespace DataBaseRepository
     [ExportMetadata( "destination", "db" )]
     public class DataBaseSerializer : IRepository
     {
-        // TODO: remove fileName argument and change way of choosing it
-        public async Task Write( object metadata, string fileName, CancellationToken cancellationToken )
+        public async Task Write( object metadata, CancellationToken cancellationToken )
         {
-            await Task.Run( () => WriteData( metadata, fileName, cancellationToken ), cancellationToken );
+            await Task.Run( () => WriteData( metadata, cancellationToken ), cancellationToken );
         }
 
-        public async Task<object> Read( string fileName, CancellationToken cancellationToken )
+        public async Task<object> Read( CancellationToken cancellationToken )
         {
-            return await ReadData( fileName, cancellationToken );
+            return await ReadData( cancellationToken );
         }
 
         #region Privates
@@ -31,7 +30,7 @@ namespace DataBaseRepository
         private AssemblyMetadataSurrogate _assemblyMetadataSurrogate;
         private AssemblyMetadataBase _assemblyMetadata;
 
-        private async Task WriteData( object metadata, string fileName, CancellationToken cancellationToken )
+        private async Task WriteData( object metadata, CancellationToken cancellationToken )
         {
             ClearAssemblyMetadatas();
 
@@ -55,7 +54,8 @@ namespace DataBaseRepository
             }
         }
 
-        private async Task SavingTasks( object metadata, ReflectorDbContext dbContext, CancellationToken cancellationToken )
+        private async Task SavingTasks( object metadata, ReflectorDbContext dbContext,
+            CancellationToken cancellationToken )
         {
             IEnumerable<Func<CancellationToken, Task>> tasks = PrepareTasksForSaving( dbContext, metadata );
             foreach ( Func<CancellationToken, Task> task in tasks )
@@ -65,7 +65,7 @@ namespace DataBaseRepository
             }
         }
 
-        private async Task<object> ReadData( string fileName, CancellationToken cancellationToken )
+        private async Task<object> ReadData( CancellationToken cancellationToken )
         {
             ClearAssemblyMetadatas();
 
@@ -93,7 +93,7 @@ namespace DataBaseRepository
         private async Task ReadingTasks( ReflectorDbContext dbContext, CancellationToken cancellationToken )
         {
             IEnumerable<Func<CancellationToken, Task>> tasks =
-                                    PrepareTasksForReading( dbContext );
+                PrepareTasksForReading( dbContext );
             foreach ( Func<CancellationToken, Task> task in tasks )
             {
                 await task( cancellationToken );
