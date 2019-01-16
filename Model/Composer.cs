@@ -4,6 +4,8 @@ using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -27,9 +29,10 @@ namespace Model
         public Composer()
         {
             Compose();
+            SetUpDataDirectory();
+            Task.Run( CreateMdfDatabaseFile );
             LoadRepository();
             LoadLogger();
-            SetUpDataDirectory();
         }
 
         private void SetUpDataDirectory()
@@ -38,6 +41,43 @@ namespace Model
             string dataDirectory = baseDirectory.Remove( baseDirectory.Length - ( "WPF\\bin\\Debug".Length + 1 ) );
             dataDirectory += "DataBase";
             AppDomain.CurrentDomain.SetData( "DataDirectory", dataDirectory );
+        }
+
+        private async Task CreateMdfDatabaseFile()
+        {
+            using ( SqlConnection connection = new SqlConnection( "Server=localhost;Integrated security=SSPI;database=master" ) )
+            {
+                using ( SqlCommand command = new SqlCommand() )
+                {
+                    string path = (string) AppDomain.CurrentDomain.GetData( "DataDirectory" );
+                    string stringCommand = "CREATE DATABASE MyDatabase ON PRIMARY " +
+                                 "(NAME = MyDatabase_Data, " +
+                                 $"FILENAME = '{path}\\MyDatabaseData.mdf') " +
+                                 "LOG ON (NAME = MyDatabase_Log, " +
+                                 $"FILENAME = '{path}\\MyDatabaseLog.ldf')";
+
+                    command.CommandText = stringCommand;
+                    command.Connection = connection;
+                    try
+                    {
+                        connection.Open();
+                        await command.ExecuteNonQueryAsync();
+                    }
+                    catch ( Exception e )
+                    {
+                        Console.WriteLine( e );
+                    }
+                }
+            }
+        }
+
+        private string GetConnectionString()
+        {
+            Configuration appConfig =
+                ConfigurationManager.OpenExeConfiguration( Assembly.GetExecutingAssembly().Location );
+            string connectionString = appConfig.ConnectionStrings
+                .ConnectionStrings["DataBase.Properties.Settings.DataBaseConnectionString"].ConnectionString;
+            return connectionString;
         }
 
         public void Compose()

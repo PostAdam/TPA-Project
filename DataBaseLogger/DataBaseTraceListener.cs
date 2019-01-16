@@ -18,6 +18,30 @@ namespace DataBaseLogger
         public DataBaseTraceListener()
         {
             _connectionString = GetConnectionString();
+            Task.Run( EnsureTableExists );
+        }
+
+        private async Task EnsureTableExists()
+        {
+            using ( SqlConnection sqlConnection = new SqlConnection( _connectionString ) )
+            {
+                using ( SqlCommand sqlCommand = new SqlCommand() )
+                {
+                    sqlCommand.Connection = sqlConnection;
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "IF NOT EXISTS ( SELECT 1 FROM sysobjects WHERE name='LOGS_T' AND xtype='U' ) " +
+                                             "CREATE TABLE LOGS_T ( ID INT IDENTITY(1,1) PRIMARY KEY, TIME DATETIME, MESSAGE TEXT ) ";
+                    try
+                    {
+                        sqlConnection.Open();
+                        await sqlCommand.ExecuteNonQueryAsync();
+                    }
+                    catch ( SqlException e )
+                    {
+                        Console.WriteLine( e );
+                    }
+                }
+            }
         }
 
         #endregion
@@ -31,7 +55,7 @@ namespace DataBaseLogger
 
         public async Task WriteLine( string message, string category )
         {
-            LogLevel logLevelTreshold = ( LogLevel ) Enum.Parse( typeof( LogLevel ), category );
+            LogLevel logLevelTreshold = (LogLevel) Enum.Parse( typeof( LogLevel ), category );
             if ( logLevelTreshold <= Level )
             {
                 await SaveLogEntry( message, category );
@@ -75,9 +99,9 @@ namespace DataBaseLogger
             Configuration appConfig =
                 ConfigurationManager.OpenExeConfiguration( Assembly.GetExecutingAssembly().Location );
             string connectionString = appConfig.ConnectionStrings
-                .ConnectionStrings[ "DataBase.Properties.Settings.DataBaseConnectionString" ].ConnectionString;
+                .ConnectionStrings["DataBase.Properties.Settings.DataBaseConnectionString"].ConnectionString;
             return connectionString;
-        } 
+        }
 
         #endregion
     }
