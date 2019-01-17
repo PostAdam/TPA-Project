@@ -15,7 +15,7 @@ namespace DataBaseRepository
     [ExportMetadata( "destination", "db" )]
     public class DataBaseSerializer : IRepository
     {
-        public async Task Write( object metadata, CancellationToken cancellationToken )
+        public async Task Write( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
         {
             await Task.Run( () => WriteData( metadata, cancellationToken ), cancellationToken );
         }
@@ -30,7 +30,7 @@ namespace DataBaseRepository
         private AssemblyMetadataSurrogate _assemblyMetadataSurrogate;
         private AssemblyMetadataBase _assemblyMetadata;
 
-        private async Task WriteData( object metadata, CancellationToken cancellationToken )
+        private async Task WriteData( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
         {
             ClearAssemblyMetadatas();
 
@@ -54,7 +54,7 @@ namespace DataBaseRepository
             }
         }
 
-        private async Task SavingTasks( object metadata, ReflectorDbContext dbContext,
+        private async Task SavingTasks(AssemblyMetadataBase metadata, ReflectorDbContext dbContext,
             CancellationToken cancellationToken )
         {
             IEnumerable<Func<CancellationToken, Task>> tasks = PrepareTasksForSaving( dbContext, metadata );
@@ -167,13 +167,13 @@ namespace DataBaseRepository
         }
 
         private IEnumerable<Func<CancellationToken, Task>> PrepareTasksForSaving( ReflectorDbContext dbContext,
-            object metadata )
+            AssemblyMetadataBase metadata )
         {
             return new List<Func<CancellationToken, Task>>()
             {
                 ct => Task.Run(
                     () => _assemblyMetadataSurrogate =
-                        new AssemblyMetadataSurrogate( metadata as AssemblyMetadataBase ), ct ),
+                        new AssemblyMetadataSurrogate( metadata ), ct ),
                 ct => Task.Run( () => dbContext.AssemblyModels.Add( _assemblyMetadataSurrogate ), ct ),
                 dbContext.SaveChangesAsync
             };
