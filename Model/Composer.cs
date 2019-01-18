@@ -28,6 +28,7 @@ namespace Model
             var filename = Path.Combine( mdfFilePath, "DataBase.mdf" );
             if ( !File.Exists( filename ) )
             {
+                Task.Run(()=>DropMdfDatabaseFile());
                 Task.Run( CreateMdfDatabaseFile ).Wait();
             }
 
@@ -90,6 +91,38 @@ namespace Model
             string dataDirectory = baseDirectory.Remove( baseDirectory.Length - ( "WPF\\bin\\Debug".Length + 1 ) );
             dataDirectory += "DataBase";
             AppDomain.CurrentDomain.SetData( "DataDirectory", dataDirectory );
+        }
+
+        private async Task DropMdfDatabaseFile()
+        {
+            using (SqlConnection connection =
+                new SqlConnection(
+                    "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True"))
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    string stringCommand = "USE MASTER; IF EXISTS ( SELECT 1 FROM master.dbo.sysdatabases WHERE NAME = 'MyDatabase') DROP DATABASE MyDatabase;";
+
+                    command.CommandText = stringCommand;
+                    command.Connection = connection;
+                    try
+                    {
+                        connection.Open();
+                        await command.ExecuteNonQueryAsync();
+                    }
+                    catch (SqlException sqle)
+                    {
+                        if (!sqle.Message.Contains("Unable to open the physical file"))
+                        {
+                            throw;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+            }
         }
 
         private async Task CreateMdfDatabaseFile()
