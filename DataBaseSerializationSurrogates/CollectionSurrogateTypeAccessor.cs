@@ -1,21 +1,27 @@
 ﻿using System.Collections.Generic;
 using DataBaseSerializationSurrogates.MetadataSurrogates;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 
 namespace DataBaseSerializationSurrogates
 {
     public static class CollectionTypeAccessor
     {
+        private static readonly ReproducedSurrogateTypes ReproducedSurrogateTypes = ReproducedSurrogateTypes.Instance;
+        private static readonly ReproducedOriginalTypes ReproducedOriginalTypes = ReproducedOriginalTypes.Instance;
+
         public static ICollection<NamespaceMetadataSurrogate> GetNamespacesMetadata(
-            IEnumerable<NamespaceMetadata> namespaces )
+            IEnumerable<NamespaceMetadataBase> namespaces )
         {
             if ( namespaces == null )
             {
                 return null;
             }
 
+            ReproducedSurrogateTypes.Clear();
+            ReproducedOriginalTypes.Clear();
+
             ICollection<NamespaceMetadataSurrogate> surrogates = new List<NamespaceMetadataSurrogate>();
-            foreach ( NamespaceMetadata namespaceMetadata in namespaces )
+            foreach ( NamespaceMetadataBase namespaceMetadata in namespaces )
             {
                 surrogates.Add( new NamespaceMetadataSurrogate( namespaceMetadata ) );
             }
@@ -24,7 +30,7 @@ namespace DataBaseSerializationSurrogates
         }
 
         public static ICollection<FieldMetadataSurrogate> GetFieldsMetadata(
-            IEnumerable<FieldMetadata> fields )
+            IEnumerable<FieldMetadataBase> fields )
         {
             if ( fields == null )
             {
@@ -32,7 +38,7 @@ namespace DataBaseSerializationSurrogates
             }
 
             ICollection<FieldMetadataSurrogate> surrogates = new List<FieldMetadataSurrogate>();
-            foreach ( FieldMetadata fieldMetadata in fields )
+            foreach ( FieldMetadataBase fieldMetadata in fields )
             {
                 surrogates.Add( new FieldMetadataSurrogate( fieldMetadata ) );
             }
@@ -41,7 +47,7 @@ namespace DataBaseSerializationSurrogates
         }
 
         public static ICollection<EventMetadataSurrogate> GetEventsMetadata(
-            IEnumerable<EventMetadata> events )
+            IEnumerable<EventMetadataBase> events )
         {
             if ( events == null )
             {
@@ -49,7 +55,7 @@ namespace DataBaseSerializationSurrogates
             }
 
             ICollection<EventMetadataSurrogate> surrogates = new List<EventMetadataSurrogate>();
-            foreach ( EventMetadata eventMetadata in events )
+            foreach ( EventMetadataBase eventMetadata in events )
             {
                 surrogates.Add( new EventMetadataSurrogate( eventMetadata ) );
             }
@@ -58,7 +64,7 @@ namespace DataBaseSerializationSurrogates
         }
 
         public static ICollection<MethodMetadataSurrogate> GetMethodsMetadata(
-            IEnumerable<MethodMetadata> methods )
+            IEnumerable<MethodMetadataBase> methods )
         {
             if ( methods == null )
             {
@@ -66,7 +72,7 @@ namespace DataBaseSerializationSurrogates
             }
 
             ICollection<MethodMetadataSurrogate> surrogates = new List<MethodMetadataSurrogate>();
-            foreach ( MethodMetadata methodMetadata in methods )
+            foreach ( MethodMetadataBase methodMetadata in methods )
             {
                 surrogates.Add( new MethodMetadataSurrogate( methodMetadata ) );
             }
@@ -75,7 +81,7 @@ namespace DataBaseSerializationSurrogates
         }
 
         public static ICollection<PropertyMetadataSurrogate> GetPropertiesMetadata(
-            IEnumerable<PropertyMetadata> properties )
+            IEnumerable<PropertyMetadataBase> properties )
         {
             if ( properties == null )
             {
@@ -83,7 +89,7 @@ namespace DataBaseSerializationSurrogates
             }
 
             ICollection<PropertyMetadataSurrogate> surrogates = new List<PropertyMetadataSurrogate>();
-            foreach ( PropertyMetadata propertyMetadata in properties )
+            foreach ( PropertyMetadataBase propertyMetadata in properties )
             {
                 surrogates.Add( new PropertyMetadataSurrogate( propertyMetadata ) );
             }
@@ -91,7 +97,7 @@ namespace DataBaseSerializationSurrogates
             return surrogates;
         }
 
-        public static ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        public static ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadataBase> types )
         {
             if ( types == null )
             {
@@ -99,7 +105,7 @@ namespace DataBaseSerializationSurrogates
             }
 
             ICollection<TypeMetadataSurrogate> surrogates = new List<TypeMetadataSurrogate>();
-            foreach ( TypeMetadata typeMetadata in types )
+            foreach ( TypeMetadataBase typeMetadata in types )
             {
                 surrogates.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
             }
@@ -108,7 +114,7 @@ namespace DataBaseSerializationSurrogates
         }
 
         public static ICollection<ParameterMetadataSurrogate> GetParametersMetadata(
-            IEnumerable<ParameterMetadata> parameters )
+            IEnumerable<ParameterMetadataBase> parameters )
         {
             if ( parameters == null )
             {
@@ -116,7 +122,7 @@ namespace DataBaseSerializationSurrogates
             }
 
             ICollection<ParameterMetadataSurrogate> surrogates = new List<ParameterMetadataSurrogate>();
-            foreach ( ParameterMetadata parameterMetadata in parameters )
+            foreach ( ParameterMetadataBase parameterMetadata in parameters )
             {
                 surrogates.Add( new ParameterMetadataSurrogate( parameterMetadata ) );
             }

@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:view="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:assembly="clr-namespace:ViewModel.MetadataViewModels;assembly=ViewModel"
+        xmlns:userControls="clr-namespace:WPF.UserControls"
         Title="MainWindow" Height="450" Width="800">
+
     <Border>
         <Border.Background>
             <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1.5">
@@ -12,7 +14,7 @@
                 <GradientStop Color="#FF03011B" Offset="0.95" />
             </LinearGradientBrush>
         </Border.Background>
-        <Grid>
+        <Grid Name="MainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150px" />
                 <ColumnDefinition Width="*" />
@@ -23,7 +25,7 @@
                       ItemsSource="{Binding Items}" Grid.Column="1" Background="#222425">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"
-                                              DataType="{x:Type assembly:AssemblyMetadataViewModel}">
+                                              DataType="{x:Type assembly:AssemblyMetadataViewModel}"> 
                         <DockPanel>
                             <TextBlock Text="{Binding Path=FullName}" FontSize="14" Margin="0,0,20,0"
                                        Foreground="WhiteSmoke" />
@@ -113,6 +115,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Border Style="{StaticResource RoundCornerRectangle}"
                         Grid.Row="0">
@@ -132,6 +135,11 @@
                             Command="{Binding ClickRead}"
                             Style="{StaticResource ButtonStyle}" />
                 </Border>
+
+                <userControls:OpenPopup Grid.Row="3" />
+                <userControls:SavePopup Grid.Row="3" />
+                <userControls:ReadPopup Grid.Row="3" />
+
             </Grid>
         </Grid>
     </Border>

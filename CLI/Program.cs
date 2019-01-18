@@ -1,14 +1,19 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 using ViewModel;
 
 namespace CLI
 {
     class Program
     {
+        public delegate void SimpleDelegate();
+
         //TODO: move to another class, refactor code
         static void Main()
         {
+            
             ConfigureConsoleWindow();
             string command;
             MainViewModel viewModel = InitViewModel();
@@ -24,27 +29,30 @@ namespace CLI
                         try
                         {
                             Console.WriteLine();
-                            Console.WriteLine(@"Provide filename:");
-                            Console.Write(">");
-                            viewModel.ClickOpen.Execute(null);
+                            Console.WriteLine( @"Provide filename:" );
+                            Console.Write( ">" );
+                            SimpleDelegate openDelegate = () => Task.Run( ()=> viewModel.ClickOpen.Execute() );
+                            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.ContextIdle, openDelegate);
+                            Task.WaitAll();
                             dllViewer.RootNodes = viewModel.Items;
                             dllViewer.DisplayTree();
+                            
                         }
                         catch ( FileNotFoundException fnfe )
                         {
-                            Console.WriteLine(fnfe.Message);
+                            Console.WriteLine( fnfe.Message );
                         }
 
                         break;
                     case "save":
-                        viewModel.ClickSave.Execute(null);
-                        Console.WriteLine("Serialized to Test.xml");
+                        Task.Run( () => viewModel.ClickSave.Execute() );
+                        Console.WriteLine( "Serialized to Test.xml" );
                         break;
                     case "read":
                         Console.WriteLine();
-                        Console.WriteLine(@"Read filename:");
-                        Console.Write(">");
-                        viewModel.ClickRead.Execute(null);
+                        Console.WriteLine( @"Read filename:" );
+                        Console.Write( ">" );
+                        Task.Run( () => viewModel.ClickRead.Execute() );
                         dllViewer.RootNodes = viewModel.Items;
                         dllViewer.DisplayTree();
                         break;
@@ -53,30 +61,31 @@ namespace CLI
                         break;
                     case "ls":
                         Console.WriteLine();
-                        Console.WriteLine("Directory list:");
-                        foreach ( string directory in Directory.EnumerateDirectories(Directory.GetCurrentDirectory()) )
+                        Console.WriteLine( "Directory list:" );
+                        foreach ( string directory in Directory.EnumerateDirectories( Directory.GetCurrentDirectory() )
+                        )
                         {
-                            Console.WriteLine(Path.GetDirectoryName(directory));
+                            Console.WriteLine( Path.GetDirectoryName( directory ) );
                         }
 
-                        foreach ( string file in Directory.GetFiles(Directory.GetCurrentDirectory()) )
+                        foreach ( string file in Directory.GetFiles( Directory.GetCurrentDirectory() ) )
                         {
-                            Console.WriteLine(Path.GetFileName(file));
+                            Console.WriteLine( Path.GetFileName( file ) );
                         }
 
                         Console.WriteLine();
                         break;
                     case "cd":
                         Console.WriteLine();
-                        Console.WriteLine("Move to:");
-                        Console.Write(">");
+                        Console.WriteLine( "Move to:" );
+                        Console.Write( ">" );
                         string dir = Directory.GetCurrentDirectory();
                         break;
                     case "exit":
-                        Console.WriteLine(@"Have an awesome day!");
+                        Console.WriteLine( @"Have an awesome day!" );
                         break;
                     default:
-                        Console.WriteLine(@"Not an option");
+                        Console.WriteLine( @"Not an option" );
                         break;
                 }
             } while ( command != "exit" );
@@ -88,7 +97,7 @@ namespace CLI
         private static MainViewModel InitViewModel()
         {
             IPathResolver pathResolver = new PathResolver();
-            MainViewModel viewmodel = new MainViewModel(pathResolver);
+            MainViewModel viewmodel = new MainViewModel( pathResolver );
 
             return viewmodel;
         }
@@ -101,13 +110,13 @@ namespace CLI
 
         private static void PrintMenu()
         {
-            Console.WriteLine("Press [open] to open dll/exe.");
-            Console.WriteLine("Press [save] to serialize model to xml.");
-            Console.WriteLine("Press [read] to read from xml.");
-            Console.WriteLine("Press [help] to see this help.");
-            Console.WriteLine("Press [ls] for unix ls command.");
-            Console.WriteLine("Press [cd] for unix cd command.");
-            Console.WriteLine("Press [exit] to quit.");
+            Console.WriteLine( "Press [open] to open dll/exe." );
+            Console.WriteLine( "Press [save] to serialize model to xml." );
+            Console.WriteLine( "Press [read] to read from xml." );
+            Console.WriteLine( "Press [help] to see this help." );
+            Console.WriteLine( "Press [ls] for unix ls command." );
+            Console.WriteLine( "Press [cd] for unix cd command." );
+            Console.WriteLine( "Press [exit] to quit." );
         }
     }
 }

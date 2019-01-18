@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using Model.ModelDTG;
 using Model.Reflection;
 using Model.Reflection.Enums;
-using Model.Reflection.MetadataModels;
 
 namespace ViewModel.MetadataViewModels
 {

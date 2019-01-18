@@ -62,11 +62,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
+    <Compile Include="Composer.cs" />
+    <Compile Include="ModelDTG\AssemblyMetadata.cs" />
+    <Compile Include="ModelDTG\Accessors\CollectionOriginalTypeAccessor.cs" />
+    <Compile Include="ModelDTG\Accessors\CollectionSurrogateTypeAccessor.cs" />
+    <Compile Include="ModelDTG\EventMetadata.cs" />
+    <Compile Include="ModelDTG\FieldMetadata.cs" />
+    <Compile Include="ModelDTG\MethodMetadata.cs" />
+    <Compile Include="ModelDTG\NamespaceMetadata.cs" />
+    <Compile Include="ModelDTG\ParameterMetadata.cs" />
+    <Compile Include="ModelDTG\PropertyMetadata.cs" />
+    <Compile Include="ModelDTG\ReproducedOriginalTypes.cs" />
+    <Compile Include="ModelDTG\ReproducedSurrogateTypes.cs" />
+    <Compile Include="ModelDTG\TypeMetadata.cs" />
     <Compile Include="Reflection\Enums\AbstractEnum.cs" />
     <Compile Include="Reflection\Enums\AccessLevel.cs" />
     <Compile Include="Reflection\Enums\ParameterKindEnum.cs" />
@@ -74,15 +82,17 @@
     <Compile Include="Reflection\Enums\StaticEnum.cs" />
     <Compile Include="Reflection\Enums\TypeKind.cs" />
     <Compile Include="Reflection\Enums\VirtualEnum.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Reflection\ExtensionMethods.cs" />
-    <Compile Include="Reflection\MetadataModels\AssemblyMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\EventMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\FieldMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\MethodMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\NamespaceMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\ParameterMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\PropertyMetadata.cs" />
-    <Compile Include="Reflection\MetadataModels\TypeMetadata.cs" />
+    <Compile Include="Reflection\MetadataModels\FieldReflector.cs" />
+    <Compile Include="Reflection\MetadataModels\MethodReflector.cs" />
+    <Compile Include="Reflection\MetadataModels\ParameterReflector.cs" />
+    <Compile Include="Reflection\MetadataModels\PropertyReflector.cs" />
+    <Compile Include="Reflection\MetadataModels\TypeReflector.cs" />
     <Compile Include="Reflection\ReflectedTypes.cs" />
     <Compile Include="Reflection\Reflector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,6 +109,10 @@
     <ProjectReference Include="..\MEFDefinitions\MEFDefinitions.csproj">
       <Project>{130fe00a-39e7-4462-a52a-5614b4f5cf74}</Project>
       <Name>MEFDefinitions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelBase\ModelBase.csproj">
+      <Project>{ba4faea1-9076-460b-8795-dc60955042b0}</Project>
+      <Name>ModelBase</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

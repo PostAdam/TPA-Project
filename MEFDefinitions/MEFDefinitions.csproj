@@ -41,5 +41,11 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ModelBase\ModelBase.csproj">
+      <Project>{BA4FAEA1-9076-460B-8795-DC60955042B0}</Project>
+      <Name>ModelBase</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

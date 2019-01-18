@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 
 namespace DataBaseSerializationSurrogates.MetadataSurrogates
 {
@@ -11,7 +11,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
         }
 
-        public NamespaceMetadataSurrogate( NamespaceMetadata namespaceMetadata )
+        public NamespaceMetadataSurrogate( NamespaceMetadataBase namespaceMetadata )
         {
             NamespaceName = namespaceMetadata.NamespaceName;
             Types = GetTypesMetadata( namespaceMetadata.Types );
@@ -34,19 +34,19 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         #endregion
 
-        public NamespaceMetadata GetOriginalNamespaceMetadata()
+        public NamespaceMetadataBase GetOriginalNamespaceMetadata()
         {
-            return new NamespaceMetadata
+            return new NamespaceMetadataBase
             {
                 NamespaceName = NamespaceName,
                 Types = CollectionOriginalTypeAccessor.GetOriginalTypesMetadata( Types )
             };
         }
 
-        private ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        private ICollection<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadataBase> types )
         {
             ICollection<TypeMetadataSurrogate> surrogates = new List<TypeMetadataSurrogate>();
-            foreach ( TypeMetadata typeMetadata in types )
+            foreach ( TypeMetadataBase typeMetadata in types )
             {
                 surrogates.Add( TypeMetadataSurrogate.EmitSurrogateTypeMetadata( typeMetadata ) );
             }

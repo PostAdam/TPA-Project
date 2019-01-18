@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 using XmlSerializationSurrogates.MetadataSurrogates;
 
 namespace XmlSerializationSurrogates
@@ -8,42 +8,42 @@ namespace XmlSerializationSurrogates
     public static class CollectionTypeAccessor
     {
         public static IEnumerable<NamespaceMetadataSurrogate> GetNamespacesMetadata(
-            IEnumerable<NamespaceMetadata> namespaces )
+            IEnumerable<NamespaceMetadataBase> namespaces )
         {
             return namespaces?.Select( n => new NamespaceMetadataSurrogate( n ) );
         }
 
         public static IEnumerable<FieldMetadataSurrogate> GetFieldsMetadata(
-            IEnumerable<FieldMetadata> fields )
+            IEnumerable<FieldMetadataBase> fields )
         {
             return fields?.Select( f => new FieldMetadataSurrogate( f ) );
         }
 
         public static IEnumerable<EventMetadataSurrogate> GetEventsMetadata(
-            IEnumerable<EventMetadata> events )
+            IEnumerable<EventMetadataBase> events )
         {
             return events?.Select( e => new EventMetadataSurrogate( e ) );
         }
 
         public static IEnumerable<MethodMetadataSurrogate> GetMethodsMetadata(
-            IEnumerable<MethodMetadata> methods )
+            IEnumerable<MethodMetadataBase> methods )
         {
             return methods?.Select( m => new MethodMetadataSurrogate( m ) );
         }
 
         public static IEnumerable<PropertyMetadataSurrogate> GetPropertiesMetadata(
-            IEnumerable<PropertyMetadata> properties )
+            IEnumerable<PropertyMetadataBase> properties )
         {
             return properties?.Select( p => new PropertyMetadataSurrogate( p ) );
         }
 
-        public static IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadata> types )
+        public static IEnumerable<TypeMetadataSurrogate> GetTypesMetadata( IEnumerable<TypeMetadataBase> types )
         {
             return types?.Select( TypeMetadataSurrogate.EmitSurrogateTypeMetadata );
         }
 
         public static IEnumerable<ParameterMetadataSurrogate> GetParametersMetadata(
-            IEnumerable<ParameterMetadata> parameter )
+            IEnumerable<ParameterMetadataBase> parameter )
         {
             return parameter?.Select( p => new ParameterMetadataSurrogate( p ) );
         }

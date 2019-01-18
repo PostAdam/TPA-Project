@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Configuration;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using MEFDefinitions;
-using Model.Reflection.MetadataModels;
+using ModelBase;
 using XmlSerializationSurrogates.MetadataSurrogates;
 
 namespace XmlRepository
@@ -12,43 +15,92 @@ namespace XmlRepository
     [ExportMetadata( "destination", "file" )]
     public class XmlSerializer : IRepository
     {
-        public async Task Write( object metadata, string fileName )
+        public async Task Write( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
         {
-            await Task.Run( () => WriteData( metadata, fileName ) );
+            await Task.Run( () => TryWriteData( metadata, cancellationToken ), cancellationToken );
         }
 
-        public async Task<object> Read( string fileName )
+        public async Task<object> Read( CancellationToken cancellationToken )
         {
-            return await Task.Run( () => ReadData( fileName ) );
+            return await Task.Run( () => TryReadData( cancellationToken ), cancellationToken );
         }
 
         #region Privates
 
-        private void WriteData( object metadata, string fileName )
-        {
-            //TODO: use DI to inject implementation through method based on config file??
-            AssemblyMetadataSurrogate assemblyMetadataSurrogate =
-                new AssemblyMetadataSurrogate( (AssemblyMetadata) metadata );
-            DataContractSerializer serializer = new DataContractSerializer( typeof( AssemblyMetadataSurrogate ) );
+        private AssemblyMetadataSurrogate _assemblyMetadataSurrogate;
 
-            using ( FileStream stream = File.Create( fileName ) )
+        private readonly DataContractSerializer _serializer =
+            new DataContractSerializer( typeof( AssemblyMetadataSurrogate ) );
+
+        private readonly string _fileName = ConfigurationManager.AppSettings[ "fileName" ];
+
+        private async Task TryWriteData( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
+        {
+            try
             {
-                //TODO: error proof
-                serializer.WriteObject( stream, assemblyMetadataSurrogate );
+                await Task.Run( () => WriteData( metadata, cancellationToken ), cancellationToken );
+            }
+            catch ( OperationCanceledException e )
+            {
+                // TODO: replace with logger
+                Console.WriteLine( e );
+            }
+            catch ( Exception e )
+            {
+                // TODO: replace with logger
+                Console.WriteLine( e );
             }
         }
 
-        private object ReadData( string fileName )
+        private void WriteData( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
         {
-            DataContractSerializer serializer = new DataContractSerializer( typeof( AssemblyMetadataSurrogate ) );
-            AssemblyMetadataSurrogate assemblyMetadataSurrogate;
+            _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( metadata );
 
-            using ( FileStream stream = File.OpenRead( fileName ) )
+            cancellationToken.ThrowIfCancellationRequested();
+            using ( FileStream stream = File.Create( _fileName ) )
             {
-                assemblyMetadataSurrogate = (AssemblyMetadataSurrogate) serializer.ReadObject( stream );
+                _serializer.WriteObject( stream, _assemblyMetadataSurrogate );
             }
 
-            AssemblyMetadata assemblyMetadata = assemblyMetadataSurrogate.GetOriginalAssemblyMetadata();
+            cancellationToken.ThrowIfCancellationRequested();
+        }
+
+        private AssemblyMetadataBase TryReadData( CancellationToken cancellationToken )
+        {
+            AssemblyMetadataBase assemblyMetadataBase = null;
+            try
+            {
+                assemblyMetadataBase =
+                    Task.Run( () => ReadData( cancellationToken ), cancellationToken ).Result;
+            }
+            catch ( OperationCanceledException e )
+            {
+                // TODO: replace with logger
+                Console.WriteLine( e );
+            }
+            catch ( Exception e )
+            {
+                // TODO: replace with logger
+                Console.WriteLine( e );
+            }
+
+            return assemblyMetadataBase;
+        }
+
+        private AssemblyMetadataBase ReadData( CancellationToken cancellationToken )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            using ( FileStream stream = File.OpenRead( _fileName ) )
+            {
+                _assemblyMetadataSurrogate = (AssemblyMetadataSurrogate) _serializer.ReadObject( stream );
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            AssemblyMetadataBase assemblyMetadata = _assemblyMetadataSurrogate.GetOriginalAssemblyMetadata();
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             return assemblyMetadata;
         }
