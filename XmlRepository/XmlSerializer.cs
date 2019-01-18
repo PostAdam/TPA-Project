@@ -15,7 +15,7 @@ namespace XmlRepository
     [ExportMetadata( "destination", "file" )]
     public class XmlSerializer : IRepository
     {
-        public async Task Write( object metadata, CancellationToken cancellationToken )
+        public async Task Write( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
         {
             await Task.Run( () => TryWriteData( metadata, cancellationToken ), cancellationToken );
         }
@@ -34,7 +34,7 @@ namespace XmlRepository
 
         private readonly string _fileName = ConfigurationManager.AppSettings[ "fileName" ];
 
-        private async Task TryWriteData( object metadata, CancellationToken cancellationToken )
+        private async Task TryWriteData( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
         {
             try
             {
@@ -52,9 +52,9 @@ namespace XmlRepository
             }
         }
 
-        private void WriteData( object metadata, CancellationToken cancellationToken )
+        private void WriteData( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
         {
-            _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( (AssemblyMetadataBase) metadata );
+            _assemblyMetadataSurrogate = new AssemblyMetadataSurrogate( metadata );
 
             cancellationToken.ThrowIfCancellationRequested();
             using ( FileStream stream = File.Create( _fileName ) )
