@@ -29,7 +29,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlSerializationSurrogates"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseSerializationSurrogates", "DataBaseSerializationSurrogates\DataBaseSerializationSurrogates.csproj", "{C2BCDD8E-84D4-4AA2-A055-9F0FD32826EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelBase", "ModelBase\ModelBase.csproj", "{BA4FAEA1-9076-460B-8795-DC60955042B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelBase", "ModelBase\ModelBase.csproj", "{BA4FAEA1-9076-460B-8795-DC60955042B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReflectionUnitTest", "ReflectionUnitTest\ReflectionUnitTest.csproj", "{2F1040F0-FF72-4F43-8911-7AA7891EA7FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,12 +95,16 @@ Global
 		{BA4FAEA1-9076-460B-8795-DC60955042B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA4FAEA1-9076-460B-8795-DC60955042B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA4FAEA1-9076-460B-8795-DC60955042B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F1040F0-FF72-4F43-8911-7AA7891EA7FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1040F0-FF72-4F43-8911-7AA7891EA7FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1040F0-FF72-4F43-8911-7AA7891EA7FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1040F0-FF72-4F43-8911-7AA7891EA7FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {EF7208FB-6259-4E54-B98D-64AE25FD4966}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal
