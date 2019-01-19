@@ -20,8 +20,9 @@ namespace DataBaseRepository
 
         #region Constructor
 
-        public ReflectorDbContext() : base( "name = Database.Properties.Settings.DatabaseConnectionString" )
+        public ReflectorDbContext() : base( "name = DataBase.Properties.Settings.ReflectorConnectionString" )
         {
+            Database.SetInitializer( new CreateDatabaseIfNotExists<ReflectorDbContext>() );
         }
 
         #endregion

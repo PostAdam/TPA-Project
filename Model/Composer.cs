@@ -4,8 +4,6 @@ using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
-using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -24,14 +22,6 @@ namespace Model
         {
             Compose();
             SetUpDataDirectory();
-            string mdfFilePath = ( string ) AppDomain.CurrentDomain.GetData( "DataDirectory" );
-            var filename = Path.Combine( mdfFilePath, "DataBase.mdf" );
-            if ( !File.Exists( filename ) )
-            {
-                Task.Run(()=>DropMdfDatabaseFile());
-                Task.Run( CreateMdfDatabaseFile ).Wait();
-            }
-
             LoadLogger();
             LoadRepository();
         }
@@ -91,73 +81,6 @@ namespace Model
             string dataDirectory = baseDirectory.Remove( baseDirectory.Length - ( "WPF\\bin\\Debug".Length + 1 ) );
             dataDirectory += "DataBase";
             AppDomain.CurrentDomain.SetData( "DataDirectory", dataDirectory );
-        }
-
-        private async Task DropMdfDatabaseFile()
-        {
-            using (SqlConnection connection =
-                new SqlConnection(
-                    "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True"))
-            {
-                using (SqlCommand command = new SqlCommand())
-                {
-                    string stringCommand = "USE MASTER; IF EXISTS ( SELECT 1 FROM master.dbo.sysdatabases WHERE NAME = 'MyDatabase') DROP DATABASE MyDatabase;";
-
-                    command.CommandText = stringCommand;
-                    command.Connection = connection;
-                    try
-                    {
-                        connection.Open();
-                        await command.ExecuteNonQueryAsync();
-                    }
-                    catch (SqlException sqle)
-                    {
-                        if (!sqle.Message.Contains("Unable to open the physical file"))
-                        {
-                            throw;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                }
-            }
-        }
-
-        private async Task CreateMdfDatabaseFile()
-        {
-            using ( SqlConnection connection =
-                new SqlConnection(
-                    "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True" ) )
-            {
-                using ( SqlCommand command = new SqlCommand() )
-                {
-                    string path = ( string ) AppDomain.CurrentDomain.GetData( "DataDirectory" );
-                    string stringCommand = GetStringCommand( path );
-
-                    command.CommandText = stringCommand;
-                    command.Connection = connection;
-                    try
-                    {
-                        connection.Open();
-                        await command.ExecuteNonQueryAsync();
-                    }
-                    catch ( Exception e )
-                    {
-                        Console.WriteLine( e );
-                    }
-                }
-            }
-        }
-
-        private static string GetStringCommand( string path )
-        {
-            return "CREATE DATABASE MyDatabase ON PRIMARY " +
-                   "(NAME = Database_Data, " +
-                   $"FILENAME = '{path}\\DataBase.mdf') " +
-                   "LOG ON (NAME = MyDatabase_Log, " +
-                   $"FILENAME = '{path}\\DataBase.ldf')";
         }
 
         private List<DirectoryCatalog> GetDirectoryCatalogs()

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
 using System.Reflection;
 using System.Threading.Tasks;
 using MEFDefinitions;
@@ -13,39 +11,6 @@ namespace DataBaseLogger
     [ExportMetadata( "destination", "db" )]
     class DataBaseTraceListener : ITrace
     {
-        #region Constructor
-
-        public DataBaseTraceListener()
-        {
-            _connectionString = GetConnectionString();
-            Task.Run( EnsureTableExists );
-        }
-
-        private async Task EnsureTableExists()
-        {
-            using ( SqlConnection sqlConnection = new SqlConnection( _connectionString ) )
-            {
-                using ( SqlCommand sqlCommand = new SqlCommand() )
-                {
-                    sqlCommand.Connection = sqlConnection;
-                    sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = "IF NOT EXISTS ( SELECT 1 FROM sysobjects WHERE name='LOGS_T' AND xtype='U' ) " +
-                                             "CREATE TABLE LOGS_T ( ID INT IDENTITY(1,1) PRIMARY KEY, TIME DATETIME, MESSAGE TEXT ) ";
-                    try
-                    {
-                        sqlConnection.Open();
-                        await sqlCommand.ExecuteNonQueryAsync();
-                    }
-                    catch ( SqlException e )
-                    {
-                        Console.WriteLine( e );
-                    }
-                }
-            }
-        }
-
-        #endregion
-
         public LogLevel Level { get; set; }
 
         public async Task Write( string message )
@@ -64,43 +29,20 @@ namespace DataBaseLogger
 
         #region Privates
 
-        private readonly string _connectionString;
-
         private async Task SaveLogEntry( string message, string category )
         {
-            using ( SqlConnection sqlConnection = new SqlConnection( _connectionString ) )
+            using ( LoggerDbContext dbContext = new LoggerDbContext() )
             {
-                using ( SqlCommand sqlCommand = new SqlCommand() )
+                Log log = new Log
                 {
-                    DateTime time = DateTime.Now;
-                    sqlCommand.Connection = sqlConnection;
-                    sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = @"INSERT INTO LOGS_T ( TIME, MESSAGE ) 
-                                               VALUES( @time, @message )";
+                    Time = DateTime.Now,
+                    Category = category,
+                    Message = message,
+                };
 
-                    sqlCommand.Parameters.AddWithValue( "@time", time );
-                    sqlCommand.Parameters.AddWithValue( "@message", message );
-
-                    try
-                    {
-                        sqlConnection.Open();
-                        await sqlCommand.ExecuteNonQueryAsync();
-                    }
-                    catch ( SqlException e )
-                    {
-                        Console.WriteLine( e );
-                    }
-                }
+                dbContext.Logs.Add( log );
+                await dbContext.SaveChangesAsync();
             }
-        }
-
-        private string GetConnectionString()
-        {
-            Configuration appConfig =
-                ConfigurationManager.OpenExeConfiguration( Assembly.GetExecutingAssembly().Location );
-            string connectionString = appConfig.ConnectionStrings
-                .ConnectionStrings["DataBase.Properties.Settings.DataBaseConnectionString"].ConnectionString;
-            return connectionString;
         }
 
         #endregion
