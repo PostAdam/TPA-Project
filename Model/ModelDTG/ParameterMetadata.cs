@@ -20,15 +20,15 @@ namespace Model.ModelDTG
         {
             Name = parameterInfo.Name;
             TypeMetadata = TypeReflector.EmitType( parameterInfo.ParameterType );
-            ParameterAttributes = TypeReflector.EmitAttributes( parameterInfo.GetCustomAttributes() );
+            ParameterAttributes = TypeReflector.EmitAttributes( parameterInfo.CustomAttributes );
             Kind = ParameterReflector.GetParameterKind( parameterInfo );
             Position = parameterInfo.Position;
-            if ( parameterInfo.HasDefaultValue )
+            /*if ( parameterInfo.HasDefaultValue )
             {
                 DefaultValue = parameterInfo.DefaultValue != null
                     ? parameterInfo.DefaultValue.ToString()
                     : String.Empty;
-            }
+            }*/
         }
 
         public ParameterMetadata( ParameterMetadataBase parameterMetadata )

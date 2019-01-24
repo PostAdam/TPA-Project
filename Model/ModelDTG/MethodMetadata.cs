@@ -58,7 +58,7 @@ namespace Model.ModelDTG
             ReturnType = MethodReflector.EmitReturnType(method);
             Parameters = MethodReflector.EmitParameters(method.GetParameters());
             Modifiers = MethodReflector.EmitModifiers(method);
-            MethodAttributes = TypeReflector.EmitAttributes(method.GetCustomAttributes());
+            MethodAttributes = TypeReflector.EmitAttributes(method.CustomAttributes);
             Extension = MethodReflector.EmitExtension(method);
         }
 

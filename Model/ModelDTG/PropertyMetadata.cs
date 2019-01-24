@@ -21,7 +21,7 @@ namespace Model.ModelDTG
             Name = propertyInfo.Name;
             Modifiers = PropertyReflector.GetModifier(Getter ,Setter);
             TypeMetadata = TypeReflector.EmitType( propertyInfo.PropertyType );
-            PropertyAttributes = TypeReflector.EmitAttributes( propertyInfo.GetCustomAttributes() );
+            PropertyAttributes = TypeReflector.EmitAttributes( propertyInfo.CustomAttributes );
             Getter = MethodMetadata.EmitMethod( propertyInfo.GetGetMethod( true ) );
             Setter = MethodMetadata.EmitMethod( propertyInfo.GetSetMethod( true ) );
         }

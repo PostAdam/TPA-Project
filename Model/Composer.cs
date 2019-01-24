@@ -101,27 +101,32 @@ namespace Model
         {
             string repositoryType = ConfigurationManager.AppSettings[ "repositoryType" ];
             Repository = Repositories
-                .FirstOrDefault( repository => ( string ) repository.Metadata[ "destination" ] == repositoryType )?.Value;
+                ?.FirstOrDefault( repository => ( string ) repository.Metadata[ "destination" ] == repositoryType )?.Value;
         }
 
         private void LoadLogger()
         {
             string loggerType = ConfigurationManager.AppSettings[ "loggerType" ];
-            Logger = Loggers.FirstOrDefault( logger => ( string ) logger.Metadata[ "destination" ] == loggerType )?.Value;
+            Logger = Loggers?.FirstOrDefault( logger => ( string ) logger.Metadata[ "destination" ] == loggerType )?.Value;
             if ( Logger != null )
             {
-                string logLevel = ConfigurationManager.AppSettings[ "logLevel" ];
-
-                if ( int.TryParse( logLevel, out int level ) )
-                {
-                    Logger.Level = ( LogLevel ) level;
-                }
-                else
-                {
-                    Logger.Level = LogLevel.Warning;
-                }
+                Logger.Level = GetLogLevel();
             }
-        } 
+        }
+
+        private LogLevel GetLogLevel()
+        {
+            string logLevel = ConfigurationManager.AppSettings[ "logLevel" ];
+
+            if ( int.TryParse( logLevel, out int level ) )
+            {
+                return ( LogLevel ) level;
+            }
+            else
+            {
+                return LogLevel.Warning;
+            }
+        }
 
         #endregion
     }

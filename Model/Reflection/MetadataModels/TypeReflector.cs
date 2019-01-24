@@ -23,6 +23,11 @@ namespace Model.Reflection.MetadataModels
             return from type in types select EmitType( type );
         }
 
+        internal static IEnumerable<TypeMetadata> EmitAttributeTypes( IEnumerable<Type> types )
+        {
+            return from type in types select EmitAttributeType( type );
+        }
+
         internal static TypeMetadata EmitType( Type type )
         {
             if ( type == null )
@@ -39,12 +44,28 @@ namespace Model.Reflection.MetadataModels
             return ReflectedTypes[ type.FullName ?? type.Namespace + " . " + type.Name ];
         }
 
-        internal static IEnumerable<TypeMetadata> EmitAttributes( IEnumerable<Attribute> attributes )
+        internal static TypeMetadata EmitAttributeType( Type type )
+        {
+            if ( type == null )
+            {
+                return null;
+            }
+
+            if ( !ReflectedTypes.ContainsKey( type.FullName ?? type.Namespace + " . " + type.Name ) )
+            {
+                ReflectedTypes.Add( type.FullName ?? type.Namespace + " . " + type.Name,
+                    new TypeMetadata( type.Namespace, type.Name, type.FullName ) );
+            }
+
+            return ReflectedTypes[ type.FullName ?? type.Namespace + " . " + type.Name ];
+        }
+
+        internal static IEnumerable<TypeMetadata> EmitAttributes( IEnumerable<CustomAttributeData> attributes )
         {
             if ( attributes == null )
                 return null;
             IEnumerable<Type> attributesTypes = from attribute in attributes select attribute.GetType();
-            return EmitTypes( attributesTypes );
+            return EmitAttributeTypes( attributesTypes );
         }
 
         #endregion
@@ -56,7 +77,7 @@ namespace Model.Reflection.MetadataModels
         {
             if ( !type.IsGenericType )
             {
-                return new TypeMetadata( type.Name, type.GetNamespace() );
+                return new TypeMetadata( type.Name, type.GetNamespace(), type.FullName );
             }
 
             return new TypeMetadata( type.Name, type.GetNamespace(),

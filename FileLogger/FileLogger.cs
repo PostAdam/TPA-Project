@@ -49,7 +49,7 @@ namespace FileLogger
 
         private void LoadLoggerConfiguration()
         {
-            string filename = ConfigurationManager.AppSettings[ "filename" ];
+            string filename = ConfigurationManager.AppSettings[ "logFileName" ];
             _traceListener = new TextWriterTraceListener( filename );
             LoadLogLevel();
         }
