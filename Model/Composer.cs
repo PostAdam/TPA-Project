@@ -14,7 +14,7 @@ using ModelBase;
 
 namespace Model
 {
-    public class Composer
+    public class Composer : IDisposable
     {
         #region Constructor
 
@@ -41,11 +41,11 @@ namespace Model
         {
             List<DirectoryCatalog> directoryCatalogs = GetDirectoryCatalogs();
             AggregateCatalog catalog = new AggregateCatalog(directoryCatalogs);
-            CompositionContainer container = new CompositionContainer(catalog);
+            _container = new CompositionContainer(catalog);
 
             try
             {
-                container.ComposeParts(this);
+                _container.ComposeParts(this);
             }
             catch (CompositionException compositionException)
             {
@@ -53,9 +53,9 @@ namespace Model
 
                 throw;
             }
-            catch (Exception exception) when (exception is ReflectionTypeLoadException)
+            catch ( ReflectionTypeLoadException exception )
             {
-                ReflectionTypeLoadException typeLoadException = ( ReflectionTypeLoadException ) exception;
+                ReflectionTypeLoadException typeLoadException = exception;
                 Exception[] loaderExceptions = typeLoadException.LoaderExceptions;
                 loaderExceptions.ToList().ForEach(ex => Console.WriteLine(ex.StackTrace));
             }
@@ -73,7 +73,14 @@ namespace Model
             await Repository.Write(assemblyMetadata.GetOriginalAssemblyMetadata(), cancellationTokenSource);
         }
 
+        public void Dispose()
+        {
+            _container.Dispose();
+        }
+
         #region Private
+
+        private CompositionContainer _container;
 
         private void SetUpDataDirectory()
         {

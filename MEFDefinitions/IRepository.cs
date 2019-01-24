@@ -10,6 +10,6 @@ namespace MEFDefinitions
         Task<T> Read<T>( string fileName ) where T : class;*/
     
         Task Write( AssemblyMetadataBase type, CancellationToken cancellationToken );
-        Task<object> Read( CancellationToken cancellationToken );
+        Task<AssemblyMetadataBase> Read( CancellationToken cancellationToken );
     }
 }
