@@ -33,7 +33,7 @@ namespace Model.ModelDTG
 
         public MethodMetadata(MethodMetadataBase methodMetadata)
         {
-            Name = Name;
+            Name = methodMetadata.Name;
             Extension = methodMetadata.Extension;
             ReturnType = TypeMetadata.EmitSurrogateTypeMetadata(methodMetadata.ReturnType);
             MethodAttributes = GetTypesMetadata(methodMetadata.MethodAttributes);
