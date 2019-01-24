@@ -41,8 +41,8 @@ namespace Model.ModelDTG
             GenericArguments = GetTypesMetadata(methodMetadata.GenericArguments);
             Modifiers = Tuple.Create((AccessLevel) methodMetadata.Modifiers.Item1,
                 (AbstractEnum) methodMetadata.Modifiers.Item2,
-                (StaticEnum) methodMetadata.Modifiers.Item2,
-                (VirtualEnum) methodMetadata.Modifiers.Item3);
+                (StaticEnum) methodMetadata.Modifiers.Item3,
+                (VirtualEnum) methodMetadata.Modifiers.Item4);
         }
 
         #endregion
@@ -58,7 +58,7 @@ namespace Model.ModelDTG
             ReturnType = MethodReflector.EmitReturnType(method);
             Parameters = MethodReflector.EmitParameters(method.GetParameters());
             Modifiers = MethodReflector.EmitModifiers(method);
-            MethodAttributes = TypeReflector.EmitAttributes(method.GetCustomAttributes());
+            MethodAttributes = TypeReflector.EmitAttributes(method.CustomAttributes);
             Extension = MethodReflector.EmitExtension(method);
         }
 
@@ -88,7 +88,7 @@ namespace Model.ModelDTG
                 GenericArguments = GetOriginalTypesMetadata(GenericArguments),
                 Modifiers = Tuple.Create((ModelBase.Enums.AccessLevel) Modifiers.Item1,
                     (ModelBase.Enums.AbstractEnum) Modifiers.Item2,
-                    (ModelBase.Enums.StaticEnum) Modifiers.Item2, (ModelBase.Enums.VirtualEnum) Modifiers.Item3)
+                    (ModelBase.Enums.StaticEnum) Modifiers.Item3, (ModelBase.Enums.VirtualEnum) Modifiers.Item4)
             };
         }
     }

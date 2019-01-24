@@ -19,11 +19,11 @@ namespace Model.ModelDTG
         internal PropertyMetadata( PropertyInfo propertyInfo )
         {
             Name = propertyInfo.Name;
+            Getter = MethodMetadata.EmitMethod(propertyInfo.GetGetMethod(true));
+            Setter = MethodMetadata.EmitMethod(propertyInfo.GetSetMethod(true));
             Modifiers = PropertyReflector.GetModifier(Getter ,Setter);
             TypeMetadata = TypeReflector.EmitType( propertyInfo.PropertyType );
-            PropertyAttributes = TypeReflector.EmitAttributes( propertyInfo.GetCustomAttributes() );
-            Getter = MethodMetadata.EmitMethod( propertyInfo.GetGetMethod( true ) );
-            Setter = MethodMetadata.EmitMethod( propertyInfo.GetSetMethod( true ) );
+            PropertyAttributes = TypeReflector.EmitAttributes( propertyInfo.CustomAttributes );
         }
 
         public PropertyMetadata( PropertyMetadataBase propertyMetadata )

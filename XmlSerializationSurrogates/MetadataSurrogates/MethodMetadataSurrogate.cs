@@ -15,7 +15,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
 
         public MethodMetadataSurrogate( MethodMetadataBase methodMetadata )
         {
-            Name = Name;
+            Name = methodMetadata.Name;
             Extension = methodMetadata.Extension;
             ReturnType = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( methodMetadata.ReturnType );
             MethodAttributes = GetTypesMetadata( methodMetadata.MethodAttributes );

@@ -15,7 +15,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
 
         public EventMetadataSurrogate( EventMetadataBase eventMetadata )
         {
-            Name = Name;
+            Name = eventMetadata.Name;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( eventMetadata.TypeMetadata );
             AddMethodMetadata = eventMetadata.AddMethodMetadata == null
                 ? null

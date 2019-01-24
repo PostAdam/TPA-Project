@@ -52,7 +52,7 @@ namespace DataBaseSerializationSurrogates.MetadataSurrogates
         {
             TypeName = typeName;
             NamespaceName = namespaceName;
-            FullName = namespaceName + " . " + typeName;
+            FullName = namespaceName + "." + typeName;
         }
 
         #endregion
