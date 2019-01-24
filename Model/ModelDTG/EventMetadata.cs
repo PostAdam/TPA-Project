@@ -26,7 +26,7 @@ namespace Model.ModelDTG
 
         public EventMetadata(EventMetadataBase eventMetadata)
         {
-            Name = Name;
+            Name = eventMetadata.Name;
             TypeMetadata = ModelDTG.TypeMetadata.EmitSurrogateTypeMetadata(eventMetadata.TypeMetadata);
             AddMethodMetadata = eventMetadata.AddMethodMetadata == null
                 ? null
