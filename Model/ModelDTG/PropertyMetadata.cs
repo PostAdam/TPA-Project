@@ -30,7 +30,8 @@ namespace Model.ModelDTG
         {
             Name = propertyMetadata.Name;
             PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
-            Modifiers = Modifiers;
+            Modifiers = propertyMetadata?.Modifiers != null ? Tuple.Create((Model.Reflection.Enums.AccessLevel) propertyMetadata.Modifiers.Item1, (Model.Reflection.Enums.AbstractEnum) propertyMetadata.Modifiers.Item2,
+                (Model.Reflection.Enums.StaticEnum) propertyMetadata.Modifiers.Item3, (Model.Reflection.Enums.VirtualEnum) propertyMetadata.Modifiers.Item4 ) : null;
             TypeMetadata = TypeMetadata.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadata( propertyMetadata.Getter );
             Setter = propertyMetadata.Setter == null ? null : new MethodMetadata( propertyMetadata.Setter );
