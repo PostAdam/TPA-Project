@@ -17,7 +17,7 @@ namespace XmlSerializationSurrogates.MetadataSurrogates
         {
             Name = propertyMetadata.Name;
             PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
-            Modifiers = Modifiers;
+            Modifiers = propertyMetadata.Modifiers;
             TypeMetadata = TypeMetadataSurrogate.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Getter );
             Setter = propertyMetadata.Setter == null ? null : new MethodMetadataSurrogate( propertyMetadata.Setter );
