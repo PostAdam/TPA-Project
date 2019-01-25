@@ -20,7 +20,7 @@ namespace Model.ModelDTG
         {
             Name = fieldInfo.Name;
             TypeMetadata = TypeReflector.EmitType( fieldInfo.FieldType );
-            FieldAttributes = TypeReflector.EmitAttributes( fieldInfo.GetCustomAttributes() );
+            FieldAttributes = TypeReflector.EmitAttributes( fieldInfo.CustomAttributes );
             Modifiers = FieldReflector.GetModifier( fieldInfo );
             IsStatic = fieldInfo.IsStatic ? StaticEnum.Static : StaticEnum.NotStatic;
         }

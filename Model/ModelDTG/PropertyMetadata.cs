@@ -19,18 +19,19 @@ namespace Model.ModelDTG
         internal PropertyMetadata( PropertyInfo propertyInfo )
         {
             Name = propertyInfo.Name;
+            Getter = MethodMetadata.EmitMethod(propertyInfo.GetGetMethod(true));
+            Setter = MethodMetadata.EmitMethod(propertyInfo.GetSetMethod(true));
             Modifiers = PropertyReflector.GetModifier(Getter ,Setter);
             TypeMetadata = TypeReflector.EmitType( propertyInfo.PropertyType );
-            PropertyAttributes = TypeReflector.EmitAttributes( propertyInfo.GetCustomAttributes() );
-            Getter = MethodMetadata.EmitMethod( propertyInfo.GetGetMethod( true ) );
-            Setter = MethodMetadata.EmitMethod( propertyInfo.GetSetMethod( true ) );
+            PropertyAttributes = TypeReflector.EmitAttributes( propertyInfo.CustomAttributes );
         }
 
         public PropertyMetadata( PropertyMetadataBase propertyMetadata )
         {
             Name = propertyMetadata.Name;
             PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
-            Modifiers = Modifiers;
+            Modifiers = propertyMetadata.Modifiers != null ? Tuple.Create( Modifiers.Item1, Modifiers.Item2,
+                Modifiers.Item3, Modifiers.Item4 ) : null;
             TypeMetadata = TypeMetadata.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadata( propertyMetadata.Getter );
             Setter = propertyMetadata.Setter == null ? null : new MethodMetadata( propertyMetadata.Setter );
@@ -58,7 +59,7 @@ namespace Model.ModelDTG
                 Name = Name,
                 PropertyAttributes = GetOriginalTypesMetadata( PropertyAttributes ),
                 Modifiers = Modifiers != null ? Tuple.Create( ( ModelBase.Enums.AccessLevel ) Modifiers.Item1, ( ModelBase.Enums.AbstractEnum ) Modifiers.Item2,
-                    ( ModelBase.Enums.StaticEnum ) Modifiers.Item2, ( ModelBase.Enums.VirtualEnum ) Modifiers.Item3 ) : null,
+                    ( ModelBase.Enums.StaticEnum ) Modifiers.Item3, ( ModelBase.Enums.VirtualEnum ) Modifiers.Item4 ) : null,
                 TypeMetadata = TypeMetadata?.EmitOriginalTypeMetadata(),
                 Getter = Getter?.GetOriginalMethodMetadata(),
                 Setter = Setter?.GetOriginalMethodMetadata()

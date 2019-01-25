@@ -4,8 +4,13 @@
         xmlns:view="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:assembly="clr-namespace:ViewModel.MetadataViewModels;assembly=ViewModel"
         xmlns:userControls="clr-namespace:WPF.UserControls"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Title="MainWindow" Height="450" Width="800">
-
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ClickCloseApp}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Border>
         <Border.Background>
             <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1.5">

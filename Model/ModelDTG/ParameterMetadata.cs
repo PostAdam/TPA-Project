@@ -20,15 +20,9 @@ namespace Model.ModelDTG
         {
             Name = parameterInfo.Name;
             TypeMetadata = TypeReflector.EmitType( parameterInfo.ParameterType );
-            ParameterAttributes = TypeReflector.EmitAttributes( parameterInfo.GetCustomAttributes() );
+            ParameterAttributes = TypeReflector.EmitAttributes( parameterInfo.CustomAttributes );
             Kind = ParameterReflector.GetParameterKind( parameterInfo );
             Position = parameterInfo.Position;
-            if ( parameterInfo.HasDefaultValue )
-            {
-                DefaultValue = parameterInfo.DefaultValue != null
-                    ? parameterInfo.DefaultValue.ToString()
-                    : String.Empty;
-            }
         }
 
         public ParameterMetadata( ParameterMetadataBase parameterMetadata )
@@ -38,7 +32,6 @@ namespace Model.ModelDTG
             Position = parameterMetadata.Position;
             Kind = (ParameterKindEnum) parameterMetadata.Kind;
             ParameterAttributes = GetTypesMetadata( parameterMetadata.ParameterAttributes );
-            DefaultValue = parameterMetadata.DefaultValue;
         }
 
         #endregion
@@ -50,7 +43,6 @@ namespace Model.ModelDTG
         public int Position { get; set; }
         public ParameterKindEnum Kind { get; set; }
         public IEnumerable<TypeMetadata> ParameterAttributes { get; set; }
-        public string DefaultValue { get; set; }
 
         #endregion
 
@@ -63,7 +55,6 @@ namespace Model.ModelDTG
                 Position = Position,
                 Kind = (ModelBase.Enums.ParameterKindEnum) Kind,
                 ParameterAttributes = GetOriginalTypesMetadata( ParameterAttributes ),
-                DefaultValue = DefaultValue
             };
         }
     }

@@ -18,9 +18,6 @@ namespace ViewModel.MetadataViewModels
                 : String.Empty;
             fullname += _parameterMetadata.TypeMetadata.TypeName + " ";
             fullname += _parameterMetadata.Name;
-            fullname += !string.IsNullOrEmpty( _parameterMetadata?.DefaultValue )
-                ? " = " + _parameterMetadata.DefaultValue
-                : String.Empty;
             return fullname;
         }
 

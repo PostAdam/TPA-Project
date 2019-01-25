@@ -32,6 +32,7 @@ namespace ViewModel
             ClickRead = new AsyncCommand( Read );
             ClickCancelSave = new DelegateCommand( CancelSave );
             ClickCancelRead = new DelegateCommand( CancelRead );
+            ClickCloseApp = new DelegateCommand( CloseApp );
         }
 
         #endregion
@@ -52,6 +53,7 @@ namespace ViewModel
         public AsyncCommand ClickRead { get; }
         public ICommand ClickCancelSave { get; }
         public ICommand ClickCancelRead { get; }
+        public ICommand ClickCloseApp { get; }
 
         #endregion
 
@@ -150,6 +152,25 @@ namespace ViewModel
             catch ( AggregateException e )
             {
                 _logger?.WriteLine( "Cancelling reading model, exception message: " + e.Flatten(),
+                    LogLevel.Information.ToString() );
+            }
+        }
+
+        private void CloseApp()
+        {
+            try
+            {
+                _logger?.WriteLine( "Attempting to close the application",
+                    LogLevel.Information.ToString() );
+
+                _composer.Dispose();
+
+                _logger?.WriteLine( "Application closed successfully",
+                    LogLevel.Information.ToString() );
+            }
+            catch ( Exception e )
+            {
+                _logger?.WriteLine( "Failed to close the application, exception message: " + e,
                     LogLevel.Information.ToString() );
             }
         }

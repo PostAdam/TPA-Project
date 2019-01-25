@@ -68,9 +68,6 @@ namespace ViewModel.MetadataViewModels
                     : String.Empty;
                 fullname += parameter.TypeMetadata.TypeName + " ";
                 fullname += parameter.Name;
-                fullname += !string.IsNullOrEmpty( parameter?.DefaultValue )
-                    ? " = " + parameter.DefaultValue
-                    : String.Empty;
                 names.Append( " " + fullname );
                 if ( i < _methodMetadata.Parameters.Count() - 1 )
                 {

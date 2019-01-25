@@ -17,7 +17,7 @@ namespace Model.ModelDTG
         {
             Name = eventInfo.Name;
             TypeMetadata = TypeReflector.EmitType( eventInfo.EventHandlerType );
-            EventAttributes = TypeReflector.EmitAttributes( eventInfo.GetCustomAttributes() );
+            EventAttributes = TypeReflector.EmitAttributes( eventInfo.CustomAttributes );
             AddMethodMetadata = MethodMetadata.EmitMethod( eventInfo.AddMethod );
             RaiseMethodMetadata = MethodMetadata.EmitMethod( eventInfo.RaiseMethod );
             RemoveMethodMetadata = MethodMetadata.EmitMethod( eventInfo.RemoveMethod );
@@ -26,8 +26,8 @@ namespace Model.ModelDTG
 
         public EventMetadata(EventMetadataBase eventMetadata)
         {
-            Name = Name;
-            TypeMetadata = ModelDTG.TypeMetadata.EmitSurrogateTypeMetadata(eventMetadata.TypeMetadata);
+            Name = eventMetadata.Name;
+            TypeMetadata = TypeMetadata.EmitSurrogateTypeMetadata(eventMetadata.TypeMetadata);
             AddMethodMetadata = eventMetadata.AddMethodMetadata == null
                 ? null
                 : new MethodMetadata(eventMetadata.AddMethodMetadata);

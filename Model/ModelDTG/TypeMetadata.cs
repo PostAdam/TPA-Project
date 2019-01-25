@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Model.Reflection.MetadataModels;
 using ModelBase;
@@ -32,7 +31,7 @@ namespace Model.ModelDTG
             ImplementedInterfaces = TypeReflector.EmitTypes(type.GetInterfaces());
             DeclaringType = TypeReflector.EmitType(type.DeclaringType);
             NestedTypes = TypeReflector.EmitTypes(type.GetNestedTypes(AllAccessLevels));
-            Attributes = TypeReflector.EmitAttributes(type.GetCustomAttributes(false).Cast<Attribute>());
+            Attributes = TypeReflector.EmitAttributes(type.CustomAttributes);
             Fields = TypeReflector.EmitFields(type.GetFields(AllAccessLevels));
             Events = TypeReflector.EmitEvents(type.GetEvents(AllAccessLevels));
             GenericArguments = type.IsGenericTypeDefinition
@@ -84,6 +83,7 @@ namespace Model.ModelDTG
         {
             TypeName = typeName;
             NamespaceName = namespaceName;
+            FullName = namespaceName + "." + typeName;
         }
 
         public TypeMetadata(string typeName, string namespaceName,

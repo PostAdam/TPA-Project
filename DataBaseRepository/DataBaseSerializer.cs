@@ -20,7 +20,7 @@ namespace DataBaseRepository
             await Task.Run( () => WriteData( metadata, cancellationToken ), cancellationToken );
         }
 
-        public async Task<object> Read( CancellationToken cancellationToken )
+        public async Task<AssemblyMetadataBase> Read( CancellationToken cancellationToken )
         {
             return await ReadData( cancellationToken );
         }
@@ -65,7 +65,7 @@ namespace DataBaseRepository
             }
         }
 
-        private async Task<object> ReadData( CancellationToken cancellationToken )
+        private async Task<AssemblyMetadataBase> ReadData( CancellationToken cancellationToken )
         {
             ClearAssemblyMetadatas();
 

@@ -30,21 +30,18 @@ namespace Model.Reflection.MetadataModels
                 return null;
             }
 
-            if ( !ReflectedTypes.ContainsKey( type.FullName ?? type.Namespace + " . " + type.Name ) )
+            if ( !ReflectedTypes.ContainsKey( type.FullName ?? type.Namespace + "." + type.Name ) )
             {
-                ReflectedTypes.Add( type.FullName ?? type.Namespace + " . " + type.Name,
+                ReflectedTypes.Add( type.FullName ?? type.Namespace + "." + type.Name,
                     new TypeMetadata( type ) );
             }
 
-            return ReflectedTypes[ type.FullName ?? type.Namespace + " . " + type.Name ];
+            return ReflectedTypes[ type.FullName ?? type.Namespace + "." + type.Name ];
         }
 
-        internal static IEnumerable<TypeMetadata> EmitAttributes( IEnumerable<Attribute> attributes )
+        internal static IEnumerable<TypeMetadata> EmitAttributes( IEnumerable<CustomAttributeData> attributes )
         {
-            if ( attributes == null )
-                return null;
-            IEnumerable<Type> attributesTypes = from attribute in attributes select attribute.GetType();
-            return EmitTypes( attributesTypes );
+            return attributes?.Select(attr => EmitType(attr.AttributeType));// new TypeMetadata(attr.AttributeType.Name, attr.AttributeType.Namespace));
         }
 
         #endregion

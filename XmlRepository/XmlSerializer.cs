@@ -20,7 +20,7 @@ namespace XmlRepository
             await Task.Run( () => TryWriteData( metadata, cancellationToken ), cancellationToken );
         }
 
-        public async Task<object> Read( CancellationToken cancellationToken )
+        public async Task<AssemblyMetadataBase> Read( CancellationToken cancellationToken )
         {
             return await Task.Run( () => TryReadData( cancellationToken ), cancellationToken );
         }
@@ -32,7 +32,7 @@ namespace XmlRepository
         private readonly DataContractSerializer _serializer =
             new DataContractSerializer( typeof( AssemblyMetadataSurrogate ) );
 
-        private readonly string _fileName = ConfigurationManager.AppSettings[ "fileName" ];
+        private readonly string _fileName = ConfigurationManager.AppSettings[ "repositoryFileName" ];
 
         private async Task TryWriteData( AssemblyMetadataBase metadata, CancellationToken cancellationToken )
         {

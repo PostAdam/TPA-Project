@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Model.ModelDTG;
 
@@ -11,7 +10,7 @@ namespace Model.Reflection
 
         public async Task Reflect( string assemblyFile )
         {
-            Assembly assembly = Assembly.LoadFile( assemblyFile ) ;
+            Assembly assembly = Assembly.ReflectionOnlyLoadFrom( assemblyFile ) ;
             AssemblyModel = new AssemblyMetadata( assembly );
         }
     }
