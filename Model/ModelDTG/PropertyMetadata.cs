@@ -30,8 +30,7 @@ namespace Model.ModelDTG
         {
             Name = propertyMetadata.Name;
             PropertyAttributes = GetTypesMetadata( propertyMetadata.PropertyAttributes );
-            Modifiers = propertyMetadata.Modifiers != null ? Tuple.Create( Modifiers.Item1, Modifiers.Item2,
-                Modifiers.Item3, Modifiers.Item4 ) : null;
+            Modifiers = Modifiers;
             TypeMetadata = TypeMetadata.EmitSurrogateTypeMetadata( propertyMetadata.TypeMetadata );
             Getter = propertyMetadata.Getter == null ? null : new MethodMetadata( propertyMetadata.Getter );
             Setter = propertyMetadata.Setter == null ? null : new MethodMetadata( propertyMetadata.Setter );
